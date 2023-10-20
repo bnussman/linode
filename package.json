@@ -1,0 +1,12 @@
+{
+  "name": "linode-api",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest",
+    "orval": "^6.19.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
