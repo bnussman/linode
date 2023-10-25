@@ -1,11 +1,8 @@
 import { defineConfig } from 'orval';
 
 export default defineConfig({
-	petstore: {
-		input: './petstore.yaml',
-		output: './petstore.ts',
-		hooks: {
-			afterAllFilesWrite: 'prettier --write',
-		},
+	v4: {
+		input: './openapi.yaml',
+		output: './v4.ts',
 	},
 });
