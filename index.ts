@@ -1,6 +1,7 @@
 import orval from 'orval';
-import resolver from 'oas-resolver';
 import yaml from 'yaml';
+// @ts-expect-error they don't publish types
+import resolver from 'oas-resolver';
 
 const SPEC_URL = "https://raw.githubusercontent.com/linode/linode-api-docs/development/openapi.yaml";
 
