@@ -8,11 +8,13 @@ export default defineConfig({
       client: 'axios',
       headers: true,
       override: {
-        transformer(verb) {
-          verb.override.components.responses.suffix = '';
-          return verb;
+        mutator: {
+          path: './axios.ts',
+          name: 'customInstance',
         },
       },
     }
   },
 });
+
+

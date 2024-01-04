@@ -425,11 +425,8 @@ can be accessed via other methods such as Shell commands and other third-party a
 
  * OpenAPI spec version: 4.169.1
  */
-import axios from 'axios'
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios'
+import { customInstance } from './axios';
+import type { BodyType } from './axios';
 
 // https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir/49579497#49579497
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
@@ -43738,6 +43735,14 @@ export type AccountActivePromotionsItem = {
 
 
 
+// eslint-disable-next-line
+  type SecondParameter<T extends (...args: any) => any> = T extends (
+  config: any,
+  args: infer P,
+) => any
+  ? P
+  : never;
+
 
   export const getLinodeAPI = () => {
 /**
@@ -43745,28 +43750,31 @@ export type AccountActivePromotionsItem = {
 
  * @summary Account View
  */
-const getAccount = <TData = AxiosResponse<GetAccount200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account`,options
-    );
-  }
-
+const getAccount = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAccount200>(
+      {url: `/account`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates contact and billing information related to your Account.
 
  * @summary Account Update
  */
-const updateAccount = <TData = AxiosResponse<UpdateAccount200>>(
-    updateAccountBody: NonReadonly<UpdateAccountBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account`,
-      updateAccountBody,options
-    );
-  }
-
+const updateAccount = (
+    updateAccountBody: BodyType<NonReadonly<UpdateAccountBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateAccount200>(
+      {url: `/account`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAccountBody
+    },
+      options);
+    }
+  
 /**
  * Returns service unavailability for all available regions.
 
@@ -43776,14 +43784,15 @@ Only authorized Users can access this endpoint.
 
  * @summary Account Availability
  */
-const getAvailability = <TData = AxiosResponse<GetAvailability200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/availability`,options
-    );
-  }
-
+const getAvailability = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAvailability200>(
+      {url: `/account/availability`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a single region's service availability.
 
@@ -43791,14 +43800,15 @@ Only authorized Users can access this.
 
  * @summary Region Service Availability
  */
-const getAccountAvailability = <TData = AxiosResponse<GetAccountAvailability200>>(
-    id: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/availability/${id}`,options
-    );
-  }
-
+const getAccountAvailability = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAccountAvailability200>(
+      {url: `/account/availability/${id}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Display all enrolled Beta Programs for your Account. Includes inactive as well as active Beta Programs.
 
@@ -43806,16 +43816,16 @@ Only unrestricted Users can access this command.
 
  * @summary Enrolled Beta Programs List
  */
-const getEnrolledBetaPrograms = <TData = AxiosResponse<GetEnrolledBetaPrograms200>>(
-    params?: GetEnrolledBetaProgramsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/betas`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getEnrolledBetaPrograms = (
+    params?: GetEnrolledBetaProgramsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEnrolledBetaPrograms200>(
+      {url: `/account/betas`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Enroll your Account in an active Beta Program.
 
@@ -43829,15 +43839,17 @@ Beta Programs with `"greenlight_only": true` can only be enrolled by Accounts th
 
  * @summary Beta Program Enroll
  */
-const enrollBetaProgram = <TData = AxiosResponse<EnrollBetaProgram200>>(
-    enrollBetaProgramBody: EnrollBetaProgramBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/betas`,
-      enrollBetaProgramBody,options
-    );
-  }
-
+const enrollBetaProgram = (
+    enrollBetaProgramBody: BodyType<EnrollBetaProgramBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EnrollBetaProgram200>(
+      {url: `/account/betas`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollBetaProgramBody
+    },
+      options);
+    }
+  
 /**
  * Display an enrolled Beta Program for your Account. The Beta Program may be inactive.
 
@@ -43845,28 +43857,31 @@ Only unrestricted Users can access this command.
 
  * @summary Enrolled Beta Program View
  */
-const getEnrolledBetaProgram = <TData = AxiosResponse<GetEnrolledBetaProgram200>>(
-    betaId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/betas/${betaId}`,options
-    );
-  }
-
+const getEnrolledBetaProgram = (
+    betaId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEnrolledBetaProgram200>(
+      {url: `/account/betas/${betaId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Cancels an active Linode account. This action will cause Linode to attempt to charge the credit card on file for the remaining balance. An error will occur if Linode fails to charge the credit card on file. Restricted users will not be able to cancel an account.
 
  * @summary Account Cancel
  */
-const cancelAccount = <TData = AxiosResponse<CancelAccount200>>(
-    cancelAccountBody: CancelAccountBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/cancel`,
-      cancelAccountBody,options
-    );
-  }
-
+const cancelAccount = (
+    cancelAccountBody: BodyType<CancelAccountBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CancelAccount200>(
+      {url: `/account/cancel`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: cancelAccountBody
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use Payment Method Add ([POST /account/payment-methods](/docs/api/account/#payment-method-add)).
 
@@ -43875,209 +43890,222 @@ Adds a credit card Payment Method to your account and sets it as the default met
  * @deprecated
  * @summary Credit Card Add/Edit
  */
-const createCreditCard = <TData = AxiosResponse<CreateCreditCard200>>(
-    createCreditCardBody: CreateCreditCardBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/credit-card`,
-      createCreditCardBody,options
-    );
-  }
-
+const createCreditCard = (
+    createCreditCardBody: BodyType<CreateCreditCardBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateCreditCard200>(
+      {url: `/account/credit-card`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createCreditCardBody
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use [Service Transfers List](/docs/api/account/#service-transfers-list).
 
  * @deprecated
  * @summary Entity Transfers List
  */
-const getEntityTransfers = <TData = AxiosResponse<GetEntityTransfers200>>(
-    params?: GetEntityTransfersParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/entity-transfers`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getEntityTransfers = (
+    params?: GetEntityTransfersParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEntityTransfers200>(
+      {url: `/account/entity-transfers`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use [Service Transfer Create](/docs/api/account/#service-transfer-create).
 
  * @deprecated
  * @summary Entity Transfer Create
  */
-const createEntityTransfer = <TData = AxiosResponse<CreateEntityTransfer200>>(
-    createEntityTransferBody: CreateEntityTransferBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/entity-transfers`,
-      createEntityTransferBody,options
-    );
-  }
-
+const createEntityTransfer = (
+    createEntityTransferBody: BodyType<CreateEntityTransferBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateEntityTransfer200>(
+      {url: `/account/entity-transfers`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createEntityTransferBody
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use [Service Transfer View](/docs/api/account/#service-transfer-view).
 
  * @deprecated
  * @summary Entity Transfer View
  */
-const getEntityTransfer = <TData = AxiosResponse<GetEntityTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/entity-transfers/${token}`,options
-    );
-  }
-
+const getEntityTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEntityTransfer200>(
+      {url: `/account/entity-transfers/${token}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use [Service Transfer Cancel](/docs/api/account/#service-transfer-cancel).
 
  * @deprecated
  * @summary Entity Transfer Cancel
  */
-const deleteEntityTransfer = <TData = AxiosResponse<DeleteEntityTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/account/entity-transfers/${token}`,options
-    );
-  }
-
+const deleteEntityTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteEntityTransfer200>(
+      {url: `/account/entity-transfers/${token}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * **DEPRECATED**. Please use [Service Transfer Accept](/docs/api/account/#service-transfer-accept).
 
  * @deprecated
  * @summary Entity Transfer Accept
  */
-const acceptEntityTransfer = <TData = AxiosResponse<AcceptEntityTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/entity-transfers/${token}/accept`,undefined,options
-    );
-  }
-
+const acceptEntityTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AcceptEntityTransfer200>(
+      {url: `/account/entity-transfers/${token}/accept`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of Event objects representing actions taken on your Account from the last 90 days. The Events returned depend on your grants.
 
  * @summary Events List
  */
-const getEvents = <TData = AxiosResponse<GetEvents200>>(
-    params?: GetEventsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/events`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getEvents = (
+    params?: GetEventsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEvents200>(
+      {url: `/account/events`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a single Event object.
 
  * @summary Event View
  */
-const getEvent = <TData = AxiosResponse<GetEvent200>>(
-    eventId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/events/${eventId}`,options
-    );
-  }
-
+const getEvent = (
+    eventId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetEvent200>(
+      {url: `/account/events/${eventId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Marks a single Event as read.
  * @summary Event Mark as Read
  */
-const eventRead = <TData = AxiosResponse<EventRead200>>(
-    eventId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/events/${eventId}/read`,undefined,options
-    );
-  }
-
+const eventRead = (
+    eventId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EventRead200>(
+      {url: `/account/events/${eventId}/read`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Marks all Events up to and including this Event by ID as seen.
 
  * @summary Event Mark as Seen
  */
-const eventSeen = <TData = AxiosResponse<EventSeen200>>(
-    eventId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/events/${eventId}/seen`,undefined,options
-    );
-  }
-
+const eventSeen = (
+    eventId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EventSeen200>(
+      {url: `/account/events/${eventId}/seen`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Invoices against your Account.
 
  * @summary Invoices List
  */
-const getInvoices = <TData = AxiosResponse<GetInvoices200>>(
-    params?: GetInvoicesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/invoices`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getInvoices = (
+    params?: GetInvoicesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetInvoices200>(
+      {url: `/account/invoices`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a single Invoice object.
  * @summary Invoice View
  */
-const getInvoice = <TData = AxiosResponse<GetInvoice200>>(
-    invoiceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/invoices/${invoiceId}`,options
-    );
-  }
-
+const getInvoice = (
+    invoiceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetInvoice200>(
+      {url: `/account/invoices/${invoiceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Invoice items.
  * @summary Invoice Items List
  */
-const getInvoiceItems = <TData = AxiosResponse<GetInvoiceItems200>>(
+const getInvoiceItems = (
     invoiceId: number,
-    params?: GetInvoiceItemsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/invoices/${invoiceId}/items`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetInvoiceItemsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetInvoiceItems200>(
+      {url: `/account/invoices/${invoiceId}/items`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of successful logins for all users on the account during the last 90 days. This command can only be accessed by the unrestricted users of an account.
 
  * @summary User Logins List All
  */
-const getAccountLogins = <TData = AxiosResponse<GetAccountLogins200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/logins`,options
-    );
-  }
-
+const getAccountLogins = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAccountLogins200>(
+      {url: `/account/logins`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a Login object that displays information about a successful login. The logins that can be viewed can be for any user on the account, and are not limited to only the logins of the user that is accessing this API endpoint. This command can only be accessed by the unrestricted users of the account.
 
  * @summary Login View
  */
-const getAccountLogin = <TData = AxiosResponse<GetAccountLogin200>>(
-    loginId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/logins/${loginId}`,options
-    );
-  }
-
+const getAccountLogin = (
+    loginId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAccountLogin200>(
+      {url: `/account/logins/${loginId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of Maintenance objects for any entity a user has permissions to view. Canceled Maintenance objects are not returned.
 
@@ -44085,156 +44113,167 @@ Currently, Linodes are the only entities available for viewing.
 
  * @summary Maintenance List
  */
-const getMaintenance = <TData = AxiosResponse<GetMaintenance200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/maintenance`,options
-    );
-  }
-
+const getMaintenance = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetMaintenance200>(
+      {url: `/account/maintenance`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of Notification objects representing important, often time-sensitive items related to your Account.
 You cannot interact directly with Notifications, and a Notification will disappear when the circumstances causing it have been resolved. For example, if you have an important Ticket open, you must respond to the Ticket to dismiss the Notification.
 
  * @summary Notifications List
  */
-const getNotifications = <TData = AxiosResponse<GetNotifications200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/notifications`,options
-    );
-  }
-
+const getNotifications = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNotifications200>(
+      {url: `/account/notifications`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of OAuth Clients registered to your Account.  OAuth Clients allow users to log into applications you write or host using their Linode Account, and may allow them to grant some level of access to their Linodes or other entities to your application.
 
  * @summary OAuth Clients List
  */
-const getClients = <TData = AxiosResponse<GetClients200>>(
-    params?: GetClientsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/oauth-clients`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getClients = (
+    params?: GetClientsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetClients200>(
+      {url: `/account/oauth-clients`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates an OAuth Client, which can be used to allow users (using their Linode account) to log in to your own application, and optionally grant your application some amount of access to their Linodes or other entities.
 
  * @summary OAuth Client Create
  */
-const createClient = <TData = AxiosResponse<CreateClient200>>(
-    createClientBodyAllOf: NonReadonly<CreateClientBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/oauth-clients`,
-      createClientBodyAllOf,options
-    );
-  }
-
+const createClient = (
+    createClientBodyAllOf: BodyType<NonReadonly<CreateClientBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateClient200>(
+      {url: `/account/oauth-clients`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createClientBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single OAuth client.
 
  * @summary OAuth Client View
  */
-const getClient = <TData = AxiosResponse<GetClient200>>(
-    clientId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/oauth-clients/${clientId}`,options
-    );
-  }
-
+const getClient = (
+    clientId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetClient200>(
+      {url: `/account/oauth-clients/${clientId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update information about an OAuth Client on your Account. This can be especially useful to update the `redirect_uri` of your client in the event that the callback url changed in your application.
 
  * @summary OAuth Client Update
  */
-const updateClient = <TData = AxiosResponse<UpdateClient200>>(
+const updateClient = (
     clientId: string,
-    updateClientBody: NonReadonly<UpdateClientBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account/oauth-clients/${clientId}`,
-      updateClientBody,options
-    );
-  }
-
+    updateClientBody: BodyType<NonReadonly<UpdateClientBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateClient200>(
+      {url: `/account/oauth-clients/${clientId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateClientBody
+    },
+      options);
+    }
+  
 /**
  * Deletes an OAuth Client registered with Linode. The Client ID and Client secret will no longer be accepted by <a target="_top" href="https://login.linode.com">https://login.linode.com</a>, and all tokens issued to this client will be invalidated (meaning that if your application was using a token, it will no longer work).
 
  * @summary OAuth Client Delete
  */
-const deleteClient = <TData = AxiosResponse<DeleteClient200>>(
-    clientId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/account/oauth-clients/${clientId}`,options
-    );
-  }
-
+const deleteClient = (
+    clientId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteClient200>(
+      {url: `/account/oauth-clients/${clientId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Resets the OAuth Client secret for a client you own, and returns the OAuth Client with the plaintext secret. This secret is not supposed to be publicly known or disclosed anywhere. This can be used to generate a new secret in case the one you have has been leaked, or to get a new secret if you lost the original. The old secret is expired immediately, and logins to your client with the old secret will fail.
 
  * @summary OAuth Client Secret Reset
  */
-const resetClientSecret = <TData = AxiosResponse<ResetClientSecret200>>(
-    clientId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/oauth-clients/${clientId}/reset-secret`,undefined,options
-    );
-  }
-
+const resetClientSecret = (
+    clientId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResetClientSecret200>(
+      {url: `/account/oauth-clients/${clientId}/reset-secret`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns the thumbnail for this OAuth Client.  This is a publicly-viewable endpoint, and can be accessed without authentication.
 
  * @summary OAuth Client Thumbnail View
  */
-const getClientThumbnail = <TData = AxiosResponse<Blob>>(
-    clientId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/oauth-clients/${clientId}/thumbnail`,{
-        responseType: 'blob',
-    ...options,}
-    );
-  }
-
+const getClientThumbnail = (
+    clientId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<Blob>(
+      {url: `/account/oauth-clients/${clientId}/thumbnail`, method: 'get',
+        responseType: 'blob'
+    },
+      options);
+    }
+  
 /**
  * Upload a thumbnail for a client you own.  You must upload an image file that will be returned when the thumbnail is retrieved.  This image will be publicly-viewable.
 
  * @summary OAuth Client Thumbnail Update
  */
-const setClientThumbnail = <TData = AxiosResponse<SetClientThumbnail200>>(
+const setClientThumbnail = (
     clientId: string,
-    setClientThumbnailBody: Blob, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account/oauth-clients/${clientId}/thumbnail`,
-      setClientThumbnailBody,options
-    );
-  }
-
+    setClientThumbnailBody: BodyType<Blob>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<SetClientThumbnail200>(
+      {url: `/account/oauth-clients/${clientId}/thumbnail`, method: 'put',
+      headers: {'Content-Type': 'image/png', },
+      data: setClientThumbnailBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Payment Methods for this Account.
 
  * @summary Payment Methods List
  */
-const getPaymentMethods = <TData = AxiosResponse<GetPaymentMethods200>>(
-    params?: GetPaymentMethodsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/payment-methods`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getPaymentMethods = (
+    params?: GetPaymentMethodsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPaymentMethods200>(
+      {url: `/account/payment-methods`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a Payment Method to your Account with the option to set it as the default method.
 
@@ -44251,28 +44290,31 @@ with a valid `zip` by using the Account Update ([PUT /account](/docs/api/account
 
  * @summary Payment Method Add
  */
-const createPaymentMethod = <TData = AxiosResponse<CreatePaymentMethod200>>(
-    createPaymentMethodBody: CreatePaymentMethodBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/payment-methods`,
-      createPaymentMethodBody,options
-    );
-  }
-
+const createPaymentMethod = (
+    createPaymentMethodBody: BodyType<CreatePaymentMethodBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreatePaymentMethod200>(
+      {url: `/account/payment-methods`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createPaymentMethodBody
+    },
+      options);
+    }
+  
 /**
  * View the details of the specified Payment Method.
 
  * @summary Payment Method View
  */
-const getPaymentMethod = <TData = AxiosResponse<GetPaymentMethod200>>(
-    paymentMethodId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/payment-methods/${paymentMethodId}`,options
-    );
-  }
-
+const getPaymentMethod = (
+    paymentMethodId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPaymentMethod200>(
+      {url: `/account/payment-methods/${paymentMethodId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Deactivate the specified Payment Method.
 
@@ -44284,14 +44326,15 @@ endpoint.
 
  * @summary Payment Method Delete
  */
-const deletePaymentMethod = <TData = AxiosResponse<DeletePaymentMethod200>>(
-    paymentMethodId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/account/payment-methods/${paymentMethodId}`,options
-    );
-  }
-
+const deletePaymentMethod = (
+    paymentMethodId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeletePaymentMethod200>(
+      {url: `/account/payment-methods/${paymentMethodId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Make the specified Payment Method the default method for automatically processing payments.
 
@@ -44299,29 +44342,30 @@ Removes the default status from any other Payment Method.
 
  * @summary Payment Method Make Default
  */
-const makePaymentMethodDefault = <TData = AxiosResponse<MakePaymentMethodDefault200>>(
-    paymentMethodId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/payment-methods/${paymentMethodId}/make-default`,undefined,options
-    );
-  }
-
+const makePaymentMethodDefault = (
+    paymentMethodId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<MakePaymentMethodDefault200>(
+      {url: `/account/payment-methods/${paymentMethodId}/make-default`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Payments made on this Account.
 
  * @summary Payments List
  */
-const getPayments = <TData = AxiosResponse<GetPayments200>>(
-    params?: GetPaymentsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/payments`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getPayments = (
+    params?: GetPaymentsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPayments200>(
+      {url: `/account/payments`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Makes a Payment to your Account.
 
@@ -44331,58 +44375,65 @@ const getPayments = <TData = AxiosResponse<GetPayments200>>(
 
  * @summary Payment Make
  */
-const createPayment = <TData = AxiosResponse<CreatePayment200 | CreatePayment202>>(
-    createPaymentBody: CreatePaymentBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/payments`,
-      createPaymentBody,options
-    );
-  }
-
+const createPayment = (
+    createPaymentBody: BodyType<CreatePaymentBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreatePayment200 | CreatePayment202>(
+      {url: `/account/payments`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createPaymentBody
+    },
+      options);
+    }
+  
 /**
  * Returns information about a specific Payment.
 
  * @summary Payment View
  */
-const getPayment = <TData = AxiosResponse<GetPayment200>>(
-    paymentId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/payments/${paymentId}`,options
-    );
-  }
-
+const getPayment = (
+    paymentId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPayment200>(
+      {url: `/account/payments/${paymentId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **Note**: This endpoint is disabled and no longer accessible. PayPal can be designated as a Payment Method for automated payments using the Cloud Manager. See [Manage Payment Methods](/docs/products/platform/billing/guides/payment-methods/).
 
  * @deprecated
  * @summary PayPal Payment Stage
  */
-const createPayPalPayment = <TData = AxiosResponse<CreatePayPalPayment200 | CreatePayPalPayment299>>(
-    createPayPalPaymentBody: CreatePayPalPaymentBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/payments/paypal`,
-      createPayPalPaymentBody,options
-    );
-  }
-
+const createPayPalPayment = (
+    createPayPalPaymentBody: BodyType<CreatePayPalPaymentBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreatePayPalPayment200 | CreatePayPalPayment299>(
+      {url: `/account/payments/paypal`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createPayPalPaymentBody
+    },
+      options);
+    }
+  
 /**
  * **Note**: This endpoint is disabled and no longer accessible. PayPal can be designated as a Payment Method for automated payments using the Cloud Manager. See [Manage Payment Methods](/docs/products/platform/billing/guides/payment-methods/).
 
  * @deprecated
  * @summary Staged/Approved PayPal Payment Execute
  */
-const executePayPalPayment = <TData = AxiosResponse<ExecutePayPalPayment200 | ExecutePayPalPayment202 | ExecutePayPalPayment299>>(
-    executePayPalPaymentBody: ExecutePayPalPaymentBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/payments/paypal/execute`,
-      executePayPalPaymentBody,options
-    );
-  }
-
+const executePayPalPayment = (
+    executePayPalPaymentBody: BodyType<ExecutePayPalPaymentBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ExecutePayPalPayment200 | ExecutePayPalPayment202 | ExecutePayPalPayment299>(
+      {url: `/account/payments/paypal/execute`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: executePayPalPaymentBody
+    },
+      options);
+    }
+  
 /**
  * Adds an expiring Promo Credit to your account.
 
@@ -44396,15 +44447,17 @@ The following restrictions apply:
 
  * @summary Promo Credit Add
  */
-const createPromoCredit = <TData = AxiosResponse<CreatePromoCredit200>>(
-    createPromoCreditBody: CreatePromoCreditBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/promo-codes`,
-      createPromoCreditBody,options
-    );
-  }
-
+const createPromoCredit = (
+    createPromoCreditBody: BodyType<CreatePromoCreditBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreatePromoCredit200>(
+      {url: `/account/promo-codes`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createPromoCreditBody
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of all created and accepted Service Transfers for this account, regardless of the user that created or accepted the transfer.
 
@@ -44412,16 +44465,16 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Service Transfers List
  */
-const getServiceTransfers = <TData = AxiosResponse<GetServiceTransfers200>>(
-    params?: GetServiceTransfersParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/service-transfers`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getServiceTransfers = (
+    params?: GetServiceTransfersParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetServiceTransfers200>(
+      {url: `/account/service-transfers`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a transfer request for the specified services. A request can contain any of the specified service types
 and any number of each service type. At this time, only Linodes can be transferred.
@@ -44462,15 +44515,17 @@ incomplete.
 
  * @summary Service Transfer Create
  */
-const createServiceTransfer = <TData = AxiosResponse<CreateServiceTransfer200>>(
-    createServiceTransferBody: CreateServiceTransferBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/service-transfers`,
-      createServiceTransferBody,options
-    );
-  }
-
+const createServiceTransfer = (
+    createServiceTransferBody: BodyType<CreateServiceTransferBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateServiceTransfer200>(
+      {url: `/account/service-transfers`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createServiceTransferBody
+    },
+      options);
+    }
+  
 /**
  * Returns the details of the Service Transfer for the provided token.
 
@@ -44481,14 +44536,15 @@ transfer can view it.
 
  * @summary Service Transfer View
  */
-const getServiceTransfer = <TData = AxiosResponse<GetServiceTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/service-transfers/${token}`,options
-    );
-  }
-
+const getServiceTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetServiceTransfer200>(
+      {url: `/account/service-transfers/${token}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Cancels the Service Transfer for the provided token. Once canceled, a transfer cannot be accepted or otherwise acted on in any way. If canceled in error, the transfer must be [created](/docs/api/account/#service-transfer-create) again.
 
@@ -44498,14 +44554,15 @@ This command can only be accessed by the unrestricted users of the account that 
 
  * @summary Service Transfer Cancel
  */
-const deleteServiceTransfer = <TData = AxiosResponse<DeleteServiceTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/account/service-transfers/${token}`,options
-    );
-  }
-
+const deleteServiceTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteServiceTransfer200>(
+      {url: `/account/service-transfers/${token}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Accept a Service Transfer for the provided token to receive the services included in the transfer to your
 account. At this time, only Linodes can be transferred.
@@ -44544,27 +44601,29 @@ transfer's expiration to allow the transfer to be accepted by the receiving acco
 
  * @summary Service Transfer Accept
  */
-const acceptServiceTransfer = <TData = AxiosResponse<AcceptServiceTransfer200>>(
-    token: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/service-transfers/${token}/accept`,undefined,options
-    );
-  }
-
+const acceptServiceTransfer = (
+    token: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AcceptServiceTransfer200>(
+      {url: `/account/service-transfers/${token}/accept`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns information related to your Account settings: Managed service subscription, Longview subscription, and network helper.
 
  * @summary Account Settings View
  */
-const getAccountSettings = <TData = AxiosResponse<GetAccountSettings200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/settings`,options
-    );
-  }
-
+const getAccountSettings = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetAccountSettings200>(
+      {url: `/account/settings`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates your Account settings.
 
@@ -44572,41 +44631,45 @@ To update your Longview subscription plan, send a request to [Update Longview Pl
 
  * @summary Account Settings Update
  */
-const updateAccountSettings = <TData = AxiosResponse<UpdateAccountSettings200>>(
-    updateAccountSettingsBody: NonReadonly<UpdateAccountSettingsBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account/settings`,
-      updateAccountSettingsBody,options
-    );
-  }
-
+const updateAccountSettings = (
+    updateAccountSettingsBody: BodyType<NonReadonly<UpdateAccountSettingsBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateAccountSettings200>(
+      {url: `/account/settings`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAccountSettingsBody
+    },
+      options);
+    }
+  
 /**
  * Enables Linode Managed for the entire account and sends a welcome email to the account's associated email address. Linode Managed can monitor any service or software stack reachable over TCP or HTTP. See our [Linode Managed guide](/docs/guides/linode-managed/) to learn more.
 
  * @summary Linode Managed Enable
  */
-const enableAccountManaged = <TData = AxiosResponse<EnableAccountManaged200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/settings/managed-enable`,undefined,options
-    );
-  }
-
+const enableAccountManaged = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EnableAccountManaged200>(
+      {url: `/account/settings/managed-enable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a Transfer object showing your network utilization, in GB, for the current month.
 
  * @summary Network Utilization View
  */
-const getTransfer = <TData = AxiosResponse<GetTransfer200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/transfer`,options
-    );
-  }
-
+const getTransfer = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTransfer200>(
+      {url: `/account/transfer`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Users on your Account.
 
@@ -44616,16 +44679,16 @@ Users may access all or part of your Account based on their restricted status an
 
  * @summary Users List
  */
-const getUsers = <TData = AxiosResponse<GetUsers200>>(
-    params?: GetUsersParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/users`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getUsers = (
+    params?: GetUsersParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetUsers200>(
+      {url: `/account/users`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a User on your Account. Once created, a confirmation message containing
 password creation and login instructions is sent to the User's email address.
@@ -44637,15 +44700,17 @@ and what grants they have been given.
 
  * @summary User Create
  */
-const createUser = <TData = AxiosResponse<CreateUser200>>(
-    createUserBodyAllOf: NonReadonly<CreateUserBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/account/users`,
-      createUserBodyAllOf,options
-    );
-  }
-
+const createUser = (
+    createUserBodyAllOf: BodyType<NonReadonly<CreateUserBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateUser200>(
+      {url: `/account/users`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createUserBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single User on your Account.
 
@@ -44653,14 +44718,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary User View
  */
-const getUser = <TData = AxiosResponse<GetUser200>>(
-    username: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/users/${username}`,options
-    );
-  }
-
+const getUser = (
+    username: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetUser200>(
+      {url: `/account/users/${username}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update information about a User on your Account. This can be used to
 change the restricted status of a User. When making a User restricted,
@@ -44671,16 +44737,18 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary User Update
  */
-const updateUser = <TData = AxiosResponse<UpdateUser200>>(
+const updateUser = (
     username: string,
-    updateUserBody: NonReadonly<UpdateUserBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account/users/${username}`,
-      updateUserBody,options
-    );
-  }
-
+    updateUserBody: BodyType<NonReadonly<UpdateUserBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateUser200>(
+      {url: `/account/users/${username}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUserBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a User. The deleted User will be immediately logged out and
 may no longer log in or perform any actions. All of the User's Grants
@@ -44690,14 +44758,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary User Delete
  */
-const deleteUser = <TData = AxiosResponse<DeleteUser200>>(
-    username: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/account/users/${username}`,options
-    );
-  }
-
+const deleteUser = (
+    username: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteUser200>(
+      {url: `/account/users/${username}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns the full grants structure for the specified account User
 (other than the account owner, see below for details). This includes all entities
@@ -44711,14 +44780,15 @@ endpoint, but will not see entities that they do not have access to.
 
  * @summary User's Grants View
  */
-const getUserGrants = <TData = AxiosResponse<GetUserGrants200 | void>>(
-    username: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/account/users/${username}/grants`,options
-    );
-  }
-
+const getUserGrants = (
+    username: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetUserGrants200 | void>(
+      {url: `/account/users/${username}/grants`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update the grants a User has. This can be used to give a User access
 to new entities or actions, or take access away.  You do not need to
@@ -44729,16 +44799,18 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary User's Grants Update
  */
-const updateUserGrants = <TData = AxiosResponse<UpdateUserGrants200>>(
+const updateUserGrants = (
     username: string,
-    updateUserGrantsBody: UpdateUserGrantsBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/account/users/${username}/grants`,
-      updateUserGrantsBody,options
-    );
-  }
-
+    updateUserGrantsBody: BodyType<UpdateUserGrantsBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateUserGrants200>(
+      {url: `/account/users/${username}/grants`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUserGrantsBody
+    },
+      options);
+    }
+  
 /**
  * Display all active Beta Programs.
 
@@ -44746,16 +44818,16 @@ Only unrestricted Users can access this command.
 
  * @summary Beta Programs List
  */
-const getBetaPrograms = <TData = AxiosResponse<GetBetaPrograms200>>(
-    params?: GetBetaProgramsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/betas`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getBetaPrograms = (
+    params?: GetBetaProgramsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetBetaPrograms200>(
+      {url: `/betas`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Display information about a Beta Program. This command can be used to access inactive as well as active Beta Programs.
 
@@ -44763,14 +44835,15 @@ Only unrestricted Users can access this command.
 
  * @summary Beta Program View
  */
-const getBetaProgram = <TData = AxiosResponse<GetBetaProgram200>>(
-    betaId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/betas/${betaId}`,options
-    );
-  }
-
+const getBetaProgram = (
+    betaId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetBetaProgram200>(
+      {url: `/betas/${betaId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44778,16 +44851,16 @@ Display all available Managed Database engine types and versions. Engine IDs are
 
  * @summary Managed Database Engines List
  */
-const getDatabasesEngines = <TData = AxiosResponse<GetDatabasesEngines200>>(
-    params?: GetDatabasesEnginesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/engines`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDatabasesEngines = (
+    params?: GetDatabasesEnginesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesEngines200>(
+      {url: `/databases/engines`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44795,17 +44868,17 @@ Display information for a single Managed Database engine type and version.
 
  * @summary Managed Database Engine View
  */
-const getDatabasesEngine = <TData = AxiosResponse<GetDatabasesEngine200>>(
+const getDatabasesEngine = (
     engineId: string,
-    params?: GetDatabasesEngineParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/engines/${engineId}`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetDatabasesEngineParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesEngine200>(
+      {url: `/databases/engines/${engineId}`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44815,16 +44888,16 @@ For more detailed information on a particular Database instance, make a request 
 
  * @summary Managed Databases List All
  */
-const getDatabasesInstances = <TData = AxiosResponse<GetDatabasesInstances200>>(
-    params?: GetDatabasesInstancesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/instances`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDatabasesInstances = (
+    params?: GetDatabasesInstancesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesInstances200>(
+      {url: `/databases/instances`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44832,16 +44905,16 @@ Display all accessible Managed MySQL Databases.
 
  * @summary Managed MySQL Databases List
  */
-const getDatabasesMySQLInstances = <TData = AxiosResponse<GetDatabasesMySQLInstances200>>(
-    params?: GetDatabasesMySQLInstancesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDatabasesMySQLInstances = (
+    params?: GetDatabasesMySQLInstancesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstances200>(
+      {url: `/databases/mysql/instances`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44871,15 +44944,17 @@ All Managed Databases include automatic patch updates, which apply security patc
 
  * @summary Managed MySQL Database Create
  */
-const postDatabasesMySQLInstances = <TData = AxiosResponse<PostDatabasesMySQLInstances200>>(
-    postDatabasesMySQLInstancesBody: PostDatabasesMySQLInstancesBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/mysql/instances`,
-      postDatabasesMySQLInstancesBody,options
-    );
-  }
-
+const postDatabasesMySQLInstances = (
+    postDatabasesMySQLInstancesBody: BodyType<PostDatabasesMySQLInstancesBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesMySQLInstances200>(
+      {url: `/databases/mysql/instances`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postDatabasesMySQLInstancesBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44887,14 +44962,15 @@ Display information for a single, accessible Managed MySQL Database.
 
  * @summary Managed MySQL Database View
  */
-const getDatabasesMySQLInstance = <TData = AxiosResponse<GetDatabasesMySQLInstance200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances/${instanceId}`,options
-    );
-  }
-
+const getDatabasesMySQLInstance = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstance200>(
+      {url: `/databases/mysql/instances/${instanceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44908,14 +44984,15 @@ Only unrestricted Users can access this command, and have access regardless of t
 
  * @summary Managed MySQL Database Delete
  */
-const deleteDatabasesMySQLInstance = <TData = AxiosResponse<DeleteDatabasesMySQLInstance200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/databases/mysql/instances/${instanceId}`,options
-    );
-  }
-
+const deleteDatabasesMySQLInstance = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDatabasesMySQLInstance200>(
+      {url: `/databases/mysql/instances/${instanceId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44943,16 +45020,18 @@ All Managed Databases include automatic patch updates, which apply security patc
 
  * @summary Managed MySQL Database Update
  */
-const putDatabasesMySQLInstance = <TData = AxiosResponse<PutDatabasesMySQLInstance200>>(
+const putDatabasesMySQLInstance = (
     instanceId: number,
-    putDatabasesMySQLInstanceBody: PutDatabasesMySQLInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/databases/mysql/instances/${instanceId}`,
-      putDatabasesMySQLInstanceBody,options
-    );
-  }
-
+    putDatabasesMySQLInstanceBody: BodyType<PutDatabasesMySQLInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PutDatabasesMySQLInstance200>(
+      {url: `/databases/mysql/instances/${instanceId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: putDatabasesMySQLInstanceBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44966,17 +45045,17 @@ Database `snapshot` type backups are created by accessing the **Managed MySQL Da
 
  * @summary Managed MySQL Database Backups List
  */
-const getDatabasesMySQLInstanceBackups = <TData = AxiosResponse<GetDatabasesMySQLInstanceBackups200>>(
+const getDatabasesMySQLInstanceBackups = (
     instanceId: number,
-    params?: GetDatabasesMySQLInstanceBackupsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances/${instanceId}/backups`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetDatabasesMySQLInstanceBackupsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstanceBackups200>(
+      {url: `/databases/mysql/instances/${instanceId}/backups`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -44992,16 +45071,18 @@ The Database must have an `active` status to perform this command. If another ba
 
  * @summary Managed MySQL Database Backup Snapshot Create
  */
-const postDatabasesMySQLInstanceBackup = <TData = AxiosResponse<PostDatabasesMySQLInstanceBackup200>>(
+const postDatabasesMySQLInstanceBackup = (
     instanceId: number,
-    postDatabasesMySQLInstanceBackupBody: PostDatabasesMySQLInstanceBackupBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/mysql/instances/${instanceId}/backups`,
-      postDatabasesMySQLInstanceBackupBody,options
-    );
-  }
-
+    postDatabasesMySQLInstanceBackupBody: BodyType<PostDatabasesMySQLInstanceBackupBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesMySQLInstanceBackup200>(
+      {url: `/databases/mysql/instances/${instanceId}/backups`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postDatabasesMySQLInstanceBackupBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45011,15 +45092,16 @@ The Database must not be provisioning to perform this command.
 
  * @summary Managed MySQL Database Backup View
  */
-const getDatabasesMySQLInstanceBackup = <TData = AxiosResponse<GetDatabasesMySQLInstanceBackup200>>(
+const getDatabasesMySQLInstanceBackup = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances/${instanceId}/backups/${backupId}`,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstanceBackup200>(
+      {url: `/databases/mysql/instances/${instanceId}/backups/${backupId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45031,15 +45113,16 @@ The Database must not be provisioning to perform this command.
 
  * @summary Managed MySQL Database Backup Delete
  */
-const deleteDatabaseMySQLInstanceBackup = <TData = AxiosResponse<DeleteDatabaseMySQLInstanceBackup200>>(
+const deleteDatabaseMySQLInstanceBackup = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/databases/mysql/instances/${instanceId}/backups/${backupId}`,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDatabaseMySQLInstanceBackup200>(
+      {url: `/databases/mysql/instances/${instanceId}/backups/${backupId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45055,15 +45138,16 @@ The Database must have an `active`, `degraded`, or `failed` status to perform th
 
  * @summary Managed MySQL Database Backup Restore
  */
-const postDatabasesMySQLInstanceBackupRestore = <TData = AxiosResponse<PostDatabasesMySQLInstanceBackupRestore200>>(
+const postDatabasesMySQLInstanceBackupRestore = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/mysql/instances/${instanceId}/backups/${backupId}/restore`,undefined,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesMySQLInstanceBackupRestore200>(
+      {url: `/databases/mysql/instances/${instanceId}/backups/${backupId}/restore`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45073,14 +45157,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed MySQL Database Credentials View
  */
-const getDatabasesMySQLInstanceCredentials = <TData = AxiosResponse<GetDatabasesMySQLInstanceCredentials200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances/${instanceId}/credentials`,options
-    );
-  }
-
+const getDatabasesMySQLInstanceCredentials = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstanceCredentials200>(
+      {url: `/databases/mysql/instances/${instanceId}/credentials`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45096,14 +45181,15 @@ Only unrestricted Users can access this command, and have access regardless of t
 
  * @summary Managed MySQL Database Credentials Reset
  */
-const postDatabasesMySQLInstanceCredentialsReset = <TData = AxiosResponse<PostDatabasesMySQLInstanceCredentialsReset200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/mysql/instances/${instanceId}/credentials/reset`,undefined,options
-    );
-  }
-
+const postDatabasesMySQLInstanceCredentialsReset = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesMySQLInstanceCredentialsReset200>(
+      {url: `/databases/mysql/instances/${instanceId}/credentials/reset`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45113,14 +45199,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed MySQL Database SSL Certificate View
  */
-const getDatabasesMySQLInstanceSSL = <TData = AxiosResponse<GetDatabasesMySQLInstanceSSL200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/mysql/instances/${instanceId}/ssl`,options
-    );
-  }
-
+const getDatabasesMySQLInstanceSSL = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesMySQLInstanceSSL200>(
+      {url: `/databases/mysql/instances/${instanceId}/ssl`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45138,14 +45225,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed MySQL Database Patch
  */
-const postDatabasesMySQLInstancePatch = <TData = AxiosResponse<PostDatabasesMySQLInstancePatch200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/mysql/instances/${instanceId}/patch`,undefined,options
-    );
-  }
-
+const postDatabasesMySQLInstancePatch = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesMySQLInstancePatch200>(
+      {url: `/databases/mysql/instances/${instanceId}/patch`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45153,16 +45241,16 @@ Display all accessible Managed PostgreSQL Databases.
 
  * @summary Managed PostgreSQL Databases List
  */
-const getDatabasesPostgreSQLInstances = <TData = AxiosResponse<GetDatabasesPostgreSQLInstances200>>(
-    params?: GetDatabasesPostgreSQLInstancesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDatabasesPostgreSQLInstances = (
+    params?: GetDatabasesPostgreSQLInstancesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstances200>(
+      {url: `/databases/postgresql/instances`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45192,15 +45280,17 @@ All Managed Databases include automatic patch updates, which apply security patc
 
  * @summary Managed PostgreSQL Database Create
  */
-const postDatabasesPostgreSQLInstances = <TData = AxiosResponse<PostDatabasesPostgreSQLInstances200>>(
-    postDatabasesPostgreSQLInstancesBody: PostDatabasesPostgreSQLInstancesBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/postgresql/instances`,
-      postDatabasesPostgreSQLInstancesBody,options
-    );
-  }
-
+const postDatabasesPostgreSQLInstances = (
+    postDatabasesPostgreSQLInstancesBody: BodyType<PostDatabasesPostgreSQLInstancesBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesPostgreSQLInstances200>(
+      {url: `/databases/postgresql/instances`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postDatabasesPostgreSQLInstancesBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45208,14 +45298,15 @@ Display information for a single, accessible Managed PostgreSQL Database.
 
  * @summary Managed PostgreSQL Database View
  */
-const getDatabasesPostgreSQLInstance = <TData = AxiosResponse<GetDatabasesPostgreSQLInstance200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances/${instanceId}`,options
-    );
-  }
-
+const getDatabasesPostgreSQLInstance = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstance200>(
+      {url: `/databases/postgresql/instances/${instanceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45229,14 +45320,15 @@ Only unrestricted Users can access this command, and have access regardless of t
 
  * @summary Managed PostgreSQL Database Delete
  */
-const deleteDatabasesPostgreSQLInstance = <TData = AxiosResponse<DeleteDatabasesPostgreSQLInstance200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/databases/postgresql/instances/${instanceId}`,options
-    );
-  }
-
+const deleteDatabasesPostgreSQLInstance = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDatabasesPostgreSQLInstance200>(
+      {url: `/databases/postgresql/instances/${instanceId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45264,16 +45356,18 @@ All Managed Databases include automatic patch updates, which apply security patc
 
  * @summary Managed PostgreSQL Database Update
  */
-const putDatabasesPostgreSQLInstance = <TData = AxiosResponse<PutDatabasesPostgreSQLInstance200>>(
+const putDatabasesPostgreSQLInstance = (
     instanceId: number,
-    putDatabasesPostgreSQLInstanceBody: PutDatabasesPostgreSQLInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/databases/postgresql/instances/${instanceId}`,
-      putDatabasesPostgreSQLInstanceBody,options
-    );
-  }
-
+    putDatabasesPostgreSQLInstanceBody: BodyType<PutDatabasesPostgreSQLInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PutDatabasesPostgreSQLInstance200>(
+      {url: `/databases/postgresql/instances/${instanceId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: putDatabasesPostgreSQLInstanceBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45287,17 +45381,17 @@ Database `snapshot` type backups are created by accessing the **Managed PostgreS
 
  * @summary Managed PostgreSQL Database Backups List
  */
-const getDatabasesPostgreSQLInstanceBackups = <TData = AxiosResponse<GetDatabasesPostgreSQLInstanceBackups200>>(
+const getDatabasesPostgreSQLInstanceBackups = (
     instanceId: number,
-    params?: GetDatabasesPostgreSQLInstanceBackupsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances/${instanceId}/backups`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetDatabasesPostgreSQLInstanceBackupsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstanceBackups200>(
+      {url: `/databases/postgresql/instances/${instanceId}/backups`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45313,16 +45407,18 @@ The Database must have an `active` status to perform this command. If another ba
 
  * @summary Managed PostgreSQL Database Backup Snapshot Create
  */
-const postDatabasesPostgreSQLInstanceBackup = <TData = AxiosResponse<PostDatabasesPostgreSQLInstanceBackup200>>(
+const postDatabasesPostgreSQLInstanceBackup = (
     instanceId: number,
-    postDatabasesPostgreSQLInstanceBackupBody: PostDatabasesPostgreSQLInstanceBackupBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/postgresql/instances/${instanceId}/backups`,
-      postDatabasesPostgreSQLInstanceBackupBody,options
-    );
-  }
-
+    postDatabasesPostgreSQLInstanceBackupBody: BodyType<PostDatabasesPostgreSQLInstanceBackupBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesPostgreSQLInstanceBackup200>(
+      {url: `/databases/postgresql/instances/${instanceId}/backups`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postDatabasesPostgreSQLInstanceBackupBody
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45332,15 +45428,16 @@ The Database must not be provisioning to perform this command.
 
  * @summary Managed PostgreSQL Database Backup View
  */
-const getDatabasesPostgreSQLInstanceBackup = <TData = AxiosResponse<GetDatabasesPostgreSQLInstanceBackup200>>(
+const getDatabasesPostgreSQLInstanceBackup = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances/${instanceId}/backups/${backupId}`,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstanceBackup200>(
+      {url: `/databases/postgresql/instances/${instanceId}/backups/${backupId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45352,15 +45449,16 @@ The Database must not be provisioning to perform this command.
 
  * @summary Managed PostgreSQL Database Backup Delete
  */
-const deleteDatabasePostgreSQLInstanceBackup = <TData = AxiosResponse<DeleteDatabasePostgreSQLInstanceBackup200>>(
+const deleteDatabasePostgreSQLInstanceBackup = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/databases/postgresql/instances/${instanceId}/backups/${backupId}`,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDatabasePostgreSQLInstanceBackup200>(
+      {url: `/databases/postgresql/instances/${instanceId}/backups/${backupId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45376,15 +45474,16 @@ The Database must have an `active`, `degraded`, or `failed` status to perform th
 
  * @summary Managed PostgreSQL Database Backup Restore
  */
-const postDatabasesPostgreSQLInstanceBackupRestore = <TData = AxiosResponse<PostDatabasesPostgreSQLInstanceBackupRestore200>>(
+const postDatabasesPostgreSQLInstanceBackupRestore = (
     instanceId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/postgresql/instances/${instanceId}/backups/${backupId}/restore`,undefined,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesPostgreSQLInstanceBackupRestore200>(
+      {url: `/databases/postgresql/instances/${instanceId}/backups/${backupId}/restore`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45394,14 +45493,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed PostgreSQL Database Credentials View
  */
-const getDatabasesPostgreSQLInstanceCredentials = <TData = AxiosResponse<GetDatabasesPostgreSQLInstanceCredentials200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances/${instanceId}/credentials`,options
-    );
-  }
-
+const getDatabasesPostgreSQLInstanceCredentials = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstanceCredentials200>(
+      {url: `/databases/postgresql/instances/${instanceId}/credentials`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45417,14 +45517,15 @@ Only unrestricted Users can access this command, and have access regardless of t
 
  * @summary Managed PostgreSQL Database Credentials Reset
  */
-const postDatabasesPostgreSQLInstanceCredentialsReset = <TData = AxiosResponse<PostDatabasesPostgreSQLInstanceCredentialsReset200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/postgresql/instances/${instanceId}/credentials/reset`,undefined,options
-    );
-  }
-
+const postDatabasesPostgreSQLInstanceCredentialsReset = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesPostgreSQLInstanceCredentialsReset200>(
+      {url: `/databases/postgresql/instances/${instanceId}/credentials/reset`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45434,14 +45535,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed PostgreSQL Database SSL Certificate View
  */
-const getDatabasesPostgreSQLInstanceSSL = <TData = AxiosResponse<GetDatabasesPostgreSQLInstanceSSL200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/postgresql/instances/${instanceId}/ssl`,options
-    );
-  }
-
+const getDatabasesPostgreSQLInstanceSSL = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesPostgreSQLInstanceSSL200>(
+      {url: `/databases/postgresql/instances/${instanceId}/ssl`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45459,14 +45561,15 @@ The Database must have an `active` status to perform this command.
 
  * @summary Managed PostgreSQL Database Patch
  */
-const postDatabasesPostgreSQLInstancePatch = <TData = AxiosResponse<PostDatabasesPostgreSQLInstancePatch200>>(
-    instanceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/databases/postgresql/instances/${instanceId}/patch`,undefined,options
-    );
-  }
-
+const postDatabasesPostgreSQLInstancePatch = (
+    instanceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostDatabasesPostgreSQLInstancePatch200>(
+      {url: `/databases/postgresql/instances/${instanceId}/patch`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45476,16 +45579,16 @@ Each Managed Database can have one node type. In the case of a high availabilty 
 
  * @summary Managed Database Types List
  */
-const getDatabasesTypes = <TData = AxiosResponse<GetDatabasesTypes200>>(
-    params?: GetDatabasesTypesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/types`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDatabasesTypes = (
+    params?: GetDatabasesTypesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesTypes200>(
+      {url: `/databases/types`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * **This command is currently only available for customers who already have an active Managed Database.**
 
@@ -45493,100 +45596,107 @@ Display the details of a single Managed Database type. The type and number of no
 
  * @summary Managed Database Type View
  */
-const getDatabasesType = <TData = AxiosResponse<GetDatabasesType200>>(
+const getDatabasesType = (
     typeId: string,
-    params?: GetDatabasesTypeParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/databases/types/${typeId}`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetDatabasesTypeParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDatabasesType200>(
+      {url: `/databases/types/${typeId}`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * This is a collection of Domains that you have registered in Linode's DNS Manager.  Linode is not a registrar, and in order for these to work you must own the domains and point your registrar at Linode's nameservers.
 
  * @summary Domains List
  */
-const getDomains = <TData = AxiosResponse<GetDomains200>>(
-    params?: GetDomainsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/domains`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getDomains = (
+    params?: GetDomainsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDomains200>(
+      {url: `/domains`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a new Domain to Linode's DNS Manager. Linode is not a registrar, and you must own the domain before adding it here. Be sure to point your registrar to Linode's nameservers so that the records hosted here are used.
 
  * @summary Domain Create
  */
-const createDomain = <TData = AxiosResponse<CreateDomain200>>(
-    createDomainBodyAllOf: NonReadonly<CreateDomainBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/domains`,
-      createDomainBodyAllOf,options
-    );
-  }
-
+const createDomain = (
+    createDomainBodyAllOf: BodyType<NonReadonly<CreateDomainBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateDomain200>(
+      {url: `/domains`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createDomainBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * This is a single Domain that you have registered in Linode's DNS Manager. Linode is not a registrar, and in order for this Domain record to work you must own the domain and point your registrar at Linode's nameservers.
 
  * @summary Domain View
  */
-const getDomain = <TData = AxiosResponse<GetDomain200>>(
-    domainId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/domains/${domainId}`,options
-    );
-  }
-
+const getDomain = (
+    domainId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDomain200>(
+      {url: `/domains/${domainId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update information about a Domain in Linode's DNS Manager.
 
  * @summary Domain Update
  */
-const updateDomain = <TData = AxiosResponse<UpdateDomain200>>(
+const updateDomain = (
     domainId: number,
-    updateDomainBody: NonReadonly<UpdateDomainBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/domains/${domainId}`,
-      updateDomainBody,options
-    );
-  }
-
+    updateDomainBody: BodyType<NonReadonly<UpdateDomainBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateDomain200>(
+      {url: `/domains/${domainId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateDomainBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Domain from Linode's DNS Manager. The Domain will be removed from Linode's nameservers shortly after this operation completes. This also deletes all associated Domain Records.
 
  * @summary Domain Delete
  */
-const deleteDomain = <TData = AxiosResponse<DeleteDomain200>>(
-    domainId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/domains/${domainId}`,options
-    );
-  }
-
+const deleteDomain = (
+    domainId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDomain200>(
+      {url: `/domains/${domainId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns the zone file for the last rendered zone for the specified domain.
 
  * @summary Domain Zone File View
  */
-const getDomainZone = <TData = AxiosResponse<GetDomainZone200>>(
-    domainId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/domains/${domainId}/zone-file`,options
-    );
-  }
-
+const getDomainZone = (
+    domainId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDomainZone200>(
+      {url: `/domains/${domainId}/zone-file`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Imports a domain zone from a remote nameserver.
 Your nameserver must allow zone transfers (AXFR) from the following IPs:
@@ -45598,47 +45708,51 @@ Your nameserver must allow zone transfers (AXFR) from the following IPs:
 
  * @summary Domain Import
  */
-const importDomain = <TData = AxiosResponse<ImportDomain200>>(
-    importDomainBody: ImportDomainBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/domains/import`,
-      importDomainBody,options
-    );
-  }
-
+const importDomain = (
+    importDomainBody: BodyType<ImportDomainBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ImportDomain200>(
+      {url: `/domains/import`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: importDomainBody
+    },
+      options);
+    }
+  
 /**
  * Clones a Domain and all associated DNS records from a Domain that is registered in Linode's DNS manager.
 
  * @summary Domain Clone
  */
-const cloneDomain = <TData = AxiosResponse<CloneDomain200>>(
+const cloneDomain = (
     domainId: string,
-    cloneDomainBody: CloneDomainBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/domains/${domainId}/clone`,
-      cloneDomainBody,options
-    );
-  }
-
+    cloneDomainBody: BodyType<CloneDomainBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CloneDomain200>(
+      {url: `/domains/${domainId}/clone`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: cloneDomainBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Records configured on a Domain in Linode's
 DNS Manager.
 
  * @summary Domain Records List
  */
-const getDomainRecords = <TData = AxiosResponse<GetDomainRecords200>>(
+const getDomainRecords = (
     domainId: number,
-    params?: GetDomainRecordsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/domains/${domainId}/records`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetDomainRecordsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDomainRecords200>(
+      {url: `/domains/${domainId}/records`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a new Domain Record to the zonefile this Domain represents.
 
@@ -45646,60 +45760,66 @@ Each domain can have up to 12,000 active records.
 
  * @summary Domain Record Create
  */
-const createDomainRecord = <TData = AxiosResponse<CreateDomainRecord200>>(
+const createDomainRecord = (
     domainId: number,
-    createDomainRecordBodyAllOf: NonReadonly<CreateDomainRecordBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/domains/${domainId}/records`,
-      createDomainRecordBodyAllOf,options
-    );
-  }
-
+    createDomainRecordBodyAllOf: BodyType<NonReadonly<CreateDomainRecordBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateDomainRecord200>(
+      {url: `/domains/${domainId}/records`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createDomainRecordBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * View a single Record on this Domain.
 
  * @summary Domain Record View
  */
-const getDomainRecord = <TData = AxiosResponse<GetDomainRecord200>>(
+const getDomainRecord = (
     domainId: number,
-    recordId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/domains/${domainId}/records/${recordId}`,options
-    );
-  }
-
+    recordId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDomainRecord200>(
+      {url: `/domains/${domainId}/records/${recordId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a single Record on this Domain.
 
  * @summary Domain Record Update
  */
-const updateDomainRecord = <TData = AxiosResponse<UpdateDomainRecord200>>(
+const updateDomainRecord = (
     domainId: number,
     recordId: number,
-    updateDomainRecordBody: UpdateDomainRecordBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/domains/${domainId}/records/${recordId}`,
-      updateDomainRecordBody,options
-    );
-  }
-
+    updateDomainRecordBody: BodyType<UpdateDomainRecordBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateDomainRecord200>(
+      {url: `/domains/${domainId}/records/${recordId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateDomainRecordBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Record on this Domain.
 
  * @summary Domain Record Delete
  */
-const deleteDomainRecord = <TData = AxiosResponse<DeleteDomainRecord200>>(
+const deleteDomainRecord = (
     domainId: number,
-    recordId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/domains/${domainId}/records/${recordId}`,options
-    );
-  }
-
+    recordId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDomainRecord200>(
+      {url: `/domains/${domainId}/records/${recordId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Images.
 
@@ -45713,30 +45833,32 @@ accessible to Users with appropriate [Grants](/docs/api/account/#users-grants-vi
 
  * @summary Images List
  */
-const getImages = <TData = AxiosResponse<GetImages200>>(
-    params?: GetImagesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/images`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getImages = (
+    params?: GetImagesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetImages200>(
+      {url: `/images`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Captures a private gold-master Image from a Linode Disk.
 
  * @summary Image Create
  */
-const createImage = <TData = AxiosResponse<CreateImage200>>(
-    createImageBody: CreateImageBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/images`,
-      createImageBody,options
-    );
-  }
-
+const createImage = (
+    createImageBody: BodyType<CreateImageBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateImage200>(
+      {url: `/images`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createImageBody
+    },
+      options);
+    }
+  
 /**
  * Initiates an Image upload.
 
@@ -45764,15 +45886,17 @@ disk image (`.img`) format. A maximum compressed file size of 5GB is supported f
 
  * @summary Image Upload
  */
-const postImagesUpload = <TData = AxiosResponse<PostImagesUpload200>>(
-    postImagesUploadBody: PostImagesUploadBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/images/upload`,
-      postImagesUploadBody,options
-    );
-  }
-
+const postImagesUpload = (
+    postImagesUploadBody: BodyType<PostImagesUploadBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostImagesUpload200>(
+      {url: `/images/upload`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postImagesUploadBody
+    },
+      options);
+    }
+  
 /**
  * Get information about a single Image.
 
@@ -45786,29 +45910,32 @@ accessible to Users with appropriate [Grants](/docs/api/account/#users-grants-vi
 
  * @summary Image View
  */
-const getImage = <TData = AxiosResponse<GetImage200>>(
-    imageId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/images/${imageId}`,options
-    );
-  }
-
+const getImage = (
+    imageId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetImage200>(
+      {url: `/images/${imageId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a private Image that you have permission to `read_write`.
 
  * @summary Image Update
  */
-const updateImage = <TData = AxiosResponse<UpdateImage200>>(
+const updateImage = (
     imageId: string,
-    updateImageBody: NonReadonly<UpdateImageBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/images/${imageId}`,
-      updateImageBody,options
-    );
-  }
-
+    updateImageBody: BodyType<NonReadonly<UpdateImageBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateImage200>(
+      {url: `/images/${imageId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateImageBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a private Image you have permission to `read_write`.
 
@@ -45817,29 +45944,30 @@ const updateImage = <TData = AxiosResponse<UpdateImage200>>(
 
  * @summary Image Delete
  */
-const deleteImage = <TData = AxiosResponse<DeleteImage200>>(
-    imageId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/images/${imageId}`,options
-    );
-  }
-
+const deleteImage = (
+    imageId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteImage200>(
+      {url: `/images/${imageId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Linodes you have permission to view.
 
  * @summary Linodes List
  */
-const getLinodeInstances = <TData = AxiosResponse<GetLinodeInstances200>>(
-    params?: GetLinodeInstancesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getLinodeInstances = (
+    params?: GetLinodeInstancesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeInstances200>(
+      {url: `/linode/instances`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Linode Instance on your Account. In order for this
 request to complete successfully, your User must have the `add_linodes` grant. Creating a
@@ -45904,27 +46032,30 @@ Linodes can be created in a number of ways:
 
  * @summary Linode Create
  */
-const createLinodeInstance = <TData = AxiosResponse<CreateLinodeInstance200>>(
-    createLinodeInstanceBody: CreateLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances`,
-      createLinodeInstanceBody,options
-    );
-  }
-
+const createLinodeInstance = (
+    createLinodeInstanceBody: BodyType<CreateLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateLinodeInstance200>(
+      {url: `/linode/instances`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Get a specific Linode by ID.
  * @summary Linode View
  */
-const getLinodeInstance = <TData = AxiosResponse<GetLinodeInstance200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}`,options
-    );
-  }
-
+const getLinodeInstance = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Linode that you have permission to `read_write`.
 
@@ -45932,16 +46063,18 @@ const getLinodeInstance = <TData = AxiosResponse<GetLinodeInstance200>>(
 
  * @summary Linode Update
  */
-const updateLinodeInstance = <TData = AxiosResponse<UpdateLinodeInstance200>>(
+const updateLinodeInstance = (
     linodeId: number,
-    updateLinodeInstanceBody: NonReadonly<UpdateLinodeInstanceBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/linode/instances/${linodeId}`,
-      updateLinodeInstanceBody,options
-    );
-  }
-
+    updateLinodeInstanceBody: BodyType<NonReadonly<UpdateLinodeInstanceBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Linode you have permission to `read_write`.
 
@@ -45959,27 +46092,29 @@ Linodes that are in the process of [cloning](/docs/api/linode-instances/#linode-
 
  * @summary Linode Delete
  */
-const deleteLinodeInstance = <TData = AxiosResponse<DeleteLinodeInstance200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/linode/instances/${linodeId}`,options
-    );
-  }
-
+const deleteLinodeInstance = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns information about this Linode's available backups.
 
  * @summary Backups List
  */
-const getBackups = <TData = AxiosResponse<GetBackups200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/backups`,options
-    );
-  }
-
+const getBackups = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetBackups200>(
+      {url: `/linode/instances/${linodeId}/backups`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates a snapshot Backup of a Linode.
 
@@ -45988,56 +46123,61 @@ action. The previous snapshot will be deleted.
 
  * @summary Snapshot Create
  */
-const createSnapshot = <TData = AxiosResponse<CreateSnapshot200>>(
+const createSnapshot = (
     linodeId: number,
-    createSnapshotBody: CreateSnapshotBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/backups`,
-      createSnapshotBody,options
-    );
-  }
-
+    createSnapshotBody: BodyType<CreateSnapshotBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateSnapshot200>(
+      {url: `/linode/instances/${linodeId}/backups`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createSnapshotBody
+    },
+      options);
+    }
+  
 /**
  * Cancels the Backup service on the given Linode. Deletes all of this Linode's existing backups forever.
 
  * @summary Backups Cancel
  */
-const cancelBackups = <TData = AxiosResponse<CancelBackups200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/backups/cancel`,undefined,options
-    );
-  }
-
+const cancelBackups = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CancelBackups200>(
+      {url: `/linode/instances/${linodeId}/backups/cancel`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Enables backups for the specified Linode.
 
  * @summary Backups Enable
  */
-const enableBackups = <TData = AxiosResponse<EnableBackups200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/backups/enable`,undefined,options
-    );
-  }
-
+const enableBackups = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EnableBackups200>(
+      {url: `/linode/instances/${linodeId}/backups/enable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns information about a Backup.
 
  * @summary Backup View
  */
-const getBackup = <TData = AxiosResponse<GetBackup200>>(
+const getBackup = (
     linodeId: number,
-    backupId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/backups/${backupId}`,options
-    );
-  }
-
+    backupId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetBackup200>(
+      {url: `/linode/instances/${linodeId}/backups/${backupId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Restores a Linode's Backup to the specified Linode.
 
@@ -46058,17 +46198,19 @@ To learn more about block device assignments and viewing your disks' UUIDs, see 
 
  * @summary Backup Restore
  */
-const restoreBackup = <TData = AxiosResponse<RestoreBackup200>>(
+const restoreBackup = (
     linodeId: number,
     backupId: number,
-    restoreBackupBody: RestoreBackupBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/backups/${backupId}/restore`,
-      restoreBackupBody,options
-    );
-  }
-
+    restoreBackupBody: BodyType<RestoreBackupBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RestoreBackup200>(
+      {url: `/linode/instances/${linodeId}/backups/${backupId}/restore`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: restoreBackupBody
+    },
+      options);
+    }
+  
 /**
  * Boots a Linode you have permission to modify. If no parameters are given, a Config profile
 will be chosen for this boot based on the following criteria:
@@ -46080,16 +46222,18 @@ will be chosen for this boot based on the following criteria:
 
  * @summary Linode Boot
  */
-const bootLinodeInstance = <TData = AxiosResponse<BootLinodeInstance200>>(
+const bootLinodeInstance = (
     linodeId: number,
-    bootLinodeInstanceBody: BootLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/boot`,
-      bootLinodeInstanceBody,options
-    );
-  }
-
+    bootLinodeInstanceBody: BodyType<BootLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<BootLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/boot`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: bootLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * You can clone your Linode's existing Disks or Configuration profiles to
 another Linode on your Account. In order for this request to complete
@@ -46111,107 +46255,115 @@ Linodes utilizing Metadata (`"has_user_data": true`) must be cloned to a new Lin
 
  * @summary Linode Clone
  */
-const cloneLinodeInstance = <TData = AxiosResponse<CloneLinodeInstance200>>(
+const cloneLinodeInstance = (
     linodeId: number,
-    cloneLinodeInstanceBody: CloneLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/clone`,
-      cloneLinodeInstanceBody,options
-    );
-  }
-
+    cloneLinodeInstanceBody: BodyType<CloneLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CloneLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/clone`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: cloneLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Lists Configuration profiles associated with a Linode.
 
  * @summary Configuration Profiles List
  */
-const getLinodeConfigs = <TData = AxiosResponse<GetLinodeConfigs200>>(
+const getLinodeConfigs = (
     linodeId: number,
-    params?: GetLinodeConfigsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/configs`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetLinodeConfigsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeConfigs200>(
+      {url: `/linode/instances/${linodeId}/configs`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a new Configuration profile to a Linode.
 
  * @summary Configuration Profile Create
  */
-const addLinodeConfig = <TData = AxiosResponse<AddLinodeConfig200>>(
+const addLinodeConfig = (
     linodeId: number,
-    addLinodeConfigBodyAllOf: NonReadonly<AddLinodeConfigBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/configs`,
-      addLinodeConfigBodyAllOf,options
-    );
-  }
-
+    addLinodeConfigBodyAllOf: BodyType<NonReadonly<AddLinodeConfigBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AddLinodeConfig200>(
+      {url: `/linode/instances/${linodeId}/configs`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: addLinodeConfigBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information about a specific Configuration profile.
 
  * @summary Configuration Profile View
  */
-const getLinodeConfig = <TData = AxiosResponse<GetLinodeConfig200>>(
+const getLinodeConfig = (
     linodeId: number,
-    configId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/configs/${configId}`,options
-    );
-  }
-
+    configId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeConfig200>(
+      {url: `/linode/instances/${linodeId}/configs/${configId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Configuration profile.
 
  * @summary Configuration Profile Update
  */
-const updateLinodeConfig = <TData = AxiosResponse<UpdateLinodeConfig200>>(
+const updateLinodeConfig = (
     linodeId: number,
     configId: number,
-    updateLinodeConfigBody: NonReadonly<UpdateLinodeConfigBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/linode/instances/${linodeId}/configs/${configId}`,
-      updateLinodeConfigBody,options
-    );
-  }
-
+    updateLinodeConfigBody: BodyType<NonReadonly<UpdateLinodeConfigBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateLinodeConfig200>(
+      {url: `/linode/instances/${linodeId}/configs/${configId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateLinodeConfigBody
+    },
+      options);
+    }
+  
 /**
  * Deletes the specified Configuration profile from the specified Linode.
 
  * @summary Configuration Profile Delete
  */
-const deleteLinodeConfig = <TData = AxiosResponse<DeleteLinodeConfig200>>(
+const deleteLinodeConfig = (
     linodeId: number,
-    configId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/linode/instances/${linodeId}/configs/${configId}`,options
-    );
-  }
-
+    configId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLinodeConfig200>(
+      {url: `/linode/instances/${linodeId}/configs/${configId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * View Disk information for Disks associated with this Linode.
 
  * @summary Disks List
  */
-const getLinodeDisks = <TData = AxiosResponse<GetLinodeDisks200>>(
+const getLinodeDisks = (
     linodeId: number,
-    params?: GetLinodeDisksParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/disks`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetLinodeDisksParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeDisks200>(
+      {url: `/linode/instances/${linodeId}/disks`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a new Disk to a Linode.
 
@@ -46237,46 +46389,51 @@ of the Image is used unless otherwise specified.
 
  * @summary Disk Create
  */
-const addLinodeDisk = <TData = AxiosResponse<AddLinodeDisk200>>(
+const addLinodeDisk = (
     linodeId: number,
-    addLinodeDiskBodyAllOf: AddLinodeDiskBodyAllOf, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/disks`,
-      addLinodeDiskBodyAllOf,options
-    );
-  }
-
+    addLinodeDiskBodyAllOf: BodyType<AddLinodeDiskBodyAllOf>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AddLinodeDisk200>(
+      {url: `/linode/instances/${linodeId}/disks`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: addLinodeDiskBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * View Disk information for a Disk associated with this Linode.
 
  * @summary Disk View
  */
-const getLinodeDisk = <TData = AxiosResponse<GetLinodeDisk200>>(
+const getLinodeDisk = (
     linodeId: number,
-    diskId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/disks/${diskId}`,options
-    );
-  }
-
+    diskId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeDisk200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Disk that you have permission to `read_write`.
 
  * @summary Disk Update
  */
-const updateDisk = <TData = AxiosResponse<UpdateDisk200>>(
+const updateDisk = (
     linodeId: number,
     diskId: number,
-    updateDiskBody: NonReadonly<UpdateDiskBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/linode/instances/${linodeId}/disks/${diskId}`,
-      updateDiskBody,options
-    );
-  }
-
+    updateDiskBody: BodyType<NonReadonly<UpdateDiskBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateDisk200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateDiskBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Disk you have permission to `read_write`.
 
@@ -46284,45 +46441,49 @@ const updateDisk = <TData = AxiosResponse<UpdateDisk200>>(
 
  * @summary Disk Delete
  */
-const deleteDisk = <TData = AxiosResponse<DeleteDisk200>>(
+const deleteDisk = (
     linodeId: number,
-    diskId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/linode/instances/${linodeId}/disks/${diskId}`,options
-    );
-  }
-
+    diskId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteDisk200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Copies a disk, byte-for-byte, into a new Disk belonging to the same Linode. The Linode must have enough storage space available to accept a new Disk of the same size as this one or this operation will fail.
 
  * @summary Disk Clone
  */
-const cloneLinodeDisk = <TData = AxiosResponse<CloneLinodeDisk200>>(
+const cloneLinodeDisk = (
     linodeId: number,
-    diskId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/disks/${diskId}/clone`,undefined,options
-    );
-  }
-
+    diskId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CloneLinodeDisk200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}/clone`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Resets the password of a Disk you have permission to `read_write`.
 
  * @summary Disk Root Password Reset
  */
-const resetDiskPassword = <TData = AxiosResponse<ResetDiskPassword200>>(
+const resetDiskPassword = (
     linodeId: number,
     diskId: number,
-    resetDiskPasswordBody: ResetDiskPasswordBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/disks/${diskId}/password`,
-      resetDiskPasswordBody,options
-    );
-  }
-
+    resetDiskPasswordBody: BodyType<ResetDiskPasswordBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResetDiskPassword200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}/password`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: resetDiskPasswordBody
+    },
+      options);
+    }
+  
 /**
  * Resizes a Disk you have permission to `read_write`.
 
@@ -46336,75 +46497,81 @@ than what is required by the total size of the files current on the Disk.
 
  * @summary Disk Resize
  */
-const resizeDisk = <TData = AxiosResponse<ResizeDisk200>>(
+const resizeDisk = (
     linodeId: number,
     diskId: number,
-    resizeDiskBody: ResizeDiskBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/disks/${diskId}/resize`,
-      resizeDiskBody,options
-    );
-  }
-
+    resizeDiskBody: BodyType<ResizeDiskBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResizeDisk200>(
+      {url: `/linode/instances/${linodeId}/disks/${diskId}/resize`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: resizeDiskBody
+    },
+      options);
+    }
+  
 /**
  * View Firewall information for Firewalls assigned to this Linode.
 
  * @summary Firewalls List
  */
-const getLinodeFirewalls = <TData = AxiosResponse<GetLinodeFirewalls200>>(
+const getLinodeFirewalls = (
     linodeId: number,
-    params?: GetLinodeFirewallsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/firewalls`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetLinodeFirewallsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeFirewalls200>(
+      {url: `/linode/instances/${linodeId}/firewalls`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns networking information for a single Linode.
 
  * @summary Networking Information List
  */
-const getLinodeIPs = <TData = AxiosResponse<GetLinodeIPs200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/ips`,options
-    );
-  }
-
+const getLinodeIPs = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeIPs200>(
+      {url: `/linode/instances/${linodeId}/ips`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Allocates a public or private IPv4 address to a Linode. Public IP Addresses, after the one included with each Linode, incur an additional monthly charge. If you need an additional public IP Address you must request one - please [open a support ticket](/docs/api/support/#support-ticket-open). You may not add more than one private IPv4 address to a single Linode.
 
  * @summary IPv4 Address Allocate
  */
-const addLinodeIP = <TData = AxiosResponse<AddLinodeIP200>>(
+const addLinodeIP = (
     linodeId: number,
-    addLinodeIPBody: AddLinodeIPBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/ips`,
-      addLinodeIPBody,options
-    );
-  }
-
+    addLinodeIPBody: BodyType<AddLinodeIPBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AddLinodeIP200>(
+      {url: `/linode/instances/${linodeId}/ips`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: addLinodeIPBody
+    },
+      options);
+    }
+  
 /**
  * View information about the specified IP address associated with the specified Linode.
 
  * @summary IP Address View
  */
-const getLinodeIP = <TData = AxiosResponse<GetLinodeIP200>>(
+const getLinodeIP = (
     linodeId: number,
-    address: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/ips/${address}`,options
-    );
-  }
-
+    address: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeIP200>(
+      {url: `/linode/instances/${linodeId}/ips/${address}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates the reverse DNS (RDNS) for a Linode's IP Address. This may be done for both IPv4 and IPv6 addresses.
 
@@ -46412,31 +46579,34 @@ Setting the RDNS to `null` for a public IPv4 address, resets it to the default "
 
  * @summary IP Address RDNS Update
  */
-const updateLinodeIP = <TData = AxiosResponse<UpdateLinodeIP200>>(
+const updateLinodeIP = (
     linodeId: number,
     address: string,
-    updateLinodeIPBody: UpdateLinodeIPBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/linode/instances/${linodeId}/ips/${address}`,
-      updateLinodeIPBody,options
-    );
-  }
-
+    updateLinodeIPBody: BodyType<UpdateLinodeIPBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateLinodeIP200>(
+      {url: `/linode/instances/${linodeId}/ips/${address}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateLinodeIPBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a public or private IPv4 address associated with this Linode. This will fail if it is the Linode's last remaining public IPv4 address.
 
  * @summary IPv4 Address Delete
  */
-const removeLinodeIP = <TData = AxiosResponse<RemoveLinodeIP200>>(
+const removeLinodeIP = (
     linodeId: number,
-    address: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/linode/instances/${linodeId}/ips/${address}`,options
-    );
-  }
-
+    address: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RemoveLinodeIP200>(
+      {url: `/linode/instances/${linodeId}/ips/${address}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Lists available Kernels.
 
@@ -46444,29 +46614,30 @@ Due to the extensive list of available kernels, please keep [pagination](/docs/a
 
  * @summary Kernels List
  */
-const getKernels = <TData = AxiosResponse<GetKernels200>>(
-    params?: GetKernelsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/kernels`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getKernels = (
+    params?: GetKernelsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetKernels200>(
+      {url: `/linode/kernels`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single Kernel.
 
  * @summary Kernel View
  */
-const getKernel = <TData = AxiosResponse<GetKernel200>>(
-    kernelId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/kernels/${kernelId}`,options
-    );
-  }
-
+const getKernel = (
+    kernelId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetKernel200>(
+      {url: `/linode/kernels/${kernelId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Initiate a pending host migration that has been scheduled by Linode or
 initiate a cross data center (DC) migration.  A list of pending migrations,
@@ -46490,32 +46661,36 @@ you will be prompted to select a different data center or contact support.
 
  * @summary DC Migration/Pending Host Migration Initiate
  */
-const migrateLinodeInstance = <TData = AxiosResponse<MigrateLinodeInstance200>>(
+const migrateLinodeInstance = (
     linodeId: number,
-    migrateLinodeInstanceBody: MigrateLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/migrate`,
-      migrateLinodeInstanceBody,options
-    );
-  }
-
+    migrateLinodeInstanceBody: BodyType<MigrateLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<MigrateLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/migrate`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: migrateLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Linodes created with now-deprecated Types are entitled to a free upgrade to the next generation. A mutating Linode will be allocated any new resources the upgraded Type provides, and will be subsequently restarted if it was currently running.
 If any actions are currently running or queued, those actions must be completed first before you can initiate a mutate.
 
  * @summary Linode Upgrade
  */
-const mutateLinodeInstance = <TData = AxiosResponse<MutateLinodeInstance200>>(
+const mutateLinodeInstance = (
     linodeId: number,
-    mutateLinodeInstanceBody: MutateLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/mutate`,
-      mutateLinodeInstanceBody,options
-    );
-  }
-
+    mutateLinodeInstanceBody: BodyType<MutateLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<MutateLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/mutate`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: mutateLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Returns a list of NodeBalancers that are assigned to this Linode and readable by the requesting User.
 
@@ -46524,14 +46699,15 @@ Read permission to a NodeBalancer can be given to a User by accessing the User's
 
  * @summary Linode NodeBalancers View
  */
-const getLinodeNodeBalancers = <TData = AxiosResponse<GetLinodeNodeBalancers200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/nodebalancers`,options
-    );
-  }
-
+const getLinodeNodeBalancers = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeNodeBalancers200>(
+      {url: `/linode/instances/${linodeId}/nodebalancers`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Resets the root password for this Linode.
 * Your Linode must be [shut down](/docs/api/linode-instances/#linode-shut-down) for a password reset to complete.
@@ -46540,31 +46716,35 @@ const getLinodeNodeBalancers = <TData = AxiosResponse<GetLinodeNodeBalancers200>
 
  * @summary Linode Root Password Reset
  */
-const resetLinodePassword = <TData = AxiosResponse<ResetLinodePassword200>>(
+const resetLinodePassword = (
     linodeId: number,
-    resetLinodePasswordBody: ResetLinodePasswordBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/password`,
-      resetLinodePasswordBody,options
-    );
-  }
-
+    resetLinodePasswordBody: BodyType<ResetLinodePasswordBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResetLinodePassword200>(
+      {url: `/linode/instances/${linodeId}/password`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: resetLinodePasswordBody
+    },
+      options);
+    }
+  
 /**
  * Reboots a Linode you have permission to modify. If any actions are currently running or queued, those actions must be completed first before you can initiate a reboot.
 
  * @summary Linode Reboot
  */
-const rebootLinodeInstance = <TData = AxiosResponse<RebootLinodeInstance200>>(
+const rebootLinodeInstance = (
     linodeId: number,
-    rebootLinodeInstanceBody: RebootLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/reboot`,
-      rebootLinodeInstanceBody,options
-    );
-  }
-
+    rebootLinodeInstanceBody: BodyType<RebootLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RebootLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/reboot`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: rebootLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Rebuilds a Linode you have the `read_write` permission to modify.
 
@@ -46587,32 +46767,36 @@ You also have the option to resize the Linode to a different plan by including t
 
  * @summary Linode Rebuild
  */
-const rebuildLinodeInstance = <TData = AxiosResponse<RebuildLinodeInstance200>>(
+const rebuildLinodeInstance = (
     linodeId: number,
-    rebuildLinodeInstanceBody: RebuildLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/rebuild`,
-      rebuildLinodeInstanceBody,options
-    );
-  }
-
+    rebuildLinodeInstanceBody: BodyType<RebuildLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RebuildLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/rebuild`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: rebuildLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Rescue Mode is a safe environment for performing many system recovery and disk management tasks. Rescue Mode is based on the Finnix recovery distribution, a self-contained and bootable Linux distribution. You can also use Rescue Mode for tasks other than disaster recovery, such as formatting disks to use different filesystems, copying data between disks, and downloading files from a disk via SSH and SFTP.
 * Note that "sdh" is reserved and unavailable during rescue.
 
  * @summary Linode Boot into Rescue Mode
  */
-const rescueLinodeInstance = <TData = AxiosResponse<RescueLinodeInstance200>>(
+const rescueLinodeInstance = (
     linodeId: number,
-    rescueLinodeInstanceBody: RescueLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/rescue`,
-      rescueLinodeInstanceBody,options
-    );
-  }
-
+    rescueLinodeInstanceBody: BodyType<RescueLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RescueLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/rescue`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: rescueLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Resizes a Linode you have the `read_write` permission to a different Type. If any actions are currently running or queued, those actions must be completed first before you can initiate a resize. Additionally, the following criteria must be met in order to resize a Linode:
 
@@ -46625,101 +46809,108 @@ You can also resize a Linode when using the [Linode Rebuild](/docs/api/linode-in
 
  * @summary Linode Resize
  */
-const resizeLinodeInstance = <TData = AxiosResponse<ResizeLinodeInstance200>>(
+const resizeLinodeInstance = (
     linodeId: number,
-    resizeLinodeInstanceBody: ResizeLinodeInstanceBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/resize`,
-      resizeLinodeInstanceBody,options
-    );
-  }
-
+    resizeLinodeInstanceBody: BodyType<ResizeLinodeInstanceBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResizeLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/resize`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: resizeLinodeInstanceBody
+    },
+      options);
+    }
+  
 /**
  * Shuts down a Linode you have permission to modify. If any actions are currently running or queued, those actions must be completed first before you can initiate a shutdown.
 
  * @summary Linode Shut Down
  */
-const shutdownLinodeInstance = <TData = AxiosResponse<ShutdownLinodeInstance200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/instances/${linodeId}/shutdown`,undefined,options
-    );
-  }
-
+const shutdownLinodeInstance = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ShutdownLinodeInstance200>(
+      {url: `/linode/instances/${linodeId}/shutdown`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a Linode's network transfer pool statistics for the current month.
 
  * @summary Network Transfer View
  */
-const getLinodeTransfer = <TData = AxiosResponse<GetLinodeTransfer200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/transfer`,options
-    );
-  }
-
+const getLinodeTransfer = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeTransfer200>(
+      {url: `/linode/instances/${linodeId}/transfer`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a Linode's network transfer statistics for a specific month. The year/month values must be either a date in the past, or the current month.
 
  * @summary Network Transfer View (year/month)
  */
-const getLinodeTransferByYearMonth = <TData = AxiosResponse<GetLinodeTransferByYearMonth200>>(
+const getLinodeTransferByYearMonth = (
     linodeId: number,
     year: number,
-    month: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/transfer/${year}/${month}`,options
-    );
-  }
-
+    month: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeTransferByYearMonth200>(
+      {url: `/linode/instances/${linodeId}/transfer/${year}/${month}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns CPU, IO, IPv4, and IPv6 statistics for your Linode for the past 24 hours.
 
  * @summary Linode Statistics View
  */
-const getLinodeStats = <TData = AxiosResponse<GetLinodeStats200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/stats`,options
-    );
-  }
-
+const getLinodeStats = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeStats200>(
+      {url: `/linode/instances/${linodeId}/stats`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns statistics for a specific month. The year/month values must be either a date in the past, or the current month. If the current month, statistics will be retrieved for the past 30 days.
 
  * @summary Statistics View (year/month)
  */
-const getLinodeStatsByYearMonth = <TData = AxiosResponse<GetLinodeStatsByYearMonth200>>(
+const getLinodeStatsByYearMonth = (
     linodeId: number,
     year: number,
-    month: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/stats/${year}/${month}`,options
-    );
-  }
-
+    month: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeStatsByYearMonth200>(
+      {url: `/linode/instances/${linodeId}/stats/${year}/${month}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * View Block Storage Volumes attached to this Linode.
 
  * @summary Linode's Volumes List
  */
-const getLinodeVolumes = <TData = AxiosResponse<GetLinodeVolumes200>>(
+const getLinodeVolumes = (
     linodeId: number,
-    params?: GetLinodeVolumesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/instances/${linodeId}/volumes`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetLinodeVolumesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeVolumes200>(
+      {url: `/linode/instances/${linodeId}/volumes`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * If the request is not authenticated, only public StackScripts are returned.
 
@@ -46727,43 +46918,46 @@ For more information on StackScripts, please read our [StackScripts documentatio
 
  * @summary StackScripts List
  */
-const getStackScripts = <TData = AxiosResponse<GetStackScripts200>>(
-    params?: GetStackScriptsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/stackscripts`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getStackScripts = (
+    params?: GetStackScriptsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetStackScripts200>(
+      {url: `/linode/stackscripts`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a StackScript in your Account.
 
  * @summary StackScript Create
  */
-const addStackScript = <TData = AxiosResponse<AddStackScript200>>(
-    addStackScriptBodyAllOf: NonReadonly<AddStackScriptBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/linode/stackscripts`,
-      addStackScriptBodyAllOf,options
-    );
-  }
-
+const addStackScript = (
+    addStackScriptBodyAllOf: BodyType<NonReadonly<AddStackScriptBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AddStackScript200>(
+      {url: `/linode/stackscripts`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: addStackScriptBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns all of the information about a specified StackScript, including the contents of the script.
 
  * @summary StackScript View
  */
-const getStackScript = <TData = AxiosResponse<GetStackScript200>>(
-    stackscriptId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/stackscripts/${stackscriptId}`,options
-    );
-  }
-
+const getStackScript = (
+    stackscriptId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetStackScript200>(
+      {url: `/linode/stackscripts/${stackscriptId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a StackScript.
 
@@ -46771,68 +46965,74 @@ const getStackScript = <TData = AxiosResponse<GetStackScript200>>(
 
  * @summary StackScript Update
  */
-const updateStackScript = <TData = AxiosResponse<UpdateStackScript200>>(
+const updateStackScript = (
     stackscriptId: string,
-    updateStackScriptBody: NonReadonly<UpdateStackScriptBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/linode/stackscripts/${stackscriptId}`,
-      updateStackScriptBody,options
-    );
-  }
-
+    updateStackScriptBody: BodyType<NonReadonly<UpdateStackScriptBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateStackScript200>(
+      {url: `/linode/stackscripts/${stackscriptId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateStackScriptBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a private StackScript you have permission to `read_write`. You cannot delete a public StackScript.
 
  * @summary StackScript Delete
  */
-const deleteStackScript = <TData = AxiosResponse<DeleteStackScript200>>(
-    stackscriptId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/linode/stackscripts/${stackscriptId}`,options
-    );
-  }
-
+const deleteStackScript = (
+    stackscriptId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteStackScript200>(
+      {url: `/linode/stackscripts/${stackscriptId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns collection of Linode Types, including pricing and specifications for each Type. These are used when [creating](/docs/api/linode-instances/#linode-create) or [resizing](/docs/api/linode-instances/#linode-resize) Linodes.
 
  * @summary Types List
  */
-const getLinodeTypes = <TData = AxiosResponse<GetLinodeTypes200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/types`,options
-    );
-  }
-
+const getLinodeTypes = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeTypes200>(
+      {url: `/linode/types`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns information about a specific Linode Type, including pricing and specifications. This is used when [creating](/docs/api/linode-instances/#linode-create) or [resizing](/docs/api/linode-instances/#linode-resize) Linodes.
 
  * @summary Type View
  */
-const getLinodeType = <TData = AxiosResponse<GetLinodeType200>>(
-    typeId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/linode/types/${typeId}`,options
-    );
-  }
-
+const getLinodeType = (
+    typeId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLinodeType200>(
+      {url: `/linode/types/${typeId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Lists current Kubernetes clusters available on your account.
 
  * @summary Kubernetes Clusters List
  */
-const getLKEClusters = <TData = AxiosResponse<GetLKEClusters200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters`,options
-    );
-  }
-
+const getLKEClusters = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusters200>(
+      {url: `/lke/clusters`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates a Kubernetes cluster. The Kubernetes cluster will be created
 asynchronously. You can use the events system to determine when the
@@ -46843,43 +47043,48 @@ are ready.
 
  * @summary Kubernetes Cluster Create
  */
-const createLKECluster = <TData = AxiosResponse<CreateLKECluster200>>(
-    createLKEClusterBody: CreateLKEClusterBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters`,
-      createLKEClusterBody,options
-    );
-  }
-
+const createLKECluster = (
+    createLKEClusterBody: BodyType<CreateLKEClusterBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateLKECluster200>(
+      {url: `/lke/clusters`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createLKEClusterBody
+    },
+      options);
+    }
+  
 /**
  * Get a specific Cluster by ID.
 
  * @summary Kubernetes Cluster View
  */
-const getLKECluster = <TData = AxiosResponse<GetLKECluster200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}`,options
-    );
-  }
-
+const getLKECluster = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKECluster200>(
+      {url: `/lke/clusters/${clusterId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Kubernetes cluster.
 
  * @summary Kubernetes Cluster Update
  */
-const putLKECluster = <TData = AxiosResponse<PutLKECluster200>>(
+const putLKECluster = (
     clusterId: number,
-    putLKEClusterBody: PutLKEClusterBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/lke/clusters/${clusterId}`,
-      putLKEClusterBody,options
-    );
-  }
-
+    putLKEClusterBody: BodyType<PutLKEClusterBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PutLKECluster200>(
+      {url: `/lke/clusters/${clusterId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: putLKEClusterBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Cluster you have permission to `read_write`.
 
@@ -46895,42 +47100,46 @@ Deleting a Cluster:
 
  * @summary Kubernetes Cluster Delete
  */
-const deleteLKECluster = <TData = AxiosResponse<DeleteLKECluster200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/lke/clusters/${clusterId}`,options
-    );
-  }
-
+const deleteLKECluster = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLKECluster200>(
+      {url: `/lke/clusters/${clusterId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns all active Node Pools on a Kubernetes cluster.
 
  * @summary Node Pools List
  */
-const getLKEClusterPools = <TData = AxiosResponse<GetLKEClusterPools200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/pools`,options
-    );
-  }
-
+const getLKEClusterPools = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusterPools200>(
+      {url: `/lke/clusters/${clusterId}/pools`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates a new Node Pool for the designated Kubernetes cluster.
 
  * @summary Node Pool Create
  */
-const postLKEClusterPools = <TData = AxiosResponse<PostLKEClusterPools200>>(
+const postLKEClusterPools = (
     clusterId: number,
-    postLKEClusterPoolsBodyAllOf: PostLKEClusterPoolsBodyAllOf, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters/${clusterId}/pools`,
-      postLKEClusterPoolsBodyAllOf,options
-    );
-  }
-
+    postLKEClusterPoolsBodyAllOf: BodyType<PostLKEClusterPoolsBodyAllOf>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKEClusterPools200>(
+      {url: `/lke/clusters/${clusterId}/pools`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postLKEClusterPoolsBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Recycles all nodes in all pools of a designated Kubernetes Cluster. All Linodes within the Cluster will be deleted
 and replaced with new Linodes on a rolling basis, which may take several minutes. Replacement Nodes are
@@ -46940,28 +47149,30 @@ installed with the latest available [patch version](https://github.com/kubernete
 
  * @summary Cluster Nodes Recycle
  */
-const postLKEClusterRecycle = <TData = AxiosResponse<PostLKEClusterRecycle200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters/${clusterId}/recycle`,undefined,options
-    );
-  }
-
+const postLKEClusterRecycle = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKEClusterRecycle200>(
+      {url: `/lke/clusters/${clusterId}/recycle`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Get a specific Node Pool by ID.
 
  * @summary Node Pool View
  */
-const getLKENodePool = <TData = AxiosResponse<GetLKENodePool200>>(
+const getLKENodePool = (
     clusterId: number,
-    poolId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/pools/${poolId}`,options
-    );
-  }
-
+    poolId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKENodePool200>(
+      {url: `/lke/clusters/${clusterId}/pools/${poolId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Node Pool's count and autoscaler configuration.
 
@@ -46971,17 +47182,19 @@ Linodes will be created or deleted to match changes to the Node Pool's count.
 
  * @summary Node Pool Update
  */
-const putLKENodePool = <TData = AxiosResponse<PutLKENodePool200>>(
+const putLKENodePool = (
     clusterId: number,
     poolId: number,
-    putLKENodePoolBody: PutLKENodePoolBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/lke/clusters/${clusterId}/pools/${poolId}`,
-      putLKENodePoolBody,options
-    );
-  }
-
+    putLKENodePoolBody: BodyType<PutLKENodePoolBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PutLKENodePool200>(
+      {url: `/lke/clusters/${clusterId}/pools/${poolId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: putLKENodePoolBody
+    },
+      options);
+    }
+  
 /**
  * Delete a specific Node Pool from a Kubernetes cluster.
 
@@ -46991,15 +47204,16 @@ Deleting a Node Pool will delete all Linodes within that Pool.
 
  * @summary Node Pool Delete
  */
-const deleteLKENodePool = <TData = AxiosResponse<DeleteLKENodePool200>>(
+const deleteLKENodePool = (
     clusterId: number,
-    poolId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/lke/clusters/${clusterId}/pools/${poolId}`,options
-    );
-  }
-
+    poolId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLKENodePool200>(
+      {url: `/lke/clusters/${clusterId}/pools/${poolId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Recycles a Node Pool for the designated Kubernetes Cluster. All Linodes within the Node Pool will be deleted
 and replaced with new Linodes on a rolling basis, which may take several minutes. Replacement Nodes are
@@ -47009,29 +47223,31 @@ installed with the latest available patch for the Cluster's Kubernetes Version.
 
  * @summary Node Pool Recycle
  */
-const postLKEClusterPoolRecycle = <TData = AxiosResponse<PostLKEClusterPoolRecycle200>>(
+const postLKEClusterPoolRecycle = (
     clusterId: number,
-    poolId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters/${clusterId}/pools/${poolId}/recycle`,undefined,options
-    );
-  }
-
+    poolId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKEClusterPoolRecycle200>(
+      {url: `/lke/clusters/${clusterId}/pools/${poolId}/recycle`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns the values for a specified node object.
 
  * @summary Node View
  */
-const getLKEClusterNode = <TData = AxiosResponse<GetLKEClusterNode200>>(
+const getLKEClusterNode = (
     clusterId: number,
-    nodeId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/nodes/${nodeId}`,options
-    );
-  }
-
+    nodeId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusterNode200>(
+      {url: `/lke/clusters/${clusterId}/nodes/${nodeId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Deletes a specific Node from a Node Pool.
 
@@ -47041,15 +47257,16 @@ Deleting a Node will reduce the size of the Node Pool it belongs to.
 
  * @summary Node Delete
  */
-const deleteLKEClusterNode = <TData = AxiosResponse<DeleteLKEClusterNode200>>(
+const deleteLKEClusterNode = (
     clusterId: number,
-    nodeId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/lke/clusters/${clusterId}/nodes/${nodeId}`,options
-    );
-  }
-
+    nodeId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLKEClusterNode200>(
+      {url: `/lke/clusters/${clusterId}/nodes/${nodeId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Recycles an individual Node in the designated Kubernetes Cluster. The Node will be deleted
 and replaced with a new Linode, which may take a few minutes. Replacement Nodes are
@@ -47059,28 +47276,30 @@ installed with the latest available patch for the Cluster's Kubernetes Version.
 
  * @summary Node Recycle
  */
-const postLKEClusterNodeRecycle = <TData = AxiosResponse<PostLKEClusterNodeRecycle200>>(
+const postLKEClusterNodeRecycle = (
     clusterId: number,
-    nodeId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters/${clusterId}/nodes/${nodeId}/recycle`,undefined,options
-    );
-  }
-
+    nodeId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKEClusterNodeRecycle200>(
+      {url: `/lke/clusters/${clusterId}/nodes/${nodeId}/recycle`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * List the Kubernetes API server endpoints for this cluster. Please note that it often takes 2-5 minutes before the endpoint is ready after first [creating a new cluster](/docs/api/linode-kubernetes-engine-lke/#kubernetes-cluster-create).
 
  * @summary Kubernetes API Endpoints List
  */
-const getLKEClusterAPIEndpoints = <TData = AxiosResponse<GetLKEClusterAPIEndpoints200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/api-endpoints`,options
-    );
-  }
-
+const getLKEClusterAPIEndpoints = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusterAPIEndpoints200>(
+      {url: `/lke/clusters/${clusterId}/api-endpoints`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Get a [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) access URL for this Cluster, which enables performance of administrative tasks through a web interface.
 
@@ -47092,41 +47311,44 @@ For additional guidance on using the Cluster Dashboard, see the [Navigating the 
 
  * @summary Kubernetes Cluster Dashboard URL View
  */
-const getLKEClusterDashboard = <TData = AxiosResponse<GetLKEClusterDashboard200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/dashboard`,options
-    );
-  }
-
+const getLKEClusterDashboard = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusterDashboard200>(
+      {url: `/lke/clusters/${clusterId}/dashboard`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Get the Kubeconfig file for a Cluster. Please note that it often takes 2-5 minutes before
 the Kubeconfig file is ready after first [creating a new cluster](/docs/api/linode-kubernetes-engine-lke/#kubernetes-cluster-create).
 
  * @summary Kubeconfig View
  */
-const getLKEClusterKubeconfig = <TData = AxiosResponse<GetLKEClusterKubeconfig200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/clusters/${clusterId}/kubeconfig`,options
-    );
-  }
-
+const getLKEClusterKubeconfig = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEClusterKubeconfig200>(
+      {url: `/lke/clusters/${clusterId}/kubeconfig`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Delete and regenerate the Kubeconfig file for a Cluster.
 
  * @summary Kubeconfig Delete
  */
-const deleteLKEClusterKubeconfig = <TData = AxiosResponse<DeleteLKEClusterKubeconfig200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/lke/clusters/${clusterId}/kubeconfig`,options
-    );
-  }
-
+const deleteLKEClusterKubeconfig = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLKEClusterKubeconfig200>(
+      {url: `/lke/clusters/${clusterId}/kubeconfig`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Regenerate the Kubeconfig file and/or the service account token for a Cluster.
 
@@ -47138,16 +47360,18 @@ When using this command, at least one of `kubeconfig` or `servicetoken` is requi
 
  * @summary Kubernetes Cluster Regenerate
  */
-const postLKEClusterRegenerate = <TData = AxiosResponse<PostLKEClusterRegenerate200>>(
+const postLKEClusterRegenerate = (
     clusterId: number,
-    postLKEClusterRegenerateBody: PostLKEClusterRegenerateBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/lke/clusters/${clusterId}/regenerate`,
-      postLKEClusterRegenerateBody,options
-    );
-  }
-
+    postLKEClusterRegenerateBody: BodyType<PostLKEClusterRegenerateBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKEClusterRegenerate200>(
+      {url: `/lke/clusters/${clusterId}/regenerate`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postLKEClusterRegenerateBody
+    },
+      options);
+    }
+  
 /**
  * Delete and regenerate the service account token for a Cluster.
 
@@ -47155,97 +47379,105 @@ const postLKEClusterRegenerate = <TData = AxiosResponse<PostLKEClusterRegenerate
 
  * @summary Service Token Delete
  */
-const postLKECServiceTokenDelete = <TData = AxiosResponse<PostLKECServiceTokenDelete200>>(
-    clusterId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/lke/clusters/${clusterId}/servicetoken`,options
-    );
-  }
-
+const postLKECServiceTokenDelete = (
+    clusterId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostLKECServiceTokenDelete200>(
+      {url: `/lke/clusters/${clusterId}/servicetoken`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * List the Kubernetes versions available for deployment to a Kubernetes cluster.
 
  * @summary Kubernetes Versions List
  */
-const getLKEVersions = <TData = AxiosResponse<GetLKEVersions200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/versions`,options
-    );
-  }
-
+const getLKEVersions = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEVersions200>(
+      {url: `/lke/versions`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * View a Kubernetes version available for deployment to a Kubernetes cluster.
 
  * @summary Kubernetes Version View
  */
-const getLKEVersion = <TData = AxiosResponse<GetLKEVersion200>>(
-    version: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/lke/versions/${version}`,options
-    );
-  }
-
+const getLKEVersion = (
+    version: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLKEVersion200>(
+      {url: `/lke/versions/${version}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Longview Clients you have access to. Longview Client is used to monitor stats on your Linode with the help of the Longview Client application.
 
  * @summary Longview Clients List
  */
-const getLongviewClients = <TData = AxiosResponse<GetLongviewClients200>>(
-    params?: GetLongviewClientsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/longview/clients`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getLongviewClients = (
+    params?: GetLongviewClientsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLongviewClients200>(
+      {url: `/longview/clients`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Longview Client.  This Client will not begin monitoring the status of your server until you configure the Longview Client application on your Linode using the returning `install_code` and `api_key`.
 
  * @summary Longview Client Create
  */
-const createLongviewClient = <TData = AxiosResponse<CreateLongviewClient200>>(
-    createLongviewClientBody: NonReadonly<CreateLongviewClientBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/longview/clients`,
-      createLongviewClientBody,options
-    );
-  }
-
+const createLongviewClient = (
+    createLongviewClientBody: BodyType<NonReadonly<CreateLongviewClientBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateLongviewClient200>(
+      {url: `/longview/clients`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createLongviewClientBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Longview Client you can access.
 
  * @summary Longview Client View
  */
-const getLongviewClient = <TData = AxiosResponse<GetLongviewClient200>>(
-    clientId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/longview/clients/${clientId}`,options
-    );
-  }
-
+const getLongviewClient = (
+    clientId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLongviewClient200>(
+      {url: `/longview/clients/${clientId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Longview Client.  This cannot update how it monitors your server; use the Longview Client application on your Linode for monitoring configuration.
 
  * @summary Longview Client Update
  */
-const updateLongviewClient = <TData = AxiosResponse<UpdateLongviewClient200>>(
+const updateLongviewClient = (
     clientId: number,
-    updateLongviewClientBody: NonReadonly<UpdateLongviewClientBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/longview/clients/${clientId}`,
-      updateLongviewClientBody,options
-    );
-  }
-
+    updateLongviewClientBody: BodyType<NonReadonly<UpdateLongviewClientBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateLongviewClient200>(
+      {url: `/longview/clients/${clientId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateLongviewClientBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Longview Client from your Account.
 
@@ -47255,14 +47487,15 @@ This _does not_ uninstall the Longview Client application for your Linode - you 
 
  * @summary Longview Client Delete
  */
-const deleteLongviewClient = <TData = AxiosResponse<DeleteLongviewClient200>>(
-    clientId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/longview/clients/${clientId}`,options
-    );
-  }
-
+const deleteLongviewClient = (
+    clientId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteLongviewClient200>(
+      {url: `/longview/clients/${clientId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Get the details of your current Longview plan. This returns a `LongviewSubscription` object for your current Longview Pro plan, or an empty set `{}` if your current plan is Longview Free.
 
@@ -47278,14 +47511,15 @@ To update your subscription plan, send a request to [Update Longview Plan](/docs
 
  * @summary Longview Plan View
  */
-const getLongviewPlan = <TData = AxiosResponse<GetLongviewPlan200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/longview/plan`,options
-    );
-  }
-
+const getLongviewPlan = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLongviewPlan200>(
+      {url: `/longview/plan`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update your Longview plan to that of the given subcription ID. This returns a `LongviewSubscription` object for the updated Longview Pro plan, or an empty set `{}` if the updated plan is Longview Free.
 
@@ -47295,43 +47529,46 @@ You can send a request to the [List Longview Subscriptions](/docs/api/longview/#
 
  * @summary Longview Plan Update
  */
-const updateLongviewPlan = <TData = AxiosResponse<UpdateLongviewPlan200>>(
-    updateLongviewPlanBody: UpdateLongviewPlanBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/longview/plan`,
-      updateLongviewPlanBody,options
-    );
-  }
-
+const updateLongviewPlan = (
+    updateLongviewPlanBody: BodyType<UpdateLongviewPlanBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateLongviewPlan200>(
+      {url: `/longview/plan`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateLongviewPlanBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of available Longview Subscriptions. This is a public endpoint and requires no authentication.
 
  * @summary Longview Subscriptions List
  */
-const getLongviewSubscriptions = <TData = AxiosResponse<GetLongviewSubscriptions200>>(
-    params?: GetLongviewSubscriptionsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/longview/subscriptions`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getLongviewSubscriptions = (
+    params?: GetLongviewSubscriptionsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLongviewSubscriptions200>(
+      {url: `/longview/subscriptions`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Get the Longview plan details as a single `LongviewSubscription` object for the provided subscription ID. This is a public endpoint and requires no authentication.
 
  * @summary Longview Subscription View
  */
-const getLongviewSubscription = <TData = AxiosResponse<GetLongviewSubscription200>>(
-    subscriptionId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/longview/subscriptions/${subscriptionId}`,options
-    );
-  }
-
+const getLongviewSubscription = (
+    subscriptionId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetLongviewSubscription200>(
+      {url: `/longview/subscriptions/${subscriptionId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Managed Contacts on your Account.
 
@@ -47339,16 +47576,16 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Contacts List
  */
-const getManagedContacts = <TData = AxiosResponse<GetManagedContacts200>>(
-    params?: GetManagedContactsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/contacts`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getManagedContacts = (
+    params?: GetManagedContactsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedContacts200>(
+      {url: `/managed/contacts`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Managed Contact.  A Managed Contact is someone Linode
 special forces can contact in the course of attempting to resolve an issue
@@ -47358,15 +47595,17 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Contact Create
  */
-const createManagedContact = <TData = AxiosResponse<CreateManagedContact200>>(
-    createManagedContactBody: NonReadonly<CreateManagedContactBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/contacts`,
-      createManagedContactBody,options
-    );
-  }
-
+const createManagedContact = (
+    createManagedContactBody: BodyType<NonReadonly<CreateManagedContactBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateManagedContact200>(
+      {url: `/managed/contacts`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createManagedContactBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Managed Contact.
 
@@ -47374,30 +47613,33 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Contact View
  */
-const getManagedContact = <TData = AxiosResponse<GetManagedContact200>>(
-    contactId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/contacts/${contactId}`,options
-    );
-  }
-
+const getManagedContact = (
+    contactId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedContact200>(
+      {url: `/managed/contacts/${contactId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates information about a Managed Contact.
 This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Contact Update
  */
-const updateManagedContact = <TData = AxiosResponse<UpdateManagedContact200>>(
+const updateManagedContact = (
     contactId: number,
-    updateManagedContactBody: NonReadonly<UpdateManagedContactBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/managed/contacts/${contactId}`,
-      updateManagedContactBody,options
-    );
-  }
-
+    updateManagedContactBody: BodyType<NonReadonly<UpdateManagedContactBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateManagedContact200>(
+      {url: `/managed/contacts/${contactId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateManagedContactBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Managed Contact.
 
@@ -47405,14 +47647,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Contact Delete
  */
-const deleteManagedContact = <TData = AxiosResponse<DeleteManagedContact200>>(
-    contactId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/managed/contacts/${contactId}`,options
-    );
-  }
-
+const deleteManagedContact = (
+    contactId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteManagedContact200>(
+      {url: `/managed/contacts/${contactId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Managed Credentials on your Account.
 
@@ -47420,16 +47663,16 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credentials List
  */
-const getManagedCredentials = <TData = AxiosResponse<GetManagedCredentials200>>(
-    params?: GetManagedCredentialsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/credentials`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getManagedCredentials = (
+    params?: GetManagedCredentialsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedCredentials200>(
+      {url: `/managed/credentials`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Managed Credential. A Managed Credential is stored securely
 to allow Linode special forces to access your Managed Services and resolve
@@ -47439,15 +47682,17 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credential Create
  */
-const createManagedCredential = <TData = AxiosResponse<CreateManagedCredential200>>(
-    createManagedCredentialBody: NonReadonly<CreateManagedCredentialBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/credentials`,
-      createManagedCredentialBody,options
-    );
-  }
-
+const createManagedCredential = (
+    createManagedCredentialBody: BodyType<NonReadonly<CreateManagedCredentialBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateManagedCredential200>(
+      {url: `/managed/credentials`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createManagedCredentialBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Managed Credential.
 
@@ -47455,30 +47700,33 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credential View
  */
-const getManagedCredential = <TData = AxiosResponse<GetManagedCredential200>>(
-    credentialId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/credentials/${credentialId}`,options
-    );
-  }
-
+const getManagedCredential = (
+    credentialId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedCredential200>(
+      {url: `/managed/credentials/${credentialId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates the label of a Managed Credential. This endpoint does not update the username and password for a Managed Credential. To do this, use the Managed Credential Username and Password Update ([POST /managed/credentials/{credentialId}/update](/docs/api/managed/#managed-credential-username-and-password-update)) endpoint instead.
 This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credential Update
  */
-const updateManagedCredential = <TData = AxiosResponse<UpdateManagedCredential200>>(
+const updateManagedCredential = (
     credentialId: number,
-    updateManagedCredentialBody: NonReadonly<UpdateManagedCredentialBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/managed/credentials/${credentialId}`,
-      updateManagedCredentialBody,options
-    );
-  }
-
+    updateManagedCredentialBody: BodyType<NonReadonly<UpdateManagedCredentialBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateManagedCredential200>(
+      {url: `/managed/credentials/${credentialId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateManagedCredentialBody
+    },
+      options);
+    }
+  
 /**
  * Updates the username and password for a Managed Credential.
 
@@ -47486,16 +47734,18 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credential Username and Password Update
  */
-const updateManagedCredentialUsernamePassword = <TData = AxiosResponse<UpdateManagedCredentialUsernamePassword200>>(
+const updateManagedCredentialUsernamePassword = (
     credentialId: number,
-    updateManagedCredentialUsernamePasswordBody: UpdateManagedCredentialUsernamePasswordBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/credentials/${credentialId}/update`,
-      updateManagedCredentialUsernamePasswordBody,options
-    );
-  }
-
+    updateManagedCredentialUsernamePasswordBody: BodyType<UpdateManagedCredentialUsernamePasswordBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateManagedCredentialUsernamePassword200>(
+      {url: `/managed/credentials/${credentialId}/update`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: updateManagedCredentialUsernamePasswordBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Managed Credential.  Linode special forces will no longer
 have access to this Credential when attempting to resolve issues.
@@ -47504,14 +47754,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Credential Delete
  */
-const deleteManagedCredential = <TData = AxiosResponse<DeleteManagedCredential200>>(
-    credentialId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/credentials/${credentialId}/revoke`,undefined,options
-    );
-  }
-
+const deleteManagedCredential = (
+    credentialId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteManagedCredential200>(
+      {url: `/managed/credentials/${credentialId}/revoke`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns the unique SSH public key assigned to your Linode account's
 Managed service. If you [add this public key](/docs/products/services/managed/get-started/#adding-the-public-key) to a Linode on your account,
@@ -47522,14 +47773,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed SSH Key View
  */
-const viewManagedSSHKey = <TData = AxiosResponse<ViewManagedSSHKey200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/credentials/sshkey`,options
-    );
-  }
-
+const viewManagedSSHKey = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ViewManagedSSHKey200>(
+      {url: `/managed/credentials/sshkey`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of recent and ongoing issues detected on your
 Managed Services.
@@ -47538,16 +47790,16 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Issues List
  */
-const getManagedIssues = <TData = AxiosResponse<GetManagedIssues200>>(
-    params?: GetManagedIssuesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/issues`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getManagedIssues = (
+    params?: GetManagedIssuesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedIssues200>(
+      {url: `/managed/issues`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a single Issue that is impacting or did impact one of your
 Managed Services.
@@ -47556,14 +47808,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Issue View
  */
-const getManagedIssue = <TData = AxiosResponse<GetManagedIssue200>>(
-    issueId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/issues/${issueId}`,options
-    );
-  }
-
+const getManagedIssue = (
+    issueId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedIssue200>(
+      {url: `/managed/issues/${issueId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Managed Settings for your Linodes. There will
 be one entry per Linode on your Account.
@@ -47572,16 +47825,16 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Linode Settings List
  */
-const getManagedLinodeSettings = <TData = AxiosResponse<GetManagedLinodeSettings200>>(
-    params?: GetManagedLinodeSettingsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/linode-settings`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getManagedLinodeSettings = (
+    params?: GetManagedLinodeSettingsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedLinodeSettings200>(
+      {url: `/managed/linode-settings`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a single Linode's Managed settings.
 
@@ -47589,30 +47842,33 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Linode's Managed Settings View
  */
-const getManagedLinodeSetting = <TData = AxiosResponse<GetManagedLinodeSetting200>>(
-    linodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/linode-settings/${linodeId}`,options
-    );
-  }
-
+const getManagedLinodeSetting = (
+    linodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedLinodeSetting200>(
+      {url: `/managed/linode-settings/${linodeId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a single Linode's Managed settings.
 This command can only be accessed by the unrestricted users of an account.
 
  * @summary Linode's Managed Settings Update
  */
-const updateManagedLinodeSetting = <TData = AxiosResponse<UpdateManagedLinodeSetting200>>(
+const updateManagedLinodeSetting = (
     linodeId: number,
-    updateManagedLinodeSettingBody: NonReadonly<UpdateManagedLinodeSettingBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/managed/linode-settings/${linodeId}`,
-      updateManagedLinodeSettingBody,options
-    );
-  }
-
+    updateManagedLinodeSettingBody: BodyType<NonReadonly<UpdateManagedLinodeSettingBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateManagedLinodeSetting200>(
+      {url: `/managed/linode-settings/${linodeId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateManagedLinodeSettingBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Managed Services on your Account. These
 are the services Linode Managed is monitoring and will report and attempt
@@ -47622,14 +47878,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Services List
  */
-const getManagedServices = <TData = AxiosResponse<GetManagedServices200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/services`,options
-    );
-  }
-
+const getManagedServices = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedServices200>(
+      {url: `/managed/services`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates a Managed Service. Linode Managed will begin monitoring this
 service and reporting and attempting to resolve any Issues.
@@ -47638,15 +47895,17 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service Create
  */
-const createManagedService = <TData = AxiosResponse<CreateManagedService200>>(
-    createManagedServiceBodyAllOf: NonReadonly<CreateManagedServiceBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/services`,
-      createManagedServiceBodyAllOf,options
-    );
-  }
-
+const createManagedService = (
+    createManagedServiceBodyAllOf: BodyType<NonReadonly<CreateManagedServiceBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateManagedService200>(
+      {url: `/managed/services`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createManagedServiceBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single Managed Service on your Account.
 
@@ -47654,14 +47913,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service View
  */
-const getManagedService = <TData = AxiosResponse<GetManagedService200>>(
-    serviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/services/${serviceId}`,options
-    );
-  }
-
+const getManagedService = (
+    serviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedService200>(
+      {url: `/managed/services/${serviceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates information about a Managed Service.
 
@@ -47669,16 +47929,18 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service Update
  */
-const updateManagedService = <TData = AxiosResponse<UpdateManagedService200>>(
+const updateManagedService = (
     serviceId: number,
-    updateManagedServiceBody: NonReadonly<UpdateManagedServiceBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/managed/services/${serviceId}`,
-      updateManagedServiceBody,options
-    );
-  }
-
+    updateManagedServiceBody: BodyType<NonReadonly<UpdateManagedServiceBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateManagedService200>(
+      {url: `/managed/services/${serviceId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateManagedServiceBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Managed Service.  This service will no longer be monitored by
 Linode Managed.
@@ -47687,14 +47949,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service Delete
  */
-const deleteManagedService = <TData = AxiosResponse<DeleteManagedService200>>(
-    serviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/managed/services/${serviceId}`,options
-    );
-  }
-
+const deleteManagedService = (
+    serviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteManagedService200>(
+      {url: `/managed/services/${serviceId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Temporarily disables monitoring of a Managed Service.
 
@@ -47702,14 +47965,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service Disable
  */
-const disableManagedService = <TData = AxiosResponse<DisableManagedService200>>(
-    serviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/services/${serviceId}/disable`,undefined,options
-    );
-  }
-
+const disableManagedService = (
+    serviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DisableManagedService200>(
+      {url: `/managed/services/${serviceId}/disable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Enables monitoring of a Managed Service.
 
@@ -47717,14 +47981,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Service Enable
  */
-const enableManagedService = <TData = AxiosResponse<EnableManagedService200>>(
-    serviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/managed/services/${serviceId}/enable`,undefined,options
-    );
-  }
-
+const enableManagedService = (
+    serviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<EnableManagedService200>(
+      {url: `/managed/services/${serviceId}/enable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a list of Managed Stats on your Account in the form of x and y data points.
 You can use these data points to plot your own graph visualizations. These stats
@@ -47742,14 +48007,15 @@ This command can only be accessed by the unrestricted users of an account.
 
  * @summary Managed Stats List
  */
-const getManagedStats = <TData = AxiosResponse<GetManagedStats200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/managed/stats`,options
-    );
-  }
-
+const getManagedStats = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetManagedStats200>(
+      {url: `/managed/stats`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of IP Addresses on your Account, excluding private addresses.
 
@@ -47757,56 +48023,63 @@ We recommend utilizing the "skip_ipv6_rdns" option to improve performance if you
 
  * @summary IP Addresses List
  */
-const getIPs = <TData = AxiosResponse<GetIPs200>>(
-    getIPsBody: GetIPsBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/ips`,options
-    );
-  }
-
+const getIPs = (
+    getIPsBody: BodyType<GetIPsBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetIPs200>(
+      {url: `/networking/ips`, method: 'get',
+      headers: {'Content-Type': 'application/json', }
+    },
+      options);
+    }
+  
 /**
  * Allocates a new IPv4 Address on your Account. The Linode must be configured to support additional addresses - please [open a support ticket](/docs/api/support/#support-ticket-open) requesting additional addresses before attempting allocation.
 
  * @summary IP Address Allocate
  */
-const allocateIP = <TData = AxiosResponse<AllocateIP200>>(
-    allocateIPBody: AllocateIPBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ips`,
-      allocateIPBody,options
-    );
-  }
-
+const allocateIP = (
+    allocateIPBody: BodyType<AllocateIPBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AllocateIP200>(
+      {url: `/networking/ips`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: allocateIPBody
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single IP Address on your Account.
 
  * @summary IP Address View
  */
-const getIP = <TData = AxiosResponse<GetIP200>>(
-    address: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/ips/${address}`,options
-    );
-  }
-
+const getIP = (
+    address: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetIP200>(
+      {url: `/networking/ips/${address}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Sets RDNS on an IP Address. Forward DNS must already be set up for reverse DNS to be applied. If you set the RDNS to `null` for public IPv4 addresses, it will be reset to the default _ip.linodeusercontent.com_ RDNS value.
 
  * @summary IP Address RDNS Update
  */
-const updateIP = <TData = AxiosResponse<UpdateIP200>>(
+const updateIP = (
     address: string,
-    updateIPBody: UpdateIPBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/networking/ips/${address}`,
-      updateIPBody,options
-    );
-  }
-
+    updateIPBody: BodyType<UpdateIPBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateIP200>(
+      {url: `/networking/ips/${address}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateIPBody
+    },
+      options);
+    }
+  
 /**
  * Assign multiple IPv4 addresses and/or IPv6 ranges to multiple Linodes in one Region. This allows swapping, shuffling, or otherwise reorganizing IPs to your Linodes.
 
@@ -47824,15 +48097,17 @@ The following restrictions apply:
 
  * @summary IP Addresses Assign
  */
-const assignIPs = <TData = AxiosResponse<AssignIPs200>>(
-    assignIPsBody: AssignIPsBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ips/assign`,
-      assignIPsBody,options
-    );
-  }
-
+const assignIPs = (
+    assignIPsBody: BodyType<AssignIPsBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AssignIPs200>(
+      {url: `/networking/ips/assign`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: assignIPsBody
+    },
+      options);
+    }
+  
 /**
  * Configure shared IPs.
 
@@ -47842,15 +48117,17 @@ IP failover requires configuration of a failover service (such as [Keepalived](/
 
  * @summary IP Addresses Share
  */
-const shareIPs = <TData = AxiosResponse<ShareIPs200>>(
-    shareIPsBody: ShareIPsBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ips/share`,
-      shareIPsBody,options
-    );
-  }
-
+const shareIPs = (
+    shareIPsBody: BodyType<ShareIPsBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ShareIPs200>(
+      {url: `/networking/ips/share`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: shareIPsBody
+    },
+      options);
+    }
+  
 /**
  * This command is equivalent to **IP Addresses Assign** ([POST /networking/ips/assign](#ip-addresses-assign)).
 
@@ -47869,15 +48146,17 @@ The following restrictions apply:
 
  * @summary Linodes Assign IPv4s
  */
-const assignIPv4s = <TData = AxiosResponse<AssignIPv4s200>>(
-    assignIPv4sBody: AssignIPv4sBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ipv4/assign`,
-      assignIPv4sBody,options
-    );
-  }
-
+const assignIPv4s = (
+    assignIPv4sBody: BodyType<AssignIPv4sBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AssignIPv4s200>(
+      {url: `/networking/ipv4/assign`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: assignIPv4sBody
+    },
+      options);
+    }
+  
 /**
  * This command is equivalent to **IP Addresses Share** ([POST /networking/ips/share](#ip-addresses-share)).
 
@@ -47889,30 +48168,32 @@ IP failover requires configuration of a failover service (such as [Keepalived](/
 
  * @summary IPv4 Sharing Configure
  */
-const shareIPv4s = <TData = AxiosResponse<ShareIPv4s200>>(
-    shareIPv4sBody: ShareIPv4sBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ipv4/share`,
-      shareIPv4sBody,options
-    );
-  }
-
+const shareIPv4s = (
+    shareIPv4sBody: BodyType<ShareIPv4sBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ShareIPv4s200>(
+      {url: `/networking/ipv4/share`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: shareIPv4sBody
+    },
+      options);
+    }
+  
 /**
  * Displays the IPv6 pools on your Account. A pool of IPv6 addresses are routed to all of your Linodes in a single [Region](/docs/api/regions/#regions-list). Any Linode on your Account may bring up any address in this pool at any time, with no external configuration required.
 
  * @summary IPv6 Pools List
  */
-const getIPv6Pools = <TData = AxiosResponse<GetIPv6Pools200>>(
-    params?: GetIPv6PoolsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/ipv6/pools`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getIPv6Pools = (
+    params?: GetIPv6PoolsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetIPv6Pools200>(
+      {url: `/networking/ipv6/pools`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Displays the IPv6 ranges on your Account.
 
@@ -47925,16 +48206,16 @@ const getIPv6Pools = <TData = AxiosResponse<GetIPv6Pools200>>(
 
  * @summary IPv6 Ranges List
  */
-const getIPv6Ranges = <TData = AxiosResponse<GetIPv6Ranges200>>(
-    params?: GetIPv6RangesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/ipv6/ranges`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getIPv6Ranges = (
+    params?: GetIPv6RangesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetIPv6Ranges200>(
+      {url: `/networking/ipv6/ranges`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates an IPv6 Range and assigns it based on the provided Linode or route target IPv6 SLAAC address. See the `ipv6` property when accessing the Linode View ([GET /linode/instances/{linodeId}](/docs/api/linode-instances/#linode-view)) endpoint to view a Linode's IPv6 SLAAC address.
   * Either `linode_id` or `route_target` is required in a request.
@@ -47950,28 +48231,31 @@ const getIPv6Ranges = <TData = AxiosResponse<GetIPv6Ranges200>>(
 
  * @summary IPv6 Range Create
  */
-const postIPv6Range = <TData = AxiosResponse<PostIPv6Range200>>(
-    postIPv6RangeBody: PostIPv6RangeBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/ipv6/ranges`,
-      postIPv6RangeBody,options
-    );
-  }
-
+const postIPv6Range = (
+    postIPv6RangeBody: BodyType<PostIPv6RangeBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostIPv6Range200>(
+      {url: `/networking/ipv6/ranges`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postIPv6RangeBody
+    },
+      options);
+    }
+  
 /**
  * View IPv6 range information.
 
  * @summary IPv6 Range View
  */
-const getIPv6Range = <TData = AxiosResponse<GetIPv6Range200>>(
-    range: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/ipv6/ranges/${range}`,options
-    );
-  }
-
+const getIPv6Range = (
+    range: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetIPv6Range200>(
+      {url: `/networking/ipv6/ranges/${range}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Removes this IPv6 range from your account and disconnects the range from any assigned Linodes.
 
@@ -47979,29 +48263,30 @@ const getIPv6Range = <TData = AxiosResponse<GetIPv6Range200>>(
 
  * @summary IPv6 Range Delete
  */
-const deleteIPv6Range = <TData = AxiosResponse<DeleteIPv6Range200>>(
-    range: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/networking/ipv6/ranges/${range}`,options
-    );
-  }
-
+const deleteIPv6Range = (
+    range: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteIPv6Range200>(
+      {url: `/networking/ipv6/ranges/${range}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of accessible Firewalls.
 
  * @summary Firewalls List
  */
-const getFirewalls = <TData = AxiosResponse<GetFirewalls200>>(
-    params?: GetFirewallsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/firewalls`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getFirewalls = (
+    params?: GetFirewallsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetFirewalls200>(
+      {url: `/networking/firewalls`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Firewall to filter network traffic.
 
@@ -48023,15 +48308,17 @@ Additional disabled Firewalls can be assigned to a service, but they cannot be e
 
  * @summary Firewall Create
  */
-const createFirewalls = <TData = AxiosResponse<CreateFirewalls200>>(
-    createFirewallsBody: NonReadonly<CreateFirewallsBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/firewalls`,
-      createFirewallsBody,options
-    );
-  }
-
+const createFirewalls = (
+    createFirewallsBody: BodyType<NonReadonly<CreateFirewallsBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateFirewalls200>(
+      {url: `/networking/firewalls`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createFirewallsBody
+    },
+      options);
+    }
+  
 /**
  * Get a specific Firewall resource by its ID. The Firewall's Devices will not be
 returned in the response. Instead, use the
@@ -48040,14 +48327,15 @@ endpoint to review them.
 
  * @summary Firewall View
  */
-const getFirewall = <TData = AxiosResponse<GetFirewall200>>(
-    firewallId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/firewalls/${firewallId}`,options
-    );
-  }
-
+const getFirewall = (
+    firewallId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetFirewall200>(
+      {url: `/networking/firewalls/${firewallId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates information for a Firewall.
 
@@ -48075,16 +48363,18 @@ endpoint to delete a Firewall.
 
  * @summary Firewall Update
  */
-const updateFirewall = <TData = AxiosResponse<UpdateFirewall200>>(
+const updateFirewall = (
     firewallId: number,
-    updateFirewallBody: UpdateFirewallBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/networking/firewalls/${firewallId}`,
-      updateFirewallBody,options
-    );
-  }
-
+    updateFirewallBody: BodyType<UpdateFirewallBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateFirewall200>(
+      {url: `/networking/firewalls/${firewallId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateFirewallBody
+    },
+      options);
+    }
+  
 /**
  * Delete a Firewall resource by its ID. This removes all of the Firewall's Rules
 from any services that the Firewall was assigned to.
@@ -48095,30 +48385,31 @@ from any services that the Firewall was assigned to.
 
  * @summary Firewall Delete
  */
-const deleteFirewall = <TData = AxiosResponse<DeleteFirewall200>>(
-    firewallId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/networking/firewalls/${firewallId}`,options
-    );
-  }
-
+const deleteFirewall = (
+    firewallId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteFirewall200>(
+      {url: `/networking/firewalls/${firewallId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of a Firewall's Devices. A Firewall Device assigns a Firewall to a service (referred to as the Device's `entity`).
 
  * @summary Firewall Devices List
  */
-const getFirewallDevices = <TData = AxiosResponse<GetFirewallDevices200>>(
+const getFirewallDevices = (
     firewallId: number,
-    params?: GetFirewallDevicesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/firewalls/${firewallId}/devices`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetFirewallDevicesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetFirewallDevices200>(
+      {url: `/networking/firewalls/${firewallId}/devices`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Firewall Device, which assigns a Firewall to a service (referred to
 as the Device's `entity`) and applies the Firewall's Rules to the device.
@@ -48138,31 +48429,34 @@ Additional disabled Firewalls can be assigned to a service, but they cannot be e
 
  * @summary Firewall Device Create
  */
-const createFirewallDevice = <TData = AxiosResponse<CreateFirewallDevice200>>(
+const createFirewallDevice = (
     firewallId: number,
-    createFirewallDeviceBodyAllOf: NonReadonly<CreateFirewallDeviceBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/networking/firewalls/${firewallId}/devices`,
-      createFirewallDeviceBodyAllOf,options
-    );
-  }
-
+    createFirewallDeviceBodyAllOf: BodyType<NonReadonly<CreateFirewallDeviceBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateFirewallDevice200>(
+      {url: `/networking/firewalls/${firewallId}/devices`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createFirewallDeviceBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information for a Firewall Device, which assigns a Firewall
 to a service (referred to as the Device's `entity`).
 
  * @summary Firewall Device View
  */
-const getFirewallDevice = <TData = AxiosResponse<GetFirewallDevice200>>(
+const getFirewallDevice = (
     firewallId: number,
-    deviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/firewalls/${firewallId}/devices/${deviceId}`,options
-    );
-  }
-
+    deviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetFirewallDevice200>(
+      {url: `/networking/firewalls/${firewallId}/devices/${deviceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Removes a Firewall Device, which removes a Firewall from the service it was
 assigned to by the Device. This removes all of the Firewall's Rules from the
@@ -48175,28 +48469,30 @@ remain in effect.
 
  * @summary Firewall Device Delete
  */
-const deleteFirewallDevice = <TData = AxiosResponse<DeleteFirewallDevice200>>(
+const deleteFirewallDevice = (
     firewallId: number,
-    deviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/networking/firewalls/${firewallId}/devices/${deviceId}`,options
-    );
-  }
-
+    deviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteFirewallDevice200>(
+      {url: `/networking/firewalls/${firewallId}/devices/${deviceId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns the inbound and outbound Rules for a Firewall.
 
  * @summary Firewall Rules List
  */
-const getFirewallRules = <TData = AxiosResponse<GetFirewallRules200>>(
-    firewallId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/firewalls/${firewallId}/rules`,options
-    );
-  }
-
+const getFirewallRules = (
+    firewallId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetFirewallRules200>(
+      {url: `/networking/firewalls/${firewallId}/rules`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates the inbound and outbound Rules for a Firewall.
 
@@ -48206,16 +48502,18 @@ const getFirewallRules = <TData = AxiosResponse<GetFirewallRules200>>(
 
  * @summary Firewall Rules Update
  */
-const updateFirewallRules = <TData = AxiosResponse<UpdateFirewallRules200>>(
+const updateFirewallRules = (
     firewallId: number,
-    updateFirewallRulesBody: UpdateFirewallRulesBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/networking/firewalls/${firewallId}/rules`,
-      updateFirewallRulesBody,options
-    );
-  }
-
+    updateFirewallRulesBody: BodyType<UpdateFirewallRulesBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateFirewallRules200>(
+      {url: `/networking/firewalls/${firewallId}/rules`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateFirewallRulesBody
+    },
+      options);
+    }
+  
 /**
  * Returns a list of all Virtual Local Area Networks (VLANs) on your Account. VLANs provide
 a mechanism for secure communication between two or more Linodes that are assigned to the
@@ -48242,31 +48540,31 @@ you will be prompted to select a different data center or contact support.
 
  * @summary VLANs List
  */
-const getVLANs = <TData = AxiosResponse<GetVLANs200>>(
-    params?: GetVLANsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/networking/vlans`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getVLANs = (
+    params?: GetVLANsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetVLANs200>(
+      {url: `/networking/vlans`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of NodeBalancers you have access to.
 
  * @summary NodeBalancers List
  */
-const getNodeBalancers = <TData = AxiosResponse<GetNodeBalancers200>>(
-    params?: GetNodeBalancersParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getNodeBalancers = (
+    params?: GetNodeBalancersParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancers200>(
+      {url: `/nodebalancers`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a NodeBalancer in the requested Region.
 
@@ -48276,43 +48574,48 @@ When using the Linode CLI to create a NodeBalancer, first create a NodeBalancer 
 
  * @summary NodeBalancer Create
  */
-const createNodeBalancer = <TData = AxiosResponse<CreateNodeBalancer200>>(
-    createNodeBalancerBody: CreateNodeBalancerBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/nodebalancers`,
-      createNodeBalancerBody,options
-    );
-  }
-
+const createNodeBalancer = (
+    createNodeBalancerBody: BodyType<CreateNodeBalancerBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateNodeBalancer200>(
+      {url: `/nodebalancers`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createNodeBalancerBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single NodeBalancer you can access.
 
  * @summary NodeBalancer View
  */
-const getNodeBalancer = <TData = AxiosResponse<GetNodeBalancer200>>(
-    nodeBalancerId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}`,options
-    );
-  }
-
+const getNodeBalancer = (
+    nodeBalancerId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancer200>(
+      {url: `/nodebalancers/${nodeBalancerId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates information about a NodeBalancer you can access.
 
  * @summary NodeBalancer Update
  */
-const updateNodeBalancer = <TData = AxiosResponse<UpdateNodeBalancer200>>(
+const updateNodeBalancer = (
     nodeBalancerId: number,
-    updateNodeBalancerBody: NonReadonly<UpdateNodeBalancerBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/nodebalancers/${nodeBalancerId}`,
-      updateNodeBalancerBody,options
-    );
-  }
-
+    updateNodeBalancerBody: BodyType<NonReadonly<UpdateNodeBalancerBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateNodeBalancer200>(
+      {url: `/nodebalancers/${nodeBalancerId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateNodeBalancerBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a NodeBalancer.
 
@@ -48322,14 +48625,15 @@ Deleting a NodeBalancer will also delete all associated Configs and Nodes, altho
 
  * @summary NodeBalancer Delete
  */
-const deleteNodeBalancer = <TData = AxiosResponse<DeleteNodeBalancer200>>(
-    nodeBalancerId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/nodebalancers/${nodeBalancerId}`,options
-    );
-  }
-
+const deleteNodeBalancer = (
+    nodeBalancerId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteNodeBalancer200>(
+      {url: `/nodebalancers/${nodeBalancerId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of NodeBalancer Configs associated with this NodeBalancer. NodeBalancer Configs represent individual ports that this NodeBalancer will accept traffic on, one Config per port.
 
@@ -48337,62 +48641,67 @@ For example, if you wanted to accept standard HTTP traffic, you would need a Con
 
  * @summary Configs List
  */
-const getNodeBalancerConfigs = <TData = AxiosResponse<GetNodeBalancerConfigs200>>(
+const getNodeBalancerConfigs = (
     nodeBalancerId: number,
-    params?: GetNodeBalancerConfigsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/configs`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetNodeBalancerConfigsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancerConfigs200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a NodeBalancer Config, which allows the NodeBalancer to accept traffic on a new port. You will need to add NodeBalancer Nodes to the new Config before it can actually serve requests.
 
  * @summary Config Create
  */
-const createNodeBalancerConfig = <TData = AxiosResponse<CreateNodeBalancerConfig200>>(
+const createNodeBalancerConfig = (
     nodeBalancerId: number,
-    createNodeBalancerConfigBody: NonReadonly<CreateNodeBalancerConfigBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/nodebalancers/${nodeBalancerId}/configs`,
-      createNodeBalancerConfigBody,options
-    );
-  }
-
+    createNodeBalancerConfigBody: BodyType<NonReadonly<CreateNodeBalancerConfigBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateNodeBalancerConfig200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createNodeBalancerConfigBody
+    },
+      options);
+    }
+  
 /**
  * Returns configuration information for a single port of this NodeBalancer.
 
  * @summary Config View
  */
-const getNodeBalancerConfig = <TData = AxiosResponse<GetNodeBalancerConfig200>>(
+const getNodeBalancerConfig = (
     nodeBalancerId: number,
-    configId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}`,options
-    );
-  }
-
+    configId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancerConfig200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates the configuration for a single port on a NodeBalancer.
 
  * @summary Config Update
  */
-const updateNodeBalancerConfig = <TData = AxiosResponse<UpdateNodeBalancerConfig200>>(
+const updateNodeBalancerConfig = (
     nodeBalancerId: number,
     configId: number,
-    updateNodeBalancerConfigBody: NonReadonly<UpdateNodeBalancerConfigBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}`,
-      updateNodeBalancerConfigBody,options
-    );
-  }
-
+    updateNodeBalancerConfigBody: BodyType<NonReadonly<UpdateNodeBalancerConfigBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateNodeBalancerConfig200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateNodeBalancerConfigBody
+    },
+      options);
+    }
+  
 /**
  * Deletes the Config for a port of this NodeBalancer.
 
@@ -48402,15 +48711,16 @@ Once completed, this NodeBalancer will no longer respond to requests on the give
 
  * @summary Config Delete
  */
-const deleteNodeBalancerConfig = <TData = AxiosResponse<DeleteNodeBalancerConfig200>>(
+const deleteNodeBalancerConfig = (
     nodeBalancerId: number,
-    configId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}`,options
-    );
-  }
-
+    configId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteNodeBalancerConfig200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Rebuilds a NodeBalancer Config and its Nodes that you have permission to modify.
 
@@ -48418,82 +48728,89 @@ Use this command to update a NodeBalancer's Config and Nodes with a single reque
 
  * @summary Config Rebuild
  */
-const rebuildNodeBalancerConfig = <TData = AxiosResponse<RebuildNodeBalancerConfig200>>(
+const rebuildNodeBalancerConfig = (
     nodeBalancerId: number,
     configId: number,
-    rebuildNodeBalancerConfigBody: NonReadonly<RebuildNodeBalancerConfigBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/rebuild`,
-      rebuildNodeBalancerConfigBody,options
-    );
-  }
-
+    rebuildNodeBalancerConfigBody: BodyType<NonReadonly<RebuildNodeBalancerConfigBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RebuildNodeBalancerConfig200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/rebuild`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: rebuildNodeBalancerConfigBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of NodeBalancer nodes associated with this Config. These are the backends that will be sent traffic for this port.
 
  * @summary Nodes List
  */
-const getNodeBalancerConfigNodes = <TData = AxiosResponse<GetNodeBalancerConfigNodes200>>(
+const getNodeBalancerConfigNodes = (
     nodeBalancerId: number,
     configId: number,
-    params?: GetNodeBalancerConfigNodesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetNodeBalancerConfigNodesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancerConfigNodes200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a NodeBalancer Node, a backend that can accept traffic for this NodeBalancer Config. Nodes are routed requests on the configured port based on their status.
 
  * @summary Node Create
  */
-const createNodeBalancerNode = <TData = AxiosResponse<CreateNodeBalancerNode200>>(
+const createNodeBalancerNode = (
     nodeBalancerId: number,
     configId: number,
-    createNodeBalancerNodeBodyAllOf: NonReadonly<CreateNodeBalancerNodeBodyAllOf>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes`,
-      createNodeBalancerNodeBodyAllOf,options
-    );
-  }
-
+    createNodeBalancerNodeBodyAllOf: BodyType<NonReadonly<CreateNodeBalancerNodeBodyAllOf>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateNodeBalancerNode200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createNodeBalancerNodeBodyAllOf
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single Node, a backend for this NodeBalancer's configured port.
 
  * @summary Node View
  */
-const getNodeBalancerNode = <TData = AxiosResponse<GetNodeBalancerNode200>>(
+const getNodeBalancerNode = (
     nodeBalancerId: number,
     configId: number,
-    nodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`,options
-    );
-  }
-
+    nodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancerNode200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates information about a Node, a backend for this NodeBalancer's configured port.
 
  * @summary Node Update
  */
-const updateNodeBalancerNode = <TData = AxiosResponse<UpdateNodeBalancerNode200>>(
+const updateNodeBalancerNode = (
     nodeBalancerId: number,
     configId: number,
     nodeId: number,
-    updateNodeBalancerNodeBody: NonReadonly<UpdateNodeBalancerNodeBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`,
-      updateNodeBalancerNodeBody,options
-    );
-  }
-
+    updateNodeBalancerNodeBody: BodyType<NonReadonly<UpdateNodeBalancerNodeBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateNodeBalancerNode200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateNodeBalancerNodeBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Node from this Config. This backend will no longer receive traffic for the configured port of this NodeBalancer.
 
@@ -48501,42 +48818,45 @@ This does not change or remove the Linode whose address was used in the creation
 
  * @summary Node Delete
  */
-const deleteNodeBalancerConfigNode = <TData = AxiosResponse<DeleteNodeBalancerConfigNode200>>(
+const deleteNodeBalancerConfigNode = (
     nodeBalancerId: number,
     configId: number,
-    nodeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`,options
-    );
-  }
-
+    nodeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteNodeBalancerConfigNode200>(
+      {url: `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * View information for Firewalls assigned to this NodeBalancer.
 
  * @summary Firewalls List
  */
-const getNodeBalancerFirewalls = <TData = AxiosResponse<GetNodeBalancerFirewalls200>>(
-    nodeBalancerId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/firewalls`,options
-    );
-  }
-
+const getNodeBalancerFirewalls = (
+    nodeBalancerId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodeBalancerFirewalls200>(
+      {url: `/nodebalancers/${nodeBalancerId}/firewalls`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns detailed statistics about the requested NodeBalancer.
 
  * @summary NodeBalancer Statistics View
  */
-const getNodebalancersNodeBalancerIdStats = <TData = AxiosResponse<GetNodebalancersNodeBalancerIdStats200>>(
-    nodeBalancerId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/nodebalancers/${nodeBalancerId}/stats`,options
-    );
-  }
-
+const getNodebalancersNodeBalancerIdStats = (
+    nodeBalancerId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetNodebalancersNodeBalancerIdStats200>(
+      {url: `/nodebalancers/${nodeBalancerId}/stats`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of all Object Storage Buckets that you own.
 
@@ -48546,14 +48866,15 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Buckets List
  */
-const getObjectStorageBuckets = <TData = AxiosResponse<GetObjectStorageBuckets200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets`,options
-    );
-  }
-
+const getObjectStorageBuckets = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageBuckets200>(
+      {url: `/object-storage/buckets`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates an Object Storage Bucket in the specified cluster.
 
@@ -48565,15 +48886,17 @@ This endpoint is available for convenience. It is recommended that instead you u
 
  * @summary Object Storage Bucket Create
  */
-const createObjectStorageBucket = <TData = AxiosResponse<CreateObjectStorageBucket200>>(
-    createObjectStorageBucketBody: CreateObjectStorageBucketBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/buckets`,
-      createObjectStorageBucketBody,options
-    );
-  }
-
+const createObjectStorageBucket = (
+    createObjectStorageBucketBody: BodyType<CreateObjectStorageBucketBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateObjectStorageBucket200>(
+      {url: `/object-storage/buckets`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createObjectStorageBucketBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Object Storage Bucket.
 
@@ -48583,15 +48906,16 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Bucket View
  */
-const getObjectStorageBucket = <TData = AxiosResponse<GetObjectStorageBucket200>>(
+const getObjectStorageBucket = (
     clusterId: string,
-    bucket: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets/${clusterId}/${bucket}`,options
-    );
-  }
-
+    bucket: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageBucket200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Removes a single bucket.
 
@@ -48606,15 +48930,16 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Bucket Remove
  */
-const deleteObjectStorageBucket = <TData = AxiosResponse<DeleteObjectStorageBucket200>>(
+const deleteObjectStorageBucket = (
     clusterId: string,
-    bucket: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/object-storage/buckets/${clusterId}/${bucket}`,options
-    );
-  }
-
+    bucket: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteObjectStorageBucket200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a list of Buckets in this cluster belonging to this Account.
 
@@ -48624,14 +48949,15 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Buckets in Cluster List
  */
-const getObjectStorageBucketinCluster = <TData = AxiosResponse<GetObjectStorageBucketinCluster200>>(
-    clusterId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets/${clusterId}`,options
-    );
-  }
-
+const getObjectStorageBucketinCluster = (
+    clusterId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageBucketinCluster200>(
+      {url: `/object-storage/buckets/${clusterId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control Level (ACL) settings.
 Only allows enabling/disabling CORS for all origins, and/or setting canned ACLs.
@@ -48641,17 +48967,19 @@ For more fine-grained control of both systems, please use the more [fully-featur
 
  * @summary Object Storage Bucket Access Modify
  */
-const modifyObjectStorageBucketAccess = <TData = AxiosResponse<ModifyObjectStorageBucketAccess200>>(
+const modifyObjectStorageBucketAccess = (
     clusterId: string,
     bucket: string,
-    modifyObjectStorageBucketAccessBody: ModifyObjectStorageBucketAccessBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/buckets/${clusterId}/${bucket}/access`,
-      modifyObjectStorageBucketAccessBody,options
-    );
-  }
-
+    modifyObjectStorageBucketAccessBody: BodyType<ModifyObjectStorageBucketAccessBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ModifyObjectStorageBucketAccess200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/access`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: modifyObjectStorageBucketAccessBody
+    },
+      options);
+    }
+  
 /**
  * Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control Level (ACL) settings.
 Only allows enabling/disabling CORS for all origins, and/or setting canned ACLs.
@@ -48661,17 +48989,19 @@ For more fine-grained control of both systems, please use the more [fully-featur
 
  * @summary Object Storage Bucket Access Update
  */
-const updateObjectStorageBucketAccess = <TData = AxiosResponse<UpdateObjectStorageBucketAccess200>>(
+const updateObjectStorageBucketAccess = (
     clusterId: string,
     bucket: string,
-    updateObjectStorageBucketAccessBody: UpdateObjectStorageBucketAccessBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/object-storage/buckets/${clusterId}/${bucket}/access`,
-      updateObjectStorageBucketAccessBody,options
-    );
-  }
-
+    updateObjectStorageBucketAccessBody: BodyType<UpdateObjectStorageBucketAccessBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateObjectStorageBucketAccess200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/access`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateObjectStorageBucketAccessBody
+    },
+      options);
+    }
+  
 /**
  * View an Object's configured Access Control List (ACL) in this Object Storage bucket.
 ACLs define who can access your buckets and objects and specify the level of access
@@ -48683,18 +49013,18 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Object ACL Config View
  */
-const viewObjectStorageBucketACL = <TData = AxiosResponse<ViewObjectStorageBucketACL200>>(
+const viewObjectStorageBucketACL = (
     clusterId: string,
     bucket: string,
-    params: ViewObjectStorageBucketACLParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets/${clusterId}/${bucket}/object-acl`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params: ViewObjectStorageBucketACLParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ViewObjectStorageBucketACL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/object-acl`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Update an Object's configured Access Control List (ACL) in this Object Storage bucket.
 ACLs define who can access your buckets and objects and specify the level of access
@@ -48706,17 +49036,19 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Object ACL Config Update
  */
-const updateObjectStorageBucketACL = <TData = AxiosResponse<UpdateObjectStorageBucketACL200>>(
+const updateObjectStorageBucketACL = (
     clusterId: string,
     bucket: string,
-    updateObjectStorageBucketACLBody: UpdateObjectStorageBucketACLBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/object-storage/buckets/${clusterId}/${bucket}/object-acl`,
-      updateObjectStorageBucketACLBody,options
-    );
-  }
-
+    updateObjectStorageBucketACLBody: BodyType<UpdateObjectStorageBucketACLBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateObjectStorageBucketACL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/object-acl`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateObjectStorageBucketACLBody
+    },
+      options);
+    }
+  
 /**
  * Returns the contents of a bucket. The contents are paginated using a `marker`,
 which is the name of the last object on the previous page.  Objects may
@@ -48729,18 +49061,18 @@ use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/
 
  * @summary Object Storage Bucket Contents List
  */
-const getObjectStorageBucketContent = <TData = AxiosResponse<GetObjectStorageBucketContent200>>(
+const getObjectStorageBucketContent = (
     clusterId: string,
     bucket: string,
-    params?: GetObjectStorageBucketContentParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets/${clusterId}/${bucket}/object-list`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetObjectStorageBucketContentParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageBucketContent200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/object-list`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a pre-signed URL to access a single Object in a bucket. This
 can be used to share objects, and also to create/delete objects by using
@@ -48753,17 +49085,19 @@ directly.
 
  * @summary Object Storage Object URL Create
  */
-const createObjectStorageObjectURL = <TData = AxiosResponse<CreateObjectStorageObjectURL200>>(
+const createObjectStorageObjectURL = (
     clusterId: string,
     bucket: string,
-    createObjectStorageObjectURLBody: CreateObjectStorageObjectURLBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/buckets/${clusterId}/${bucket}/object-url`,
-      createObjectStorageObjectURLBody,options
-    );
-  }
-
+    createObjectStorageObjectURLBody: BodyType<CreateObjectStorageObjectURLBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateObjectStorageObjectURL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/object-url`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createObjectStorageObjectURLBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Object Storage Clusters that are available for
 use.  Users can connect to the clusters with third party clients to create buckets
@@ -48771,41 +49105,44 @@ and upload objects.
 
  * @summary Clusters List
  */
-const getObjectStorageClusters = <TData = AxiosResponse<GetObjectStorageClusters200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/clusters`,options
-    );
-  }
-
+const getObjectStorageClusters = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageClusters200>(
+      {url: `/object-storage/clusters`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a single Object Storage Cluster.
 
  * @summary Cluster View
  */
-const getObjectStorageCluster = <TData = AxiosResponse<GetObjectStorageCluster200>>(
-    clusterId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/clusters/${clusterId}`,options
-    );
-  }
-
+const getObjectStorageCluster = (
+    clusterId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageCluster200>(
+      {url: `/object-storage/clusters/${clusterId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Object Storage Keys for authenticating to
 the Object Storage S3 API.
 
  * @summary Object Storage Keys List
  */
-const getObjectStorageKeys = <TData = AxiosResponse<GetObjectStorageKeys200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/keys`,options
-    );
-  }
-
+const getObjectStorageKeys = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageKeys200>(
+      {url: `/object-storage/keys`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Provisions a new Object Storage Key on your account.
 
@@ -48817,28 +49154,31 @@ const getObjectStorageKeys = <TData = AxiosResponse<GetObjectStorageKeys200>>(
 
  * @summary Object Storage Key Create
  */
-const createObjectStorageKeys = <TData = AxiosResponse<CreateObjectStorageKeys200>>(
-    createObjectStorageKeysBody: NonReadonly<CreateObjectStorageKeysBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/keys`,
-      createObjectStorageKeysBody,options
-    );
-  }
-
+const createObjectStorageKeys = (
+    createObjectStorageKeysBody: BodyType<NonReadonly<CreateObjectStorageKeysBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateObjectStorageKeys200>(
+      {url: `/object-storage/keys`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createObjectStorageKeysBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Object Storage Key provisioned for your account.
 
  * @summary Object Storage Key View
  */
-const getObjectStorageKey = <TData = AxiosResponse<GetObjectStorageKey200>>(
-    keyId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/keys/${keyId}`,options
-    );
-  }
-
+const getObjectStorageKey = (
+    keyId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageKey200>(
+      {url: `/object-storage/keys/${keyId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates an Object Storage Key on your account.
 
@@ -48846,16 +49186,18 @@ const getObjectStorageKey = <TData = AxiosResponse<GetObjectStorageKey200>>(
 
  * @summary Object Storage Key Update
  */
-const updateObjectStorageKey = <TData = AxiosResponse<UpdateObjectStorageKey200>>(
+const updateObjectStorageKey = (
     keyId: number,
-    updateObjectStorageKeyBody: UpdateObjectStorageKeyBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/object-storage/keys/${keyId}`,
-      updateObjectStorageKeyBody,options
-    );
-  }
-
+    updateObjectStorageKeyBody: BodyType<UpdateObjectStorageKeyBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateObjectStorageKey200>(
+      {url: `/object-storage/keys/${keyId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateObjectStorageKeyBody
+    },
+      options);
+    }
+  
 /**
  * Revokes an Object Storage Key. This keypair will no longer be usable by third-party clients.
 
@@ -48863,14 +49205,15 @@ const updateObjectStorageKey = <TData = AxiosResponse<UpdateObjectStorageKey200>
 
  * @summary Object Storage Key Revoke
  */
-const deleteObjectStorageKey = <TData = AxiosResponse<DeleteObjectStorageKey200>>(
-    keyId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/object-storage/keys/${keyId}`,options
-    );
-  }
-
+const deleteObjectStorageKey = (
+    keyId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteObjectStorageKey200>(
+      {url: `/object-storage/keys/${keyId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Cancel Object Storage on an Account.
 
@@ -48878,29 +49221,31 @@ const deleteObjectStorageKey = <TData = AxiosResponse<DeleteObjectStorageKey200>
 
  * @summary Object Storage Cancel
  */
-const cancelObjectStorage = <TData = AxiosResponse<CancelObjectStorage200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/cancel`,undefined,options
-    );
-  }
-
+const cancelObjectStorage = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CancelObjectStorage200>(
+      {url: `/object-storage/cancel`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a boolean value indicating if this bucket has a corresponding TLS/SSL certificate that was
 uploaded by an Account user.
 
  * @summary Object Storage TLS/SSL Cert View
  */
-const getObjectStorageSSL = <TData = AxiosResponse<GetObjectStorageSSL200>>(
+const getObjectStorageSSL = (
     clusterId: string,
-    bucket: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/buckets/${clusterId}/${bucket}/ssl`,options
-    );
-  }
-
+    bucket: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageSSL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/ssl`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Upload a TLS/SSL certificate and private key to be served when you visit your Object Storage bucket via HTTPS.
 Your TLS/SSL certificate and private key are stored encrypted at rest.
@@ -48911,31 +49256,34 @@ and upload a new one.
 
  * @summary Object Storage TLS/SSL Cert Upload
  */
-const createObjectStorageSSL = <TData = AxiosResponse<CreateObjectStorageSSL200>>(
+const createObjectStorageSSL = (
     clusterId: string,
     bucket: string,
-    createObjectStorageSSLBody: CreateObjectStorageSSLBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/object-storage/buckets/${clusterId}/${bucket}/ssl`,
-      createObjectStorageSSLBody,options
-    );
-  }
-
+    createObjectStorageSSLBody: BodyType<CreateObjectStorageSSLBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateObjectStorageSSL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/ssl`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createObjectStorageSSLBody
+    },
+      options);
+    }
+  
 /**
  * Deletes this Object Storage bucket's user uploaded TLS/SSL certificate and private key.
 
  * @summary Object Storage TLS/SSL Cert Delete
  */
-const deleteObjectStorageSSL = <TData = AxiosResponse<DeleteObjectStorageSSL200>>(
+const deleteObjectStorageSSL = (
     clusterId: string,
-    bucket: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/object-storage/buckets/${clusterId}/${bucket}/ssl`,options
-    );
-  }
-
+    bucket: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteObjectStorageSSL200>(
+      {url: `/object-storage/buckets/${clusterId}/${bucket}/ssl`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * The amount of outbound data transfer used by your account's Object Storage buckets.
 Object Storage adds 1 terabyte of outbound data transfer to your data transfer pool.
@@ -48944,14 +49292,15 @@ guide for details on Object Storage transfer quotas.
 
  * @summary Object Storage Transfer View
  */
-const getObjectStorageTransfer = <TData = AxiosResponse<GetObjectStorageTransfer200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/object-storage/transfer`,options
-    );
-  }
-
+const getObjectStorageTransfer = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetObjectStorageTransfer200>(
+      {url: `/object-storage/transfer`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns information about the current User. This can be used to see who is acting in applications where more than one token is managed. For example, in third-party OAuth applications.
 
@@ -48959,69 +49308,74 @@ This endpoint is always accessible, no matter what OAuth scopes the acting token
 
  * @summary Profile View
  */
-const getProfile = <TData = AxiosResponse<GetProfile200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile`,options
-    );
-  }
-
+const getProfile = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfile200>(
+      {url: `/profile`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update information in your Profile.  This endpoint requires the "account:read_write" OAuth Scope.
 
  * @summary Profile Update
  */
-const updateProfile = <TData = AxiosResponse<UpdateProfile200>>(
-    updateProfileBody: NonReadonly<UpdateProfileBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/profile`,
-      updateProfileBody,options
-    );
-  }
-
+const updateProfile = (
+    updateProfileBody: BodyType<NonReadonly<UpdateProfileBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateProfile200>(
+      {url: `/profile`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateProfileBody
+    },
+      options);
+    }
+  
 /**
  * This is a collection of OAuth apps that you've given access to your Account, and includes the level of access granted.
 
  * @summary Authorized Apps List
  */
-const getProfileApps = <TData = AxiosResponse<GetProfileApps200>>(
-    params?: GetProfileAppsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/apps`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getProfileApps = (
+    params?: GetProfileAppsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfileApps200>(
+      {url: `/profile/apps`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Returns information about a single app you've authorized to access your Account.
 
  * @summary Authorized App View
  */
-const getProfileApp = <TData = AxiosResponse<GetProfileApp200>>(
-    appId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/apps/${appId}`,options
-    );
-  }
-
+const getProfileApp = (
+    appId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfileApp200>(
+      {url: `/profile/apps/${appId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Expires this app token. This token may no longer be used to access your Account.
 
  * @summary App Access Revoke
  */
-const deleteProfileApp = <TData = AxiosResponse<DeleteProfileApp200>>(
-    appId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/profile/apps/${appId}`,options
-    );
-  }
-
+const deleteProfileApp = (
+    appId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteProfileApp200>(
+      {url: `/profile/apps/${appId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * This returns a GrantsResponse describing what the acting User has been granted access to.  For unrestricted users, this will return a  204 and no body because unrestricted users have access to everything without grants.  This will not return information about entities you do not have access to.  This endpoint is useful when writing third-party OAuth applications to see what options you should present to the acting User.
 
@@ -49031,27 +49385,29 @@ Any client may access this endpoint; no OAuth scopes are required.
 
  * @summary Grants List
  */
-const getProfileGrants = <TData = AxiosResponse<GetProfileGrants200 | void>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/grants`,options
-    );
-  }
-
+const getProfileGrants = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfileGrants200 | void>(
+      {url: `/profile/grants`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Disables Two Factor Authentication for your User. Once successful, login attempts from untrusted computers will only require a password before being successful. This is less secure, and is discouraged.
 
  * @summary Two Factor Authentication Disable
  */
-const tfaDisable = <TData = AxiosResponse<TfaDisable200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/tfa-disable`,undefined,options
-    );
-  }
-
+const tfaDisable = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<TfaDisable200>(
+      {url: `/profile/tfa-disable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Generates a Two Factor secret for your User. To enable TFA for your User, enter the secret obtained from this command with the **Two Factor Authentication Confirm/Enable** ([POST /profile/tfa-enable-confirm](/docs/api/profile/#two-factor-authentication-confirmenable)) command.
 Once enabled, logins from untrusted computers are required to provide
@@ -49061,174 +49417,190 @@ a TFA code before they are successful.
 
  * @summary Two Factor Secret Create
  */
-const tfaEnable = <TData = AxiosResponse<TfaEnable200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/tfa-enable`,undefined,options
-    );
-  }
-
+const tfaEnable = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<TfaEnable200>(
+      {url: `/profile/tfa-enable`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Confirms that you can successfully generate Two Factor codes and enables TFA on your Account. Once this is complete, login attempts from untrusted computers will be required to provide a Two Factor code before they are successful.
 
  * @summary Two Factor Authentication Confirm/Enable
  */
-const tfaConfirm = <TData = AxiosResponse<TfaConfirm200>>(
-    tfaConfirmBody: TfaConfirmBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/tfa-enable-confirm`,
-      tfaConfirmBody,options
-    );
-  }
-
+const tfaConfirm = (
+    tfaConfirmBody: BodyType<TfaConfirmBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<TfaConfirm200>(
+      {url: `/profile/tfa-enable-confirm`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: tfaConfirmBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Personal Access Tokens currently active for your User.
 
  * @summary Personal Access Tokens List
  */
-const getPersonalAccessTokens = <TData = AxiosResponse<GetPersonalAccessTokens200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/tokens`,options
-    );
-  }
-
+const getPersonalAccessTokens = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPersonalAccessTokens200>(
+      {url: `/profile/tokens`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Creates a Personal Access Token for your User. The raw token will be returned in the response, but will never be returned again afterward so be sure to take note of it. You may create a token with _at most_ the scopes of your current token. The created token will be able to access your Account until the given expiry, or until it is revoked.
 
  * @summary Personal Access Token Create
  */
-const createPersonalAccessToken = <TData = AxiosResponse<CreatePersonalAccessToken200>>(
-    createPersonalAccessTokenBody: CreatePersonalAccessTokenBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/tokens`,
-      createPersonalAccessTokenBody,options
-    );
-  }
-
+const createPersonalAccessToken = (
+    createPersonalAccessTokenBody: BodyType<CreatePersonalAccessTokenBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreatePersonalAccessToken200>(
+      {url: `/profile/tokens`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createPersonalAccessTokenBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single Personal Access Token.
 
  * @summary Personal Access Token View
  */
-const getPersonalAccessToken = <TData = AxiosResponse<GetPersonalAccessToken200>>(
-    tokenId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/tokens/${tokenId}`,options
-    );
-  }
-
+const getPersonalAccessToken = (
+    tokenId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetPersonalAccessToken200>(
+      {url: `/profile/tokens/${tokenId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a Personal Access Token.
 
  * @summary Personal Access Token Update
  */
-const updatePersonalAccessToken = <TData = AxiosResponse<UpdatePersonalAccessToken200>>(
+const updatePersonalAccessToken = (
     tokenId: number,
-    updatePersonalAccessTokenBody: NonReadonly<UpdatePersonalAccessTokenBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/profile/tokens/${tokenId}`,
-      updatePersonalAccessTokenBody,options
-    );
-  }
-
+    updatePersonalAccessTokenBody: BodyType<NonReadonly<UpdatePersonalAccessTokenBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdatePersonalAccessToken200>(
+      {url: `/profile/tokens/${tokenId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePersonalAccessTokenBody
+    },
+      options);
+    }
+  
 /**
  * Revokes a Personal Access Token. The token will be invalidated immediately, and requests using that token will fail with a 401. It is possible to revoke access to the token making the request to revoke a token, but keep in mind that doing so could lose you access to the api and require you to create a new token through some other means.
 
  * @summary Personal Access Token Revoke
  */
-const deletePersonalAccessToken = <TData = AxiosResponse<DeletePersonalAccessToken200>>(
-    tokenId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/profile/tokens/${tokenId}`,options
-    );
-  }
-
+const deletePersonalAccessToken = (
+    tokenId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeletePersonalAccessToken200>(
+      {url: `/profile/tokens/${tokenId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of successful account logins from this user during the last 90 days.
 
  * @summary Logins List
  */
-const getProfileLogins = <TData = AxiosResponse<GetProfileLogins200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/logins`,options
-    );
-  }
-
+const getProfileLogins = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfileLogins200>(
+      {url: `/profile/logins`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a login object displaying information about a successful account login from this user.
 
  * @summary Login View
  */
-const getProfileLogin = <TData = AxiosResponse<GetProfileLogin200>>(
-    loginId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/logins/${loginId}`,options
-    );
-  }
-
+const getProfileLogin = (
+    loginId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetProfileLogin200>(
+      {url: `/profile/logins/${loginId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of active TrustedDevices for your User. Browsers with an active Remember Me Session are logged into your account until the session expires or is revoked.
 
  * @summary Trusted Devices List
  */
-const getDevices = <TData = AxiosResponse<GetDevices200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/devices`,options
-    );
-  }
-
+const getDevices = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetDevices200>(
+      {url: `/profile/devices`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a single active TrustedDevice for your User.
 
  * @summary Trusted Device View
  */
-const getTrustedDevice = <TData = AxiosResponse<GetTrustedDevice200>>(
-    deviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/devices/${deviceId}`,options
-    );
-  }
-
+const getTrustedDevice = (
+    deviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTrustedDevice200>(
+      {url: `/profile/devices/${deviceId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Revoke an active TrustedDevice for your User.  Once a TrustedDevice is revoked, this device will have to log in again before accessing your Linode account.
 
  * @summary Trusted Device Revoke
  */
-const revokeTrustedDevice = <TData = AxiosResponse<RevokeTrustedDevice200>>(
-    deviceId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/profile/devices/${deviceId}`,options
-    );
-  }
-
+const revokeTrustedDevice = (
+    deviceId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<RevokeTrustedDevice200>(
+      {url: `/profile/devices/${deviceId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of security questions and their responses, if any, for your User Profile.
 
  * @summary Security Questions List
  */
-const getSecurityQuestions = <TData = AxiosResponse<GetSecurityQuestions200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/security-questions`,options
-    );
-  }
-
+const getSecurityQuestions = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetSecurityQuestions200>(
+      {url: `/profile/security-questions`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Adds security question responses for your User.
 
@@ -49240,57 +49612,62 @@ Previous responses are overwritten if answered or reset to `null` if unanswered.
 
  * @summary Security Questions Answer
  */
-const postSecurityQuestions = <TData = AxiosResponse<PostSecurityQuestions200>>(
-    postSecurityQuestionsBody: PostSecurityQuestionsBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/security-questions`,
-      postSecurityQuestionsBody,options
-    );
-  }
-
+const postSecurityQuestions = (
+    postSecurityQuestionsBody: BodyType<PostSecurityQuestionsBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostSecurityQuestions200>(
+      {url: `/profile/security-questions`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postSecurityQuestionsBody
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of SSH Keys you've added to your Profile.
 
  * @summary SSH Keys List
  */
-const getSSHKeys = <TData = AxiosResponse<GetSSHKeys200>>(
-    params?: GetSSHKeysParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/sshkeys`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getSSHKeys = (
+    params?: GetSSHKeysParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetSSHKeys200>(
+      {url: `/profile/sshkeys`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds an SSH Key to your Account profile.
 
  * @summary SSH Key Add
  */
-const addSSHKey = <TData = AxiosResponse<AddSSHKey200>>(
-    addSSHKeyBody: NonReadonly<AddSSHKeyBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/sshkeys`,
-      addSSHKeyBody,options
-    );
-  }
-
+const addSSHKey = (
+    addSSHKeyBody: BodyType<NonReadonly<AddSSHKeyBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AddSSHKey200>(
+      {url: `/profile/sshkeys`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: addSSHKeyBody
+    },
+      options);
+    }
+  
 /**
  * Returns a single SSH Key object identified by `id` that you have access to view.
 
  * @summary SSH Key View
  */
-const getSSHKey = <TData = AxiosResponse<GetSSHKey200>>(
-    sshKeyId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/sshkeys/${sshKeyId}`,options
-    );
-  }
-
+const getSSHKey = (
+    sshKeyId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetSSHKey200>(
+      {url: `/profile/sshkeys/${sshKeyId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates an SSH Key that you have permission to `read_write`.
 
@@ -49298,16 +49675,18 @@ Only SSH key labels can be updated.
 
  * @summary SSH Key Update
  */
-const updateSSHKey = <TData = AxiosResponse<UpdateSSHKey200>>(
+const updateSSHKey = (
     sshKeyId: number,
-    updateSSHKeyBody: UpdateSSHKeyBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/profile/sshkeys/${sshKeyId}`,
-      updateSSHKeyBody,options
-    );
-  }
-
+    updateSSHKeyBody: BodyType<UpdateSSHKeyBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateSSHKey200>(
+      {url: `/profile/sshkeys/${sshKeyId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSSHKeyBody
+    },
+      options);
+    }
+  
 /**
  * Deletes an SSH Key you have access to.
 
@@ -49315,14 +49694,15 @@ const updateSSHKey = <TData = AxiosResponse<UpdateSSHKey200>>(
 
  * @summary SSH Key Delete
  */
-const deleteSSHKey = <TData = AxiosResponse<DeleteSSHKey200>>(
-    sshKeyId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/profile/sshkeys/${sshKeyId}`,options
-    );
-  }
-
+const deleteSSHKey = (
+    sshKeyId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteSSHKey200>(
+      {url: `/profile/sshkeys/${sshKeyId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Delete the verified phone number for the User making this request.
 
@@ -49330,14 +49710,15 @@ Use this command to opt out of SMS messages for the requesting User after a phon
 
  * @summary Phone Number Delete
  */
-const deleteProfilePhoneNumber = <TData = AxiosResponse<DeleteProfilePhoneNumber200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/profile/phone-number`,options
-    );
-  }
-
+const deleteProfilePhoneNumber = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteProfilePhoneNumber200>(
+      {url: `/profile/phone-number`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Send a one-time verification code via SMS message to the submitted phone number. Providing your phone number helps ensure you can securely access your Account in case other ways to connect are lost. Your phone number is only used to verify your identity by sending an SMS message. Standard carrier messaging fees may apply.
 
@@ -49351,15 +49732,17 @@ Once a verification code is received, verify your phone number with the **Phone 
 
  * @summary Phone Number Verification Code Send
  */
-const postProfilePhoneNumber = <TData = AxiosResponse<PostProfilePhoneNumber200>>(
-    postProfilePhoneNumberBody: PostProfilePhoneNumberBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/phone-number`,
-      postProfilePhoneNumberBody,options
-    );
-  }
-
+const postProfilePhoneNumber = (
+    postProfilePhoneNumberBody: BodyType<PostProfilePhoneNumberBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostProfilePhoneNumber200>(
+      {url: `/profile/phone-number`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postProfilePhoneNumberBody
+    },
+      options);
+    }
+  
 /**
  * Verify a phone number by confirming the one-time code received via SMS message after accessing the **Phone Verification Code Send** ([POST /profile/phone-number](/docs/api/profile/#phone-number-verification-code-send)) command.
 
@@ -49371,15 +49754,17 @@ Once completed, the verified phone number is assigned to the User making the req
 
  * @summary Phone Number Verify
  */
-const postProfilePhoneNumberVerify = <TData = AxiosResponse<PostProfilePhoneNumberVerify200>>(
-    postProfilePhoneNumberVerifyBody: PostProfilePhoneNumberVerifyBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/profile/phone-number/verify`,
-      postProfilePhoneNumberVerifyBody,options
-    );
-  }
-
+const postProfilePhoneNumberVerify = (
+    postProfilePhoneNumberVerifyBody: BodyType<PostProfilePhoneNumberVerifyBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<PostProfilePhoneNumberVerify200>(
+      {url: `/profile/phone-number/verify`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: postProfilePhoneNumberVerifyBody
+    },
+      options);
+    }
+  
 /**
  * View a list of user preferences tied to the OAuth client that generated
 the token making the request. The user preferences endpoints allow
@@ -49390,68 +49775,74 @@ have multiple user preferences.
 
  * @summary User Preferences View
  */
-const getUserPreferences = <TData = AxiosResponse<GetUserPreferences200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/profile/preferences`,options
-    );
-  }
-
+const getUserPreferences = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetUserPreferences200>(
+      {url: `/profile/preferences`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updates a user's preferences. These preferences are tied to the OAuth client that generated the token making the request. The user preferences endpoints allow consumers of the API to store arbitrary JSON data, such as a user's font size preference or preferred display name. An account may have multiple preferences. Preferences, and the pertaining request body, may contain any arbitrary JSON data that the user would like to store.
 
  * @summary User Preferences Update
  */
-const updateUserPreferences = <TData = AxiosResponse<UpdateUserPreferences200>>(
-    updateUserPreferencesBody: UpdateUserPreferencesBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/profile/preferences`,
-      updateUserPreferencesBody,options
-    );
-  }
-
+const updateUserPreferences = (
+    updateUserPreferencesBody: BodyType<UpdateUserPreferencesBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateUserPreferences200>(
+      {url: `/profile/preferences`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUserPreferencesBody
+    },
+      options);
+    }
+  
 /**
  * Lists the Regions available for Linode services. Not all services are guaranteed to be
 available in all Regions.
 
  * @summary Regions List
  */
-const getRegions = <TData = AxiosResponse<GetRegions200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/regions`,options
-    );
-  }
-
+const getRegions = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetRegions200>(
+      {url: `/regions`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a single Region.
 
  * @summary Region View
  */
-const getRegion = <TData = AxiosResponse<GetRegion200>>(
-    regionId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/regions/${regionId}`,options
-    );
-  }
-
+const getRegion = (
+    regionId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetRegion200>(
+      {url: `/regions/${regionId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns availability data for a single Region.
 
  * @summary Region Availability View
  */
-const getRegionAvailability = <TData = AxiosResponse<GetRegionAvailability200Item[]>>(
-    regionId: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/regions/${regionId}/availability`,options
-    );
-  }
-
+const getRegionAvailability = (
+    regionId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetRegionAvailability200Item[]>(
+      {url: `/regions/${regionId}/availability`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns availability data for all Regions.
 
@@ -49459,58 +49850,62 @@ Currently, this command returns availability of select premium and GPU plans for
 
  * @summary Regions Availability List
  */
-const getRegionsAvailability = <TData = AxiosResponse<GetRegionsAvailability200>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/regions/availability`,options
-    );
-  }
-
+const getRegionsAvailability = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetRegionsAvailability200>(
+      {url: `/regions/availability`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of Support Tickets on your Account. Support Tickets can be both tickets you open with Linode for support, as well as tickets generated by Linode regarding your Account.
 This collection includes all Support Tickets generated on your Account, with open tickets returned first.
 
  * @summary Support Tickets List
  */
-const getTickets = <TData = AxiosResponse<GetTickets200>>(
-    params?: GetTicketsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/support/tickets`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getTickets = (
+    params?: GetTicketsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTickets200>(
+      {url: `/support/tickets`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Open a Support Ticket.
 Only one of the ID attributes (`linode_id`, `domain_id`, etc.) can be set on a single Support Ticket.
 
  * @summary Support Ticket Open
  */
-const createTicket = <TData = AxiosResponse<CreateTicket200>>(
-    createTicketBody: CreateTicketBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/support/tickets`,
-      createTicketBody,options
-    );
-  }
-
+const createTicket = (
+    createTicketBody: BodyType<CreateTicketBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateTicket200>(
+      {url: `/support/tickets`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createTicketBody
+    },
+      options);
+    }
+  
 /**
  * Returns a Support Ticket under your Account.
 
  * @summary Support Ticket View
  */
-const getTicket = <TData = AxiosResponse<GetTicket200>>(
-    ticketId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/support/tickets/${ticketId}`,options
-    );
-  }
-
+const getTicket = (
+    ticketId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTicket200>(
+      {url: `/support/tickets/${ticketId}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Adds a file attachment to an existing Support
 Ticket on your Account. File attachments are used to assist our
@@ -49524,62 +49919,67 @@ The file attachment is submitted in the request as multipart/form-data.
 
  * @summary Support Ticket Attachment Create
  */
-const createTicketAttachment = <TData = AxiosResponse<CreateTicketAttachment200>>(
+const createTicketAttachment = (
     ticketId: number,
-    createTicketAttachmentBody: CreateTicketAttachmentBody, options?: AxiosRequestConfig
- ): Promise<TData> => {const formData = new FormData();
+    createTicketAttachmentBody: BodyType<CreateTicketAttachmentBody>,
+ options?: SecondParameter<typeof customInstance>,) => {const formData = new FormData();
 formData.append('data', createTicketAttachmentBody)
 
-    return axios.post(
-      `/support/tickets/${ticketId}/attachments`,
-      formData,options
-    );
-  }
-
+      return customInstance<CreateTicketAttachment200>(
+      {url: `/support/tickets/${ticketId}/attachments`, method: 'post',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      options);
+    }
+  
 /**
  * Closes a Support Ticket you have access to modify.
 
  * @summary Support Ticket Close
  */
-const closeTicket = <TData = AxiosResponse<CloseTicket200>>(
-    ticketId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/support/tickets/${ticketId}/close`,undefined,options
-    );
-  }
-
+const closeTicket = (
+    ticketId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CloseTicket200>(
+      {url: `/support/tickets/${ticketId}/close`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Returns a collection of replies to a Support Ticket on your Account.
 
  * @summary Replies List
  */
-const getTicketReplies = <TData = AxiosResponse<GetTicketReplies200>>(
+const getTicketReplies = (
     ticketId: number,
-    params?: GetTicketRepliesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/support/tickets/${ticketId}/replies`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetTicketRepliesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTicketReplies200>(
+      {url: `/support/tickets/${ticketId}/replies`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Adds a reply to an existing Support Ticket.
 
  * @summary Reply Create
  */
-const createTicketReply = <TData = AxiosResponse<CreateTicketReply200>>(
+const createTicketReply = (
     ticketId: number,
-    createTicketReplyBody: CreateTicketReplyBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/support/tickets/${ticketId}/replies`,
-      createTicketReplyBody,options
-    );
-  }
-
+    createTicketReplyBody: BodyType<CreateTicketReplyBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateTicketReply200>(
+      {url: `/support/tickets/${ticketId}/replies`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createTicketReplyBody
+    },
+      options);
+    }
+  
 /**
  * Tags are User-defined labels attached to objects in your Account, such as Linodes. They are used for specifying and grouping attributes of objects that are relevant to the User.
 
@@ -49590,16 +49990,16 @@ Tags information.
 
  * @summary Tags List
  */
-const getTags = <TData = AxiosResponse<GetTags200>>(
-    params?: GetTagsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/tags`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getTags = (
+    params?: GetTagsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTags200>(
+      {url: `/tags`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a new Tag and optionally tags requested objects with it immediately.
 
@@ -49608,15 +50008,17 @@ Tags information.
 
  * @summary New Tag Create
  */
-const createTag = <TData = AxiosResponse<CreateTag200>>(
-    createTagBody: CreateTagBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/tags`,
-      createTagBody,options
-    );
-  }
-
+const createTag = (
+    createTagBody: BodyType<CreateTagBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateTag200>(
+      {url: `/tags`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createTagBody
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of all objects you've tagged with the requested Tag. This is a mixed collection of all object types.
 
@@ -49625,17 +50027,17 @@ Tags information.
 
  * @summary Tagged Objects List
  */
-const getTaggedObjects = <TData = AxiosResponse<GetTaggedObjects200>>(
+const getTaggedObjects = (
     tagLabel: string,
-    params?: GetTaggedObjectsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/tags/${tagLabel}`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetTaggedObjectsParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetTaggedObjects200>(
+      {url: `/tags/${tagLabel}`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Remove a Tag from all objects and delete it.
 
@@ -49643,74 +50045,79 @@ const getTaggedObjects = <TData = AxiosResponse<GetTaggedObjects200>>(
 
  * @summary Tag Delete
  */
-const deleteTag = <TData = AxiosResponse<DeleteTag200>>(
-    tagLabel: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/tags/${tagLabel}`,options
-    );
-  }
-
+const deleteTag = (
+    tagLabel: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteTag200>(
+      {url: `/tags/${tagLabel}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Returns a paginated list of Volumes you have permission to view.
 
  * @summary Volumes List
  */
-const getVolumes = <TData = AxiosResponse<GetVolumes200>>(
-    params?: GetVolumesParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/volumes`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+const getVolumes = (
+    params?: GetVolumesParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetVolumes200>(
+      {url: `/volumes`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Creates a Volume on your Account. In order for this to complete successfully, your User must have the `add_volumes` grant. Creating a new Volume will start accruing additional charges on your account.
 
  * @summary Volume Create
  */
-const createVolume = <TData = AxiosResponse<CreateVolume200>>(
-    createVolumeBody: CreateVolumeBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/volumes`,
-      createVolumeBody,options
-    );
-  }
-
+const createVolume = (
+    createVolumeBody: BodyType<CreateVolumeBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CreateVolume200>(
+      {url: `/volumes`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createVolumeBody
+    },
+      options);
+    }
+  
 /**
  * Get information about a single Volume.
 
  * @summary Volume View
  */
-const getVolume = <TData = AxiosResponse<GetVolume200>>(
+const getVolume = (
     volumeId: number,
-    params?: GetVolumeParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/volumes/${volumeId}`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params?: GetVolumeParams,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<GetVolume200>(
+      {url: `/volumes/${volumeId}`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Updates a Volume that you have permission to `read_write`.
 
  * @summary Volume Update
  */
-const updateVolume = <TData = AxiosResponse<UpdateVolume200>>(
+const updateVolume = (
     volumeId: number,
-    updateVolumeBody: NonReadonly<UpdateVolumeBody>, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/volumes/${volumeId}`,
-      updateVolumeBody,options
-    );
-  }
-
+    updateVolumeBody: BodyType<NonReadonly<UpdateVolumeBody>>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<UpdateVolume200>(
+      {url: `/volumes/${volumeId}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateVolumeBody
+    },
+      options);
+    }
+  
 /**
  * Deletes a Volume you have permission to `read_write`.
 
@@ -49723,45 +50130,50 @@ the billing period the Volume was active.
 
  * @summary Volume Delete
  */
-const deleteVolume = <TData = AxiosResponse<DeleteVolume200>>(
-    volumeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/volumes/${volumeId}`,options
-    );
-  }
-
+const deleteVolume = (
+    volumeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DeleteVolume200>(
+      {url: `/volumes/${volumeId}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Attaches a Volume on your Account to an existing Linode on your Account. In order for this request to complete successfully, your User must have `read_write` permission to the Volume and `read_write` permission to the Linode. Additionally, the Volume and Linode must be located in the same Region.
 
  * @summary Volume Attach
  */
-const attachVolume = <TData = AxiosResponse<AttachVolume200>>(
+const attachVolume = (
     volumeId: number,
-    attachVolumeBody: AttachVolumeBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/volumes/${volumeId}/attach`,
-      attachVolumeBody,options
-    );
-  }
-
+    attachVolumeBody: BodyType<AttachVolumeBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<AttachVolume200>(
+      {url: `/volumes/${volumeId}/attach`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: attachVolumeBody
+    },
+      options);
+    }
+  
 /**
  * Creates a Volume on your Account. In order for this request to complete successfully, your User must have the `add_volumes` grant. The new Volume will have the same size and data as the source Volume. Creating a new Volume will incur a charge on your Account.
 * Only Volumes with a `status` of "active" can be cloned.
 
  * @summary Volume Clone
  */
-const cloneVolume = <TData = AxiosResponse<CloneVolume200>>(
+const cloneVolume = (
     volumeId: number,
-    cloneVolumeBody: CloneVolumeBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/volumes/${volumeId}/clone`,
-      cloneVolumeBody,options
-    );
-  }
-
+    cloneVolumeBody: BodyType<CloneVolumeBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<CloneVolume200>(
+      {url: `/volumes/${volumeId}/clone`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: cloneVolumeBody
+    },
+      options);
+    }
+  
 /**
  * Detaches a Volume on your Account from a Linode on your Account. In order for this request to complete successfully, your User must have `read_write` access to the Volume and `read_write` access to the Linode.
 
@@ -49769,14 +50181,15 @@ Volumes are automatically detached from deleted Linodes.
 
  * @summary Volume Detach
  */
-const detachVolume = <TData = AxiosResponse<DetachVolume200>>(
-    volumeId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/volumes/${volumeId}/detach`,undefined,options
-    );
-  }
-
+const detachVolume = (
+    volumeId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<DetachVolume200>(
+      {url: `/volumes/${volumeId}/detach`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Resize an existing Volume on your Account. In order for this request to complete successfully, your User must have the `read_write` permissions to the Volume.
 * Volumes can only be resized up.
@@ -49784,361 +50197,363 @@ const detachVolume = <TData = AxiosResponse<DetachVolume200>>(
 
  * @summary Volume Resize
  */
-const resizeVolume = <TData = AxiosResponse<ResizeVolume200>>(
+const resizeVolume = (
     volumeId: number,
-    resizeVolumeBody: ResizeVolumeBody, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/volumes/${volumeId}/resize`,
-      resizeVolumeBody,options
-    );
-  }
-
+    resizeVolumeBody: BodyType<ResizeVolumeBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      return customInstance<ResizeVolume200>(
+      {url: `/volumes/${volumeId}/resize`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: resizeVolumeBody
+    },
+      options);
+    }
+  
 return {getAccount,updateAccount,getAvailability,getAccountAvailability,getEnrolledBetaPrograms,enrollBetaProgram,getEnrolledBetaProgram,cancelAccount,createCreditCard,getEntityTransfers,createEntityTransfer,getEntityTransfer,deleteEntityTransfer,acceptEntityTransfer,getEvents,getEvent,eventRead,eventSeen,getInvoices,getInvoice,getInvoiceItems,getAccountLogins,getAccountLogin,getMaintenance,getNotifications,getClients,createClient,getClient,updateClient,deleteClient,resetClientSecret,getClientThumbnail,setClientThumbnail,getPaymentMethods,createPaymentMethod,getPaymentMethod,deletePaymentMethod,makePaymentMethodDefault,getPayments,createPayment,getPayment,createPayPalPayment,executePayPalPayment,createPromoCredit,getServiceTransfers,createServiceTransfer,getServiceTransfer,deleteServiceTransfer,acceptServiceTransfer,getAccountSettings,updateAccountSettings,enableAccountManaged,getTransfer,getUsers,createUser,getUser,updateUser,deleteUser,getUserGrants,updateUserGrants,getBetaPrograms,getBetaProgram,getDatabasesEngines,getDatabasesEngine,getDatabasesInstances,getDatabasesMySQLInstances,postDatabasesMySQLInstances,getDatabasesMySQLInstance,deleteDatabasesMySQLInstance,putDatabasesMySQLInstance,getDatabasesMySQLInstanceBackups,postDatabasesMySQLInstanceBackup,getDatabasesMySQLInstanceBackup,deleteDatabaseMySQLInstanceBackup,postDatabasesMySQLInstanceBackupRestore,getDatabasesMySQLInstanceCredentials,postDatabasesMySQLInstanceCredentialsReset,getDatabasesMySQLInstanceSSL,postDatabasesMySQLInstancePatch,getDatabasesPostgreSQLInstances,postDatabasesPostgreSQLInstances,getDatabasesPostgreSQLInstance,deleteDatabasesPostgreSQLInstance,putDatabasesPostgreSQLInstance,getDatabasesPostgreSQLInstanceBackups,postDatabasesPostgreSQLInstanceBackup,getDatabasesPostgreSQLInstanceBackup,deleteDatabasePostgreSQLInstanceBackup,postDatabasesPostgreSQLInstanceBackupRestore,getDatabasesPostgreSQLInstanceCredentials,postDatabasesPostgreSQLInstanceCredentialsReset,getDatabasesPostgreSQLInstanceSSL,postDatabasesPostgreSQLInstancePatch,getDatabasesTypes,getDatabasesType,getDomains,createDomain,getDomain,updateDomain,deleteDomain,getDomainZone,importDomain,cloneDomain,getDomainRecords,createDomainRecord,getDomainRecord,updateDomainRecord,deleteDomainRecord,getImages,createImage,postImagesUpload,getImage,updateImage,deleteImage,getLinodeInstances,createLinodeInstance,getLinodeInstance,updateLinodeInstance,deleteLinodeInstance,getBackups,createSnapshot,cancelBackups,enableBackups,getBackup,restoreBackup,bootLinodeInstance,cloneLinodeInstance,getLinodeConfigs,addLinodeConfig,getLinodeConfig,updateLinodeConfig,deleteLinodeConfig,getLinodeDisks,addLinodeDisk,getLinodeDisk,updateDisk,deleteDisk,cloneLinodeDisk,resetDiskPassword,resizeDisk,getLinodeFirewalls,getLinodeIPs,addLinodeIP,getLinodeIP,updateLinodeIP,removeLinodeIP,getKernels,getKernel,migrateLinodeInstance,mutateLinodeInstance,getLinodeNodeBalancers,resetLinodePassword,rebootLinodeInstance,rebuildLinodeInstance,rescueLinodeInstance,resizeLinodeInstance,shutdownLinodeInstance,getLinodeTransfer,getLinodeTransferByYearMonth,getLinodeStats,getLinodeStatsByYearMonth,getLinodeVolumes,getStackScripts,addStackScript,getStackScript,updateStackScript,deleteStackScript,getLinodeTypes,getLinodeType,getLKEClusters,createLKECluster,getLKECluster,putLKECluster,deleteLKECluster,getLKEClusterPools,postLKEClusterPools,postLKEClusterRecycle,getLKENodePool,putLKENodePool,deleteLKENodePool,postLKEClusterPoolRecycle,getLKEClusterNode,deleteLKEClusterNode,postLKEClusterNodeRecycle,getLKEClusterAPIEndpoints,getLKEClusterDashboard,getLKEClusterKubeconfig,deleteLKEClusterKubeconfig,postLKEClusterRegenerate,postLKECServiceTokenDelete,getLKEVersions,getLKEVersion,getLongviewClients,createLongviewClient,getLongviewClient,updateLongviewClient,deleteLongviewClient,getLongviewPlan,updateLongviewPlan,getLongviewSubscriptions,getLongviewSubscription,getManagedContacts,createManagedContact,getManagedContact,updateManagedContact,deleteManagedContact,getManagedCredentials,createManagedCredential,getManagedCredential,updateManagedCredential,updateManagedCredentialUsernamePassword,deleteManagedCredential,viewManagedSSHKey,getManagedIssues,getManagedIssue,getManagedLinodeSettings,getManagedLinodeSetting,updateManagedLinodeSetting,getManagedServices,createManagedService,getManagedService,updateManagedService,deleteManagedService,disableManagedService,enableManagedService,getManagedStats,getIPs,allocateIP,getIP,updateIP,assignIPs,shareIPs,assignIPv4s,shareIPv4s,getIPv6Pools,getIPv6Ranges,postIPv6Range,getIPv6Range,deleteIPv6Range,getFirewalls,createFirewalls,getFirewall,updateFirewall,deleteFirewall,getFirewallDevices,createFirewallDevice,getFirewallDevice,deleteFirewallDevice,getFirewallRules,updateFirewallRules,getVLANs,getNodeBalancers,createNodeBalancer,getNodeBalancer,updateNodeBalancer,deleteNodeBalancer,getNodeBalancerConfigs,createNodeBalancerConfig,getNodeBalancerConfig,updateNodeBalancerConfig,deleteNodeBalancerConfig,rebuildNodeBalancerConfig,getNodeBalancerConfigNodes,createNodeBalancerNode,getNodeBalancerNode,updateNodeBalancerNode,deleteNodeBalancerConfigNode,getNodeBalancerFirewalls,getNodebalancersNodeBalancerIdStats,getObjectStorageBuckets,createObjectStorageBucket,getObjectStorageBucket,deleteObjectStorageBucket,getObjectStorageBucketinCluster,modifyObjectStorageBucketAccess,updateObjectStorageBucketAccess,viewObjectStorageBucketACL,updateObjectStorageBucketACL,getObjectStorageBucketContent,createObjectStorageObjectURL,getObjectStorageClusters,getObjectStorageCluster,getObjectStorageKeys,createObjectStorageKeys,getObjectStorageKey,updateObjectStorageKey,deleteObjectStorageKey,cancelObjectStorage,getObjectStorageSSL,createObjectStorageSSL,deleteObjectStorageSSL,getObjectStorageTransfer,getProfile,updateProfile,getProfileApps,getProfileApp,deleteProfileApp,getProfileGrants,tfaDisable,tfaEnable,tfaConfirm,getPersonalAccessTokens,createPersonalAccessToken,getPersonalAccessToken,updatePersonalAccessToken,deletePersonalAccessToken,getProfileLogins,getProfileLogin,getDevices,getTrustedDevice,revokeTrustedDevice,getSecurityQuestions,postSecurityQuestions,getSSHKeys,addSSHKey,getSSHKey,updateSSHKey,deleteSSHKey,deleteProfilePhoneNumber,postProfilePhoneNumber,postProfilePhoneNumberVerify,getUserPreferences,updateUserPreferences,getRegions,getRegion,getRegionAvailability,getRegionsAvailability,getTickets,createTicket,getTicket,createTicketAttachment,closeTicket,getTicketReplies,createTicketReply,getTags,createTag,getTaggedObjects,deleteTag,getVolumes,createVolume,getVolume,updateVolume,deleteVolume,attachVolume,cloneVolume,detachVolume,resizeVolume}};
-export type GetAccountResult = AxiosResponse<GetAccount200>
-export type UpdateAccountResult = AxiosResponse<UpdateAccount200>
-export type GetAvailabilityResult = AxiosResponse<GetAvailability200>
-export type GetAccountAvailabilityResult = AxiosResponse<GetAccountAvailability200>
-export type GetEnrolledBetaProgramsResult = AxiosResponse<GetEnrolledBetaPrograms200>
-export type EnrollBetaProgramResult = AxiosResponse<EnrollBetaProgram200>
-export type GetEnrolledBetaProgramResult = AxiosResponse<GetEnrolledBetaProgram200>
-export type CancelAccountResult = AxiosResponse<CancelAccount200>
-export type CreateCreditCardResult = AxiosResponse<CreateCreditCard200>
-export type GetEntityTransfersResult = AxiosResponse<GetEntityTransfers200>
-export type CreateEntityTransferResult = AxiosResponse<CreateEntityTransfer200>
-export type GetEntityTransferResult = AxiosResponse<GetEntityTransfer200>
-export type DeleteEntityTransferResult = AxiosResponse<DeleteEntityTransfer200>
-export type AcceptEntityTransferResult = AxiosResponse<AcceptEntityTransfer200>
-export type GetEventsResult = AxiosResponse<GetEvents200>
-export type GetEventResult = AxiosResponse<GetEvent200>
-export type EventReadResult = AxiosResponse<EventRead200>
-export type EventSeenResult = AxiosResponse<EventSeen200>
-export type GetInvoicesResult = AxiosResponse<GetInvoices200>
-export type GetInvoiceResult = AxiosResponse<GetInvoice200>
-export type GetInvoiceItemsResult = AxiosResponse<GetInvoiceItems200>
-export type GetAccountLoginsResult = AxiosResponse<GetAccountLogins200>
-export type GetAccountLoginResult = AxiosResponse<GetAccountLogin200>
-export type GetMaintenanceResult = AxiosResponse<GetMaintenance200>
-export type GetNotificationsResult = AxiosResponse<GetNotifications200>
-export type GetClientsResult = AxiosResponse<GetClients200>
-export type CreateClientResult = AxiosResponse<CreateClient200>
-export type GetClientResult = AxiosResponse<GetClient200>
-export type UpdateClientResult = AxiosResponse<UpdateClient200>
-export type DeleteClientResult = AxiosResponse<DeleteClient200>
-export type ResetClientSecretResult = AxiosResponse<ResetClientSecret200>
-export type GetClientThumbnailResult = AxiosResponse<Blob>
-export type SetClientThumbnailResult = AxiosResponse<SetClientThumbnail200>
-export type GetPaymentMethodsResult = AxiosResponse<GetPaymentMethods200>
-export type CreatePaymentMethodResult = AxiosResponse<CreatePaymentMethod200>
-export type GetPaymentMethodResult = AxiosResponse<GetPaymentMethod200>
-export type DeletePaymentMethodResult = AxiosResponse<DeletePaymentMethod200>
-export type MakePaymentMethodDefaultResult = AxiosResponse<MakePaymentMethodDefault200>
-export type GetPaymentsResult = AxiosResponse<GetPayments200>
-export type CreatePaymentResult = AxiosResponse<CreatePayment200 | CreatePayment202>
-export type GetPaymentResult = AxiosResponse<GetPayment200>
-export type CreatePayPalPaymentResult = AxiosResponse<CreatePayPalPayment200 | CreatePayPalPayment299>
-export type ExecutePayPalPaymentResult = AxiosResponse<ExecutePayPalPayment200 | ExecutePayPalPayment202 | ExecutePayPalPayment299>
-export type CreatePromoCreditResult = AxiosResponse<CreatePromoCredit200>
-export type GetServiceTransfersResult = AxiosResponse<GetServiceTransfers200>
-export type CreateServiceTransferResult = AxiosResponse<CreateServiceTransfer200>
-export type GetServiceTransferResult = AxiosResponse<GetServiceTransfer200>
-export type DeleteServiceTransferResult = AxiosResponse<DeleteServiceTransfer200>
-export type AcceptServiceTransferResult = AxiosResponse<AcceptServiceTransfer200>
-export type GetAccountSettingsResult = AxiosResponse<GetAccountSettings200>
-export type UpdateAccountSettingsResult = AxiosResponse<UpdateAccountSettings200>
-export type EnableAccountManagedResult = AxiosResponse<EnableAccountManaged200>
-export type GetTransferResult = AxiosResponse<GetTransfer200>
-export type GetUsersResult = AxiosResponse<GetUsers200>
-export type CreateUserResult = AxiosResponse<CreateUser200>
-export type GetUserResult = AxiosResponse<GetUser200>
-export type UpdateUserResult = AxiosResponse<UpdateUser200>
-export type DeleteUserResult = AxiosResponse<DeleteUser200>
-export type GetUserGrantsResult = AxiosResponse<GetUserGrants200 | void>
-export type UpdateUserGrantsResult = AxiosResponse<UpdateUserGrants200>
-export type GetBetaProgramsResult = AxiosResponse<GetBetaPrograms200>
-export type GetBetaProgramResult = AxiosResponse<GetBetaProgram200>
-export type GetDatabasesEnginesResult = AxiosResponse<GetDatabasesEngines200>
-export type GetDatabasesEngineResult = AxiosResponse<GetDatabasesEngine200>
-export type GetDatabasesInstancesResult = AxiosResponse<GetDatabasesInstances200>
-export type GetDatabasesMySQLInstancesResult = AxiosResponse<GetDatabasesMySQLInstances200>
-export type PostDatabasesMySQLInstancesResult = AxiosResponse<PostDatabasesMySQLInstances200>
-export type GetDatabasesMySQLInstanceResult = AxiosResponse<GetDatabasesMySQLInstance200>
-export type DeleteDatabasesMySQLInstanceResult = AxiosResponse<DeleteDatabasesMySQLInstance200>
-export type PutDatabasesMySQLInstanceResult = AxiosResponse<PutDatabasesMySQLInstance200>
-export type GetDatabasesMySQLInstanceBackupsResult = AxiosResponse<GetDatabasesMySQLInstanceBackups200>
-export type PostDatabasesMySQLInstanceBackupResult = AxiosResponse<PostDatabasesMySQLInstanceBackup200>
-export type GetDatabasesMySQLInstanceBackupResult = AxiosResponse<GetDatabasesMySQLInstanceBackup200>
-export type DeleteDatabaseMySQLInstanceBackupResult = AxiosResponse<DeleteDatabaseMySQLInstanceBackup200>
-export type PostDatabasesMySQLInstanceBackupRestoreResult = AxiosResponse<PostDatabasesMySQLInstanceBackupRestore200>
-export type GetDatabasesMySQLInstanceCredentialsResult = AxiosResponse<GetDatabasesMySQLInstanceCredentials200>
-export type PostDatabasesMySQLInstanceCredentialsResetResult = AxiosResponse<PostDatabasesMySQLInstanceCredentialsReset200>
-export type GetDatabasesMySQLInstanceSSLResult = AxiosResponse<GetDatabasesMySQLInstanceSSL200>
-export type PostDatabasesMySQLInstancePatchResult = AxiosResponse<PostDatabasesMySQLInstancePatch200>
-export type GetDatabasesPostgreSQLInstancesResult = AxiosResponse<GetDatabasesPostgreSQLInstances200>
-export type PostDatabasesPostgreSQLInstancesResult = AxiosResponse<PostDatabasesPostgreSQLInstances200>
-export type GetDatabasesPostgreSQLInstanceResult = AxiosResponse<GetDatabasesPostgreSQLInstance200>
-export type DeleteDatabasesPostgreSQLInstanceResult = AxiosResponse<DeleteDatabasesPostgreSQLInstance200>
-export type PutDatabasesPostgreSQLInstanceResult = AxiosResponse<PutDatabasesPostgreSQLInstance200>
-export type GetDatabasesPostgreSQLInstanceBackupsResult = AxiosResponse<GetDatabasesPostgreSQLInstanceBackups200>
-export type PostDatabasesPostgreSQLInstanceBackupResult = AxiosResponse<PostDatabasesPostgreSQLInstanceBackup200>
-export type GetDatabasesPostgreSQLInstanceBackupResult = AxiosResponse<GetDatabasesPostgreSQLInstanceBackup200>
-export type DeleteDatabasePostgreSQLInstanceBackupResult = AxiosResponse<DeleteDatabasePostgreSQLInstanceBackup200>
-export type PostDatabasesPostgreSQLInstanceBackupRestoreResult = AxiosResponse<PostDatabasesPostgreSQLInstanceBackupRestore200>
-export type GetDatabasesPostgreSQLInstanceCredentialsResult = AxiosResponse<GetDatabasesPostgreSQLInstanceCredentials200>
-export type PostDatabasesPostgreSQLInstanceCredentialsResetResult = AxiosResponse<PostDatabasesPostgreSQLInstanceCredentialsReset200>
-export type GetDatabasesPostgreSQLInstanceSSLResult = AxiosResponse<GetDatabasesPostgreSQLInstanceSSL200>
-export type PostDatabasesPostgreSQLInstancePatchResult = AxiosResponse<PostDatabasesPostgreSQLInstancePatch200>
-export type GetDatabasesTypesResult = AxiosResponse<GetDatabasesTypes200>
-export type GetDatabasesTypeResult = AxiosResponse<GetDatabasesType200>
-export type GetDomainsResult = AxiosResponse<GetDomains200>
-export type CreateDomainResult = AxiosResponse<CreateDomain200>
-export type GetDomainResult = AxiosResponse<GetDomain200>
-export type UpdateDomainResult = AxiosResponse<UpdateDomain200>
-export type DeleteDomainResult = AxiosResponse<DeleteDomain200>
-export type GetDomainZoneResult = AxiosResponse<GetDomainZone200>
-export type ImportDomainResult = AxiosResponse<ImportDomain200>
-export type CloneDomainResult = AxiosResponse<CloneDomain200>
-export type GetDomainRecordsResult = AxiosResponse<GetDomainRecords200>
-export type CreateDomainRecordResult = AxiosResponse<CreateDomainRecord200>
-export type GetDomainRecordResult = AxiosResponse<GetDomainRecord200>
-export type UpdateDomainRecordResult = AxiosResponse<UpdateDomainRecord200>
-export type DeleteDomainRecordResult = AxiosResponse<DeleteDomainRecord200>
-export type GetImagesResult = AxiosResponse<GetImages200>
-export type CreateImageResult = AxiosResponse<CreateImage200>
-export type PostImagesUploadResult = AxiosResponse<PostImagesUpload200>
-export type GetImageResult = AxiosResponse<GetImage200>
-export type UpdateImageResult = AxiosResponse<UpdateImage200>
-export type DeleteImageResult = AxiosResponse<DeleteImage200>
-export type GetLinodeInstancesResult = AxiosResponse<GetLinodeInstances200>
-export type CreateLinodeInstanceResult = AxiosResponse<CreateLinodeInstance200>
-export type GetLinodeInstanceResult = AxiosResponse<GetLinodeInstance200>
-export type UpdateLinodeInstanceResult = AxiosResponse<UpdateLinodeInstance200>
-export type DeleteLinodeInstanceResult = AxiosResponse<DeleteLinodeInstance200>
-export type GetBackupsResult = AxiosResponse<GetBackups200>
-export type CreateSnapshotResult = AxiosResponse<CreateSnapshot200>
-export type CancelBackupsResult = AxiosResponse<CancelBackups200>
-export type EnableBackupsResult = AxiosResponse<EnableBackups200>
-export type GetBackupResult = AxiosResponse<GetBackup200>
-export type RestoreBackupResult = AxiosResponse<RestoreBackup200>
-export type BootLinodeInstanceResult = AxiosResponse<BootLinodeInstance200>
-export type CloneLinodeInstanceResult = AxiosResponse<CloneLinodeInstance200>
-export type GetLinodeConfigsResult = AxiosResponse<GetLinodeConfigs200>
-export type AddLinodeConfigResult = AxiosResponse<AddLinodeConfig200>
-export type GetLinodeConfigResult = AxiosResponse<GetLinodeConfig200>
-export type UpdateLinodeConfigResult = AxiosResponse<UpdateLinodeConfig200>
-export type DeleteLinodeConfigResult = AxiosResponse<DeleteLinodeConfig200>
-export type GetLinodeDisksResult = AxiosResponse<GetLinodeDisks200>
-export type AddLinodeDiskResult = AxiosResponse<AddLinodeDisk200>
-export type GetLinodeDiskResult = AxiosResponse<GetLinodeDisk200>
-export type UpdateDiskResult = AxiosResponse<UpdateDisk200>
-export type DeleteDiskResult = AxiosResponse<DeleteDisk200>
-export type CloneLinodeDiskResult = AxiosResponse<CloneLinodeDisk200>
-export type ResetDiskPasswordResult = AxiosResponse<ResetDiskPassword200>
-export type ResizeDiskResult = AxiosResponse<ResizeDisk200>
-export type GetLinodeFirewallsResult = AxiosResponse<GetLinodeFirewalls200>
-export type GetLinodeIPsResult = AxiosResponse<GetLinodeIPs200>
-export type AddLinodeIPResult = AxiosResponse<AddLinodeIP200>
-export type GetLinodeIPResult = AxiosResponse<GetLinodeIP200>
-export type UpdateLinodeIPResult = AxiosResponse<UpdateLinodeIP200>
-export type RemoveLinodeIPResult = AxiosResponse<RemoveLinodeIP200>
-export type GetKernelsResult = AxiosResponse<GetKernels200>
-export type GetKernelResult = AxiosResponse<GetKernel200>
-export type MigrateLinodeInstanceResult = AxiosResponse<MigrateLinodeInstance200>
-export type MutateLinodeInstanceResult = AxiosResponse<MutateLinodeInstance200>
-export type GetLinodeNodeBalancersResult = AxiosResponse<GetLinodeNodeBalancers200>
-export type ResetLinodePasswordResult = AxiosResponse<ResetLinodePassword200>
-export type RebootLinodeInstanceResult = AxiosResponse<RebootLinodeInstance200>
-export type RebuildLinodeInstanceResult = AxiosResponse<RebuildLinodeInstance200>
-export type RescueLinodeInstanceResult = AxiosResponse<RescueLinodeInstance200>
-export type ResizeLinodeInstanceResult = AxiosResponse<ResizeLinodeInstance200>
-export type ShutdownLinodeInstanceResult = AxiosResponse<ShutdownLinodeInstance200>
-export type GetLinodeTransferResult = AxiosResponse<GetLinodeTransfer200>
-export type GetLinodeTransferByYearMonthResult = AxiosResponse<GetLinodeTransferByYearMonth200>
-export type GetLinodeStatsResult = AxiosResponse<GetLinodeStats200>
-export type GetLinodeStatsByYearMonthResult = AxiosResponse<GetLinodeStatsByYearMonth200>
-export type GetLinodeVolumesResult = AxiosResponse<GetLinodeVolumes200>
-export type GetStackScriptsResult = AxiosResponse<GetStackScripts200>
-export type AddStackScriptResult = AxiosResponse<AddStackScript200>
-export type GetStackScriptResult = AxiosResponse<GetStackScript200>
-export type UpdateStackScriptResult = AxiosResponse<UpdateStackScript200>
-export type DeleteStackScriptResult = AxiosResponse<DeleteStackScript200>
-export type GetLinodeTypesResult = AxiosResponse<GetLinodeTypes200>
-export type GetLinodeTypeResult = AxiosResponse<GetLinodeType200>
-export type GetLKEClustersResult = AxiosResponse<GetLKEClusters200>
-export type CreateLKEClusterResult = AxiosResponse<CreateLKECluster200>
-export type GetLKEClusterResult = AxiosResponse<GetLKECluster200>
-export type PutLKEClusterResult = AxiosResponse<PutLKECluster200>
-export type DeleteLKEClusterResult = AxiosResponse<DeleteLKECluster200>
-export type GetLKEClusterPoolsResult = AxiosResponse<GetLKEClusterPools200>
-export type PostLKEClusterPoolsResult = AxiosResponse<PostLKEClusterPools200>
-export type PostLKEClusterRecycleResult = AxiosResponse<PostLKEClusterRecycle200>
-export type GetLKENodePoolResult = AxiosResponse<GetLKENodePool200>
-export type PutLKENodePoolResult = AxiosResponse<PutLKENodePool200>
-export type DeleteLKENodePoolResult = AxiosResponse<DeleteLKENodePool200>
-export type PostLKEClusterPoolRecycleResult = AxiosResponse<PostLKEClusterPoolRecycle200>
-export type GetLKEClusterNodeResult = AxiosResponse<GetLKEClusterNode200>
-export type DeleteLKEClusterNodeResult = AxiosResponse<DeleteLKEClusterNode200>
-export type PostLKEClusterNodeRecycleResult = AxiosResponse<PostLKEClusterNodeRecycle200>
-export type GetLKEClusterAPIEndpointsResult = AxiosResponse<GetLKEClusterAPIEndpoints200>
-export type GetLKEClusterDashboardResult = AxiosResponse<GetLKEClusterDashboard200>
-export type GetLKEClusterKubeconfigResult = AxiosResponse<GetLKEClusterKubeconfig200>
-export type DeleteLKEClusterKubeconfigResult = AxiosResponse<DeleteLKEClusterKubeconfig200>
-export type PostLKEClusterRegenerateResult = AxiosResponse<PostLKEClusterRegenerate200>
-export type PostLKECServiceTokenDeleteResult = AxiosResponse<PostLKECServiceTokenDelete200>
-export type GetLKEVersionsResult = AxiosResponse<GetLKEVersions200>
-export type GetLKEVersionResult = AxiosResponse<GetLKEVersion200>
-export type GetLongviewClientsResult = AxiosResponse<GetLongviewClients200>
-export type CreateLongviewClientResult = AxiosResponse<CreateLongviewClient200>
-export type GetLongviewClientResult = AxiosResponse<GetLongviewClient200>
-export type UpdateLongviewClientResult = AxiosResponse<UpdateLongviewClient200>
-export type DeleteLongviewClientResult = AxiosResponse<DeleteLongviewClient200>
-export type GetLongviewPlanResult = AxiosResponse<GetLongviewPlan200>
-export type UpdateLongviewPlanResult = AxiosResponse<UpdateLongviewPlan200>
-export type GetLongviewSubscriptionsResult = AxiosResponse<GetLongviewSubscriptions200>
-export type GetLongviewSubscriptionResult = AxiosResponse<GetLongviewSubscription200>
-export type GetManagedContactsResult = AxiosResponse<GetManagedContacts200>
-export type CreateManagedContactResult = AxiosResponse<CreateManagedContact200>
-export type GetManagedContactResult = AxiosResponse<GetManagedContact200>
-export type UpdateManagedContactResult = AxiosResponse<UpdateManagedContact200>
-export type DeleteManagedContactResult = AxiosResponse<DeleteManagedContact200>
-export type GetManagedCredentialsResult = AxiosResponse<GetManagedCredentials200>
-export type CreateManagedCredentialResult = AxiosResponse<CreateManagedCredential200>
-export type GetManagedCredentialResult = AxiosResponse<GetManagedCredential200>
-export type UpdateManagedCredentialResult = AxiosResponse<UpdateManagedCredential200>
-export type UpdateManagedCredentialUsernamePasswordResult = AxiosResponse<UpdateManagedCredentialUsernamePassword200>
-export type DeleteManagedCredentialResult = AxiosResponse<DeleteManagedCredential200>
-export type ViewManagedSSHKeyResult = AxiosResponse<ViewManagedSSHKey200>
-export type GetManagedIssuesResult = AxiosResponse<GetManagedIssues200>
-export type GetManagedIssueResult = AxiosResponse<GetManagedIssue200>
-export type GetManagedLinodeSettingsResult = AxiosResponse<GetManagedLinodeSettings200>
-export type GetManagedLinodeSettingResult = AxiosResponse<GetManagedLinodeSetting200>
-export type UpdateManagedLinodeSettingResult = AxiosResponse<UpdateManagedLinodeSetting200>
-export type GetManagedServicesResult = AxiosResponse<GetManagedServices200>
-export type CreateManagedServiceResult = AxiosResponse<CreateManagedService200>
-export type GetManagedServiceResult = AxiosResponse<GetManagedService200>
-export type UpdateManagedServiceResult = AxiosResponse<UpdateManagedService200>
-export type DeleteManagedServiceResult = AxiosResponse<DeleteManagedService200>
-export type DisableManagedServiceResult = AxiosResponse<DisableManagedService200>
-export type EnableManagedServiceResult = AxiosResponse<EnableManagedService200>
-export type GetManagedStatsResult = AxiosResponse<GetManagedStats200>
-export type GetIPsResult = AxiosResponse<GetIPs200>
-export type AllocateIPResult = AxiosResponse<AllocateIP200>
-export type GetIPResult = AxiosResponse<GetIP200>
-export type UpdateIPResult = AxiosResponse<UpdateIP200>
-export type AssignIPsResult = AxiosResponse<AssignIPs200>
-export type ShareIPsResult = AxiosResponse<ShareIPs200>
-export type AssignIPv4sResult = AxiosResponse<AssignIPv4s200>
-export type ShareIPv4sResult = AxiosResponse<ShareIPv4s200>
-export type GetIPv6PoolsResult = AxiosResponse<GetIPv6Pools200>
-export type GetIPv6RangesResult = AxiosResponse<GetIPv6Ranges200>
-export type PostIPv6RangeResult = AxiosResponse<PostIPv6Range200>
-export type GetIPv6RangeResult = AxiosResponse<GetIPv6Range200>
-export type DeleteIPv6RangeResult = AxiosResponse<DeleteIPv6Range200>
-export type GetFirewallsResult = AxiosResponse<GetFirewalls200>
-export type CreateFirewallsResult = AxiosResponse<CreateFirewalls200>
-export type GetFirewallResult = AxiosResponse<GetFirewall200>
-export type UpdateFirewallResult = AxiosResponse<UpdateFirewall200>
-export type DeleteFirewallResult = AxiosResponse<DeleteFirewall200>
-export type GetFirewallDevicesResult = AxiosResponse<GetFirewallDevices200>
-export type CreateFirewallDeviceResult = AxiosResponse<CreateFirewallDevice200>
-export type GetFirewallDeviceResult = AxiosResponse<GetFirewallDevice200>
-export type DeleteFirewallDeviceResult = AxiosResponse<DeleteFirewallDevice200>
-export type GetFirewallRulesResult = AxiosResponse<GetFirewallRules200>
-export type UpdateFirewallRulesResult = AxiosResponse<UpdateFirewallRules200>
-export type GetVLANsResult = AxiosResponse<GetVLANs200>
-export type GetNodeBalancersResult = AxiosResponse<GetNodeBalancers200>
-export type CreateNodeBalancerResult = AxiosResponse<CreateNodeBalancer200>
-export type GetNodeBalancerResult = AxiosResponse<GetNodeBalancer200>
-export type UpdateNodeBalancerResult = AxiosResponse<UpdateNodeBalancer200>
-export type DeleteNodeBalancerResult = AxiosResponse<DeleteNodeBalancer200>
-export type GetNodeBalancerConfigsResult = AxiosResponse<GetNodeBalancerConfigs200>
-export type CreateNodeBalancerConfigResult = AxiosResponse<CreateNodeBalancerConfig200>
-export type GetNodeBalancerConfigResult = AxiosResponse<GetNodeBalancerConfig200>
-export type UpdateNodeBalancerConfigResult = AxiosResponse<UpdateNodeBalancerConfig200>
-export type DeleteNodeBalancerConfigResult = AxiosResponse<DeleteNodeBalancerConfig200>
-export type RebuildNodeBalancerConfigResult = AxiosResponse<RebuildNodeBalancerConfig200>
-export type GetNodeBalancerConfigNodesResult = AxiosResponse<GetNodeBalancerConfigNodes200>
-export type CreateNodeBalancerNodeResult = AxiosResponse<CreateNodeBalancerNode200>
-export type GetNodeBalancerNodeResult = AxiosResponse<GetNodeBalancerNode200>
-export type UpdateNodeBalancerNodeResult = AxiosResponse<UpdateNodeBalancerNode200>
-export type DeleteNodeBalancerConfigNodeResult = AxiosResponse<DeleteNodeBalancerConfigNode200>
-export type GetNodeBalancerFirewallsResult = AxiosResponse<GetNodeBalancerFirewalls200>
-export type GetNodebalancersNodeBalancerIdStatsResult = AxiosResponse<GetNodebalancersNodeBalancerIdStats200>
-export type GetObjectStorageBucketsResult = AxiosResponse<GetObjectStorageBuckets200>
-export type CreateObjectStorageBucketResult = AxiosResponse<CreateObjectStorageBucket200>
-export type GetObjectStorageBucketResult = AxiosResponse<GetObjectStorageBucket200>
-export type DeleteObjectStorageBucketResult = AxiosResponse<DeleteObjectStorageBucket200>
-export type GetObjectStorageBucketinClusterResult = AxiosResponse<GetObjectStorageBucketinCluster200>
-export type ModifyObjectStorageBucketAccessResult = AxiosResponse<ModifyObjectStorageBucketAccess200>
-export type UpdateObjectStorageBucketAccessResult = AxiosResponse<UpdateObjectStorageBucketAccess200>
-export type ViewObjectStorageBucketACLResult = AxiosResponse<ViewObjectStorageBucketACL200>
-export type UpdateObjectStorageBucketACLResult = AxiosResponse<UpdateObjectStorageBucketACL200>
-export type GetObjectStorageBucketContentResult = AxiosResponse<GetObjectStorageBucketContent200>
-export type CreateObjectStorageObjectURLResult = AxiosResponse<CreateObjectStorageObjectURL200>
-export type GetObjectStorageClustersResult = AxiosResponse<GetObjectStorageClusters200>
-export type GetObjectStorageClusterResult = AxiosResponse<GetObjectStorageCluster200>
-export type GetObjectStorageKeysResult = AxiosResponse<GetObjectStorageKeys200>
-export type CreateObjectStorageKeysResult = AxiosResponse<CreateObjectStorageKeys200>
-export type GetObjectStorageKeyResult = AxiosResponse<GetObjectStorageKey200>
-export type UpdateObjectStorageKeyResult = AxiosResponse<UpdateObjectStorageKey200>
-export type DeleteObjectStorageKeyResult = AxiosResponse<DeleteObjectStorageKey200>
-export type CancelObjectStorageResult = AxiosResponse<CancelObjectStorage200>
-export type GetObjectStorageSSLResult = AxiosResponse<GetObjectStorageSSL200>
-export type CreateObjectStorageSSLResult = AxiosResponse<CreateObjectStorageSSL200>
-export type DeleteObjectStorageSSLResult = AxiosResponse<DeleteObjectStorageSSL200>
-export type GetObjectStorageTransferResult = AxiosResponse<GetObjectStorageTransfer200>
-export type GetProfileResult = AxiosResponse<GetProfile200>
-export type UpdateProfileResult = AxiosResponse<UpdateProfile200>
-export type GetProfileAppsResult = AxiosResponse<GetProfileApps200>
-export type GetProfileAppResult = AxiosResponse<GetProfileApp200>
-export type DeleteProfileAppResult = AxiosResponse<DeleteProfileApp200>
-export type GetProfileGrantsResult = AxiosResponse<GetProfileGrants200 | void>
-export type TfaDisableResult = AxiosResponse<TfaDisable200>
-export type TfaEnableResult = AxiosResponse<TfaEnable200>
-export type TfaConfirmResult = AxiosResponse<TfaConfirm200>
-export type GetPersonalAccessTokensResult = AxiosResponse<GetPersonalAccessTokens200>
-export type CreatePersonalAccessTokenResult = AxiosResponse<CreatePersonalAccessToken200>
-export type GetPersonalAccessTokenResult = AxiosResponse<GetPersonalAccessToken200>
-export type UpdatePersonalAccessTokenResult = AxiosResponse<UpdatePersonalAccessToken200>
-export type DeletePersonalAccessTokenResult = AxiosResponse<DeletePersonalAccessToken200>
-export type GetProfileLoginsResult = AxiosResponse<GetProfileLogins200>
-export type GetProfileLoginResult = AxiosResponse<GetProfileLogin200>
-export type GetDevicesResult = AxiosResponse<GetDevices200>
-export type GetTrustedDeviceResult = AxiosResponse<GetTrustedDevice200>
-export type RevokeTrustedDeviceResult = AxiosResponse<RevokeTrustedDevice200>
-export type GetSecurityQuestionsResult = AxiosResponse<GetSecurityQuestions200>
-export type PostSecurityQuestionsResult = AxiosResponse<PostSecurityQuestions200>
-export type GetSSHKeysResult = AxiosResponse<GetSSHKeys200>
-export type AddSSHKeyResult = AxiosResponse<AddSSHKey200>
-export type GetSSHKeyResult = AxiosResponse<GetSSHKey200>
-export type UpdateSSHKeyResult = AxiosResponse<UpdateSSHKey200>
-export type DeleteSSHKeyResult = AxiosResponse<DeleteSSHKey200>
-export type DeleteProfilePhoneNumberResult = AxiosResponse<DeleteProfilePhoneNumber200>
-export type PostProfilePhoneNumberResult = AxiosResponse<PostProfilePhoneNumber200>
-export type PostProfilePhoneNumberVerifyResult = AxiosResponse<PostProfilePhoneNumberVerify200>
-export type GetUserPreferencesResult = AxiosResponse<GetUserPreferences200>
-export type UpdateUserPreferencesResult = AxiosResponse<UpdateUserPreferences200>
-export type GetRegionsResult = AxiosResponse<GetRegions200>
-export type GetRegionResult = AxiosResponse<GetRegion200>
-export type GetRegionAvailabilityResult = AxiosResponse<GetRegionAvailability200Item[]>
-export type GetRegionsAvailabilityResult = AxiosResponse<GetRegionsAvailability200>
-export type GetTicketsResult = AxiosResponse<GetTickets200>
-export type CreateTicketResult = AxiosResponse<CreateTicket200>
-export type GetTicketResult = AxiosResponse<GetTicket200>
-export type CreateTicketAttachmentResult = AxiosResponse<CreateTicketAttachment200>
-export type CloseTicketResult = AxiosResponse<CloseTicket200>
-export type GetTicketRepliesResult = AxiosResponse<GetTicketReplies200>
-export type CreateTicketReplyResult = AxiosResponse<CreateTicketReply200>
-export type GetTagsResult = AxiosResponse<GetTags200>
-export type CreateTagResult = AxiosResponse<CreateTag200>
-export type GetTaggedObjectsResult = AxiosResponse<GetTaggedObjects200>
-export type DeleteTagResult = AxiosResponse<DeleteTag200>
-export type GetVolumesResult = AxiosResponse<GetVolumes200>
-export type CreateVolumeResult = AxiosResponse<CreateVolume200>
-export type GetVolumeResult = AxiosResponse<GetVolume200>
-export type UpdateVolumeResult = AxiosResponse<UpdateVolume200>
-export type DeleteVolumeResult = AxiosResponse<DeleteVolume200>
-export type AttachVolumeResult = AxiosResponse<AttachVolume200>
-export type CloneVolumeResult = AxiosResponse<CloneVolume200>
-export type DetachVolumeResult = AxiosResponse<DetachVolume200>
-export type ResizeVolumeResult = AxiosResponse<ResizeVolume200>
+export type GetAccountResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAccount']>>>
+export type UpdateAccountResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateAccount']>>>
+export type GetAvailabilityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAvailability']>>>
+export type GetAccountAvailabilityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAccountAvailability']>>>
+export type GetEnrolledBetaProgramsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEnrolledBetaPrograms']>>>
+export type EnrollBetaProgramResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['enrollBetaProgram']>>>
+export type GetEnrolledBetaProgramResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEnrolledBetaProgram']>>>
+export type CancelAccountResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cancelAccount']>>>
+export type CreateCreditCardResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createCreditCard']>>>
+export type GetEntityTransfersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEntityTransfers']>>>
+export type CreateEntityTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createEntityTransfer']>>>
+export type GetEntityTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEntityTransfer']>>>
+export type DeleteEntityTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteEntityTransfer']>>>
+export type AcceptEntityTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['acceptEntityTransfer']>>>
+export type GetEventsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEvents']>>>
+export type GetEventResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getEvent']>>>
+export type EventReadResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['eventRead']>>>
+export type EventSeenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['eventSeen']>>>
+export type GetInvoicesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getInvoices']>>>
+export type GetInvoiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getInvoice']>>>
+export type GetInvoiceItemsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getInvoiceItems']>>>
+export type GetAccountLoginsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAccountLogins']>>>
+export type GetAccountLoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAccountLogin']>>>
+export type GetMaintenanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getMaintenance']>>>
+export type GetNotificationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNotifications']>>>
+export type GetClientsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getClients']>>>
+export type CreateClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createClient']>>>
+export type GetClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getClient']>>>
+export type UpdateClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateClient']>>>
+export type DeleteClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteClient']>>>
+export type ResetClientSecretResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resetClientSecret']>>>
+export type GetClientThumbnailResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getClientThumbnail']>>>
+export type SetClientThumbnailResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['setClientThumbnail']>>>
+export type GetPaymentMethodsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPaymentMethods']>>>
+export type CreatePaymentMethodResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createPaymentMethod']>>>
+export type GetPaymentMethodResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPaymentMethod']>>>
+export type DeletePaymentMethodResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deletePaymentMethod']>>>
+export type MakePaymentMethodDefaultResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['makePaymentMethodDefault']>>>
+export type GetPaymentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPayments']>>>
+export type CreatePaymentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createPayment']>>>
+export type GetPaymentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPayment']>>>
+export type CreatePayPalPaymentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createPayPalPayment']>>>
+export type ExecutePayPalPaymentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['executePayPalPayment']>>>
+export type CreatePromoCreditResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createPromoCredit']>>>
+export type GetServiceTransfersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getServiceTransfers']>>>
+export type CreateServiceTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createServiceTransfer']>>>
+export type GetServiceTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getServiceTransfer']>>>
+export type DeleteServiceTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteServiceTransfer']>>>
+export type AcceptServiceTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['acceptServiceTransfer']>>>
+export type GetAccountSettingsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getAccountSettings']>>>
+export type UpdateAccountSettingsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateAccountSettings']>>>
+export type EnableAccountManagedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['enableAccountManaged']>>>
+export type GetTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTransfer']>>>
+export type GetUsersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getUsers']>>>
+export type CreateUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createUser']>>>
+export type GetUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getUser']>>>
+export type UpdateUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateUser']>>>
+export type DeleteUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteUser']>>>
+export type GetUserGrantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getUserGrants']>>>
+export type UpdateUserGrantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateUserGrants']>>>
+export type GetBetaProgramsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getBetaPrograms']>>>
+export type GetBetaProgramResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getBetaProgram']>>>
+export type GetDatabasesEnginesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesEngines']>>>
+export type GetDatabasesEngineResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesEngine']>>>
+export type GetDatabasesInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesInstances']>>>
+export type GetDatabasesMySQLInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstances']>>>
+export type PostDatabasesMySQLInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesMySQLInstances']>>>
+export type GetDatabasesMySQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstance']>>>
+export type DeleteDatabasesMySQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDatabasesMySQLInstance']>>>
+export type PutDatabasesMySQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['putDatabasesMySQLInstance']>>>
+export type GetDatabasesMySQLInstanceBackupsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstanceBackups']>>>
+export type PostDatabasesMySQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesMySQLInstanceBackup']>>>
+export type GetDatabasesMySQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstanceBackup']>>>
+export type DeleteDatabaseMySQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDatabaseMySQLInstanceBackup']>>>
+export type PostDatabasesMySQLInstanceBackupRestoreResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesMySQLInstanceBackupRestore']>>>
+export type GetDatabasesMySQLInstanceCredentialsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstanceCredentials']>>>
+export type PostDatabasesMySQLInstanceCredentialsResetResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesMySQLInstanceCredentialsReset']>>>
+export type GetDatabasesMySQLInstanceSSLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesMySQLInstanceSSL']>>>
+export type PostDatabasesMySQLInstancePatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesMySQLInstancePatch']>>>
+export type GetDatabasesPostgreSQLInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstances']>>>
+export type PostDatabasesPostgreSQLInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesPostgreSQLInstances']>>>
+export type GetDatabasesPostgreSQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstance']>>>
+export type DeleteDatabasesPostgreSQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDatabasesPostgreSQLInstance']>>>
+export type PutDatabasesPostgreSQLInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['putDatabasesPostgreSQLInstance']>>>
+export type GetDatabasesPostgreSQLInstanceBackupsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstanceBackups']>>>
+export type PostDatabasesPostgreSQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesPostgreSQLInstanceBackup']>>>
+export type GetDatabasesPostgreSQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstanceBackup']>>>
+export type DeleteDatabasePostgreSQLInstanceBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDatabasePostgreSQLInstanceBackup']>>>
+export type PostDatabasesPostgreSQLInstanceBackupRestoreResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesPostgreSQLInstanceBackupRestore']>>>
+export type GetDatabasesPostgreSQLInstanceCredentialsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstanceCredentials']>>>
+export type PostDatabasesPostgreSQLInstanceCredentialsResetResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesPostgreSQLInstanceCredentialsReset']>>>
+export type GetDatabasesPostgreSQLInstanceSSLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesPostgreSQLInstanceSSL']>>>
+export type PostDatabasesPostgreSQLInstancePatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postDatabasesPostgreSQLInstancePatch']>>>
+export type GetDatabasesTypesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesTypes']>>>
+export type GetDatabasesTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDatabasesType']>>>
+export type GetDomainsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDomains']>>>
+export type CreateDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createDomain']>>>
+export type GetDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDomain']>>>
+export type UpdateDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateDomain']>>>
+export type DeleteDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDomain']>>>
+export type GetDomainZoneResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDomainZone']>>>
+export type ImportDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['importDomain']>>>
+export type CloneDomainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cloneDomain']>>>
+export type GetDomainRecordsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDomainRecords']>>>
+export type CreateDomainRecordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createDomainRecord']>>>
+export type GetDomainRecordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDomainRecord']>>>
+export type UpdateDomainRecordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateDomainRecord']>>>
+export type DeleteDomainRecordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDomainRecord']>>>
+export type GetImagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getImages']>>>
+export type CreateImageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createImage']>>>
+export type PostImagesUploadResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postImagesUpload']>>>
+export type GetImageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getImage']>>>
+export type UpdateImageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateImage']>>>
+export type DeleteImageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteImage']>>>
+export type GetLinodeInstancesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeInstances']>>>
+export type CreateLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createLinodeInstance']>>>
+export type GetLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeInstance']>>>
+export type UpdateLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateLinodeInstance']>>>
+export type DeleteLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLinodeInstance']>>>
+export type GetBackupsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getBackups']>>>
+export type CreateSnapshotResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createSnapshot']>>>
+export type CancelBackupsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cancelBackups']>>>
+export type EnableBackupsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['enableBackups']>>>
+export type GetBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getBackup']>>>
+export type RestoreBackupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['restoreBackup']>>>
+export type BootLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['bootLinodeInstance']>>>
+export type CloneLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cloneLinodeInstance']>>>
+export type GetLinodeConfigsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeConfigs']>>>
+export type AddLinodeConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['addLinodeConfig']>>>
+export type GetLinodeConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeConfig']>>>
+export type UpdateLinodeConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateLinodeConfig']>>>
+export type DeleteLinodeConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLinodeConfig']>>>
+export type GetLinodeDisksResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeDisks']>>>
+export type AddLinodeDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['addLinodeDisk']>>>
+export type GetLinodeDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeDisk']>>>
+export type UpdateDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateDisk']>>>
+export type DeleteDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteDisk']>>>
+export type CloneLinodeDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cloneLinodeDisk']>>>
+export type ResetDiskPasswordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resetDiskPassword']>>>
+export type ResizeDiskResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resizeDisk']>>>
+export type GetLinodeFirewallsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeFirewalls']>>>
+export type GetLinodeIPsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeIPs']>>>
+export type AddLinodeIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['addLinodeIP']>>>
+export type GetLinodeIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeIP']>>>
+export type UpdateLinodeIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateLinodeIP']>>>
+export type RemoveLinodeIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['removeLinodeIP']>>>
+export type GetKernelsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getKernels']>>>
+export type GetKernelResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getKernel']>>>
+export type MigrateLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['migrateLinodeInstance']>>>
+export type MutateLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['mutateLinodeInstance']>>>
+export type GetLinodeNodeBalancersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeNodeBalancers']>>>
+export type ResetLinodePasswordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resetLinodePassword']>>>
+export type RebootLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['rebootLinodeInstance']>>>
+export type RebuildLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['rebuildLinodeInstance']>>>
+export type RescueLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['rescueLinodeInstance']>>>
+export type ResizeLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resizeLinodeInstance']>>>
+export type ShutdownLinodeInstanceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['shutdownLinodeInstance']>>>
+export type GetLinodeTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeTransfer']>>>
+export type GetLinodeTransferByYearMonthResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeTransferByYearMonth']>>>
+export type GetLinodeStatsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeStats']>>>
+export type GetLinodeStatsByYearMonthResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeStatsByYearMonth']>>>
+export type GetLinodeVolumesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeVolumes']>>>
+export type GetStackScriptsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getStackScripts']>>>
+export type AddStackScriptResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['addStackScript']>>>
+export type GetStackScriptResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getStackScript']>>>
+export type UpdateStackScriptResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateStackScript']>>>
+export type DeleteStackScriptResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteStackScript']>>>
+export type GetLinodeTypesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeTypes']>>>
+export type GetLinodeTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLinodeType']>>>
+export type GetLKEClustersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusters']>>>
+export type CreateLKEClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createLKECluster']>>>
+export type GetLKEClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKECluster']>>>
+export type PutLKEClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['putLKECluster']>>>
+export type DeleteLKEClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLKECluster']>>>
+export type GetLKEClusterPoolsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusterPools']>>>
+export type PostLKEClusterPoolsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKEClusterPools']>>>
+export type PostLKEClusterRecycleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKEClusterRecycle']>>>
+export type GetLKENodePoolResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKENodePool']>>>
+export type PutLKENodePoolResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['putLKENodePool']>>>
+export type DeleteLKENodePoolResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLKENodePool']>>>
+export type PostLKEClusterPoolRecycleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKEClusterPoolRecycle']>>>
+export type GetLKEClusterNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusterNode']>>>
+export type DeleteLKEClusterNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLKEClusterNode']>>>
+export type PostLKEClusterNodeRecycleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKEClusterNodeRecycle']>>>
+export type GetLKEClusterAPIEndpointsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusterAPIEndpoints']>>>
+export type GetLKEClusterDashboardResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusterDashboard']>>>
+export type GetLKEClusterKubeconfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEClusterKubeconfig']>>>
+export type DeleteLKEClusterKubeconfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLKEClusterKubeconfig']>>>
+export type PostLKEClusterRegenerateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKEClusterRegenerate']>>>
+export type PostLKECServiceTokenDeleteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postLKECServiceTokenDelete']>>>
+export type GetLKEVersionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEVersions']>>>
+export type GetLKEVersionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLKEVersion']>>>
+export type GetLongviewClientsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLongviewClients']>>>
+export type CreateLongviewClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createLongviewClient']>>>
+export type GetLongviewClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLongviewClient']>>>
+export type UpdateLongviewClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateLongviewClient']>>>
+export type DeleteLongviewClientResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteLongviewClient']>>>
+export type GetLongviewPlanResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLongviewPlan']>>>
+export type UpdateLongviewPlanResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateLongviewPlan']>>>
+export type GetLongviewSubscriptionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLongviewSubscriptions']>>>
+export type GetLongviewSubscriptionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getLongviewSubscription']>>>
+export type GetManagedContactsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedContacts']>>>
+export type CreateManagedContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createManagedContact']>>>
+export type GetManagedContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedContact']>>>
+export type UpdateManagedContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateManagedContact']>>>
+export type DeleteManagedContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteManagedContact']>>>
+export type GetManagedCredentialsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedCredentials']>>>
+export type CreateManagedCredentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createManagedCredential']>>>
+export type GetManagedCredentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedCredential']>>>
+export type UpdateManagedCredentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateManagedCredential']>>>
+export type UpdateManagedCredentialUsernamePasswordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateManagedCredentialUsernamePassword']>>>
+export type DeleteManagedCredentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteManagedCredential']>>>
+export type ViewManagedSSHKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['viewManagedSSHKey']>>>
+export type GetManagedIssuesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedIssues']>>>
+export type GetManagedIssueResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedIssue']>>>
+export type GetManagedLinodeSettingsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedLinodeSettings']>>>
+export type GetManagedLinodeSettingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedLinodeSetting']>>>
+export type UpdateManagedLinodeSettingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateManagedLinodeSetting']>>>
+export type GetManagedServicesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedServices']>>>
+export type CreateManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createManagedService']>>>
+export type GetManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedService']>>>
+export type UpdateManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateManagedService']>>>
+export type DeleteManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteManagedService']>>>
+export type DisableManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['disableManagedService']>>>
+export type EnableManagedServiceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['enableManagedService']>>>
+export type GetManagedStatsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getManagedStats']>>>
+export type GetIPsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getIPs']>>>
+export type AllocateIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['allocateIP']>>>
+export type GetIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getIP']>>>
+export type UpdateIPResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateIP']>>>
+export type AssignIPsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['assignIPs']>>>
+export type ShareIPsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['shareIPs']>>>
+export type AssignIPv4sResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['assignIPv4s']>>>
+export type ShareIPv4sResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['shareIPv4s']>>>
+export type GetIPv6PoolsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getIPv6Pools']>>>
+export type GetIPv6RangesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getIPv6Ranges']>>>
+export type PostIPv6RangeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postIPv6Range']>>>
+export type GetIPv6RangeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getIPv6Range']>>>
+export type DeleteIPv6RangeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteIPv6Range']>>>
+export type GetFirewallsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getFirewalls']>>>
+export type CreateFirewallsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createFirewalls']>>>
+export type GetFirewallResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getFirewall']>>>
+export type UpdateFirewallResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateFirewall']>>>
+export type DeleteFirewallResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteFirewall']>>>
+export type GetFirewallDevicesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getFirewallDevices']>>>
+export type CreateFirewallDeviceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createFirewallDevice']>>>
+export type GetFirewallDeviceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getFirewallDevice']>>>
+export type DeleteFirewallDeviceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteFirewallDevice']>>>
+export type GetFirewallRulesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getFirewallRules']>>>
+export type UpdateFirewallRulesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateFirewallRules']>>>
+export type GetVLANsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getVLANs']>>>
+export type GetNodeBalancersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancers']>>>
+export type CreateNodeBalancerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createNodeBalancer']>>>
+export type GetNodeBalancerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancer']>>>
+export type UpdateNodeBalancerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateNodeBalancer']>>>
+export type DeleteNodeBalancerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteNodeBalancer']>>>
+export type GetNodeBalancerConfigsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancerConfigs']>>>
+export type CreateNodeBalancerConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createNodeBalancerConfig']>>>
+export type GetNodeBalancerConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancerConfig']>>>
+export type UpdateNodeBalancerConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateNodeBalancerConfig']>>>
+export type DeleteNodeBalancerConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteNodeBalancerConfig']>>>
+export type RebuildNodeBalancerConfigResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['rebuildNodeBalancerConfig']>>>
+export type GetNodeBalancerConfigNodesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancerConfigNodes']>>>
+export type CreateNodeBalancerNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createNodeBalancerNode']>>>
+export type GetNodeBalancerNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancerNode']>>>
+export type UpdateNodeBalancerNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateNodeBalancerNode']>>>
+export type DeleteNodeBalancerConfigNodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteNodeBalancerConfigNode']>>>
+export type GetNodeBalancerFirewallsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodeBalancerFirewalls']>>>
+export type GetNodebalancersNodeBalancerIdStatsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getNodebalancersNodeBalancerIdStats']>>>
+export type GetObjectStorageBucketsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageBuckets']>>>
+export type CreateObjectStorageBucketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createObjectStorageBucket']>>>
+export type GetObjectStorageBucketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageBucket']>>>
+export type DeleteObjectStorageBucketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteObjectStorageBucket']>>>
+export type GetObjectStorageBucketinClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageBucketinCluster']>>>
+export type ModifyObjectStorageBucketAccessResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['modifyObjectStorageBucketAccess']>>>
+export type UpdateObjectStorageBucketAccessResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateObjectStorageBucketAccess']>>>
+export type ViewObjectStorageBucketACLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['viewObjectStorageBucketACL']>>>
+export type UpdateObjectStorageBucketACLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateObjectStorageBucketACL']>>>
+export type GetObjectStorageBucketContentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageBucketContent']>>>
+export type CreateObjectStorageObjectURLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createObjectStorageObjectURL']>>>
+export type GetObjectStorageClustersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageClusters']>>>
+export type GetObjectStorageClusterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageCluster']>>>
+export type GetObjectStorageKeysResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageKeys']>>>
+export type CreateObjectStorageKeysResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createObjectStorageKeys']>>>
+export type GetObjectStorageKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageKey']>>>
+export type UpdateObjectStorageKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateObjectStorageKey']>>>
+export type DeleteObjectStorageKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteObjectStorageKey']>>>
+export type CancelObjectStorageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cancelObjectStorage']>>>
+export type GetObjectStorageSSLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageSSL']>>>
+export type CreateObjectStorageSSLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createObjectStorageSSL']>>>
+export type DeleteObjectStorageSSLResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteObjectStorageSSL']>>>
+export type GetObjectStorageTransferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getObjectStorageTransfer']>>>
+export type GetProfileResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfile']>>>
+export type UpdateProfileResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateProfile']>>>
+export type GetProfileAppsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfileApps']>>>
+export type GetProfileAppResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfileApp']>>>
+export type DeleteProfileAppResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteProfileApp']>>>
+export type GetProfileGrantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfileGrants']>>>
+export type TfaDisableResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['tfaDisable']>>>
+export type TfaEnableResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['tfaEnable']>>>
+export type TfaConfirmResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['tfaConfirm']>>>
+export type GetPersonalAccessTokensResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPersonalAccessTokens']>>>
+export type CreatePersonalAccessTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createPersonalAccessToken']>>>
+export type GetPersonalAccessTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getPersonalAccessToken']>>>
+export type UpdatePersonalAccessTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updatePersonalAccessToken']>>>
+export type DeletePersonalAccessTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deletePersonalAccessToken']>>>
+export type GetProfileLoginsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfileLogins']>>>
+export type GetProfileLoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getProfileLogin']>>>
+export type GetDevicesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getDevices']>>>
+export type GetTrustedDeviceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTrustedDevice']>>>
+export type RevokeTrustedDeviceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['revokeTrustedDevice']>>>
+export type GetSecurityQuestionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getSecurityQuestions']>>>
+export type PostSecurityQuestionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postSecurityQuestions']>>>
+export type GetSSHKeysResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getSSHKeys']>>>
+export type AddSSHKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['addSSHKey']>>>
+export type GetSSHKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getSSHKey']>>>
+export type UpdateSSHKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateSSHKey']>>>
+export type DeleteSSHKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteSSHKey']>>>
+export type DeleteProfilePhoneNumberResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteProfilePhoneNumber']>>>
+export type PostProfilePhoneNumberResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postProfilePhoneNumber']>>>
+export type PostProfilePhoneNumberVerifyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['postProfilePhoneNumberVerify']>>>
+export type GetUserPreferencesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getUserPreferences']>>>
+export type UpdateUserPreferencesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateUserPreferences']>>>
+export type GetRegionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getRegions']>>>
+export type GetRegionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getRegion']>>>
+export type GetRegionAvailabilityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getRegionAvailability']>>>
+export type GetRegionsAvailabilityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getRegionsAvailability']>>>
+export type GetTicketsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTickets']>>>
+export type CreateTicketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createTicket']>>>
+export type GetTicketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTicket']>>>
+export type CreateTicketAttachmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createTicketAttachment']>>>
+export type CloseTicketResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['closeTicket']>>>
+export type GetTicketRepliesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTicketReplies']>>>
+export type CreateTicketReplyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createTicketReply']>>>
+export type GetTagsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTags']>>>
+export type CreateTagResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createTag']>>>
+export type GetTaggedObjectsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getTaggedObjects']>>>
+export type DeleteTagResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteTag']>>>
+export type GetVolumesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getVolumes']>>>
+export type CreateVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['createVolume']>>>
+export type GetVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['getVolume']>>>
+export type UpdateVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['updateVolume']>>>
+export type DeleteVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['deleteVolume']>>>
+export type AttachVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['attachVolume']>>>
+export type CloneVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['cloneVolume']>>>
+export type DetachVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['detachVolume']>>>
+export type ResizeVolumeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getLinodeAPI>['resizeVolume']>>>
