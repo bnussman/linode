@@ -423,7 +423,7 @@ of the Linode API that are documented here with CLI examples.
 Endpoints that do not have CLI examples are currently unavailable through the CLI, but
 can be accessed via other methods such as Shell commands and other third-party applications.
 
- * OpenAPI spec version: 4.167.3
+ * OpenAPI spec version: 4.169.1
  */
 import axios from 'axios'
 import type {
@@ -2547,7 +2547,7 @@ export type GetRegionAvailabilityDefault = {
 /**
  * Compute instance availability information by [Type](/docs/api/linode-types/) and [Region](/docs/api/regions/).
  */
-export type GetRegionAvailability200 = {
+export type GetRegionAvailability200Item = {
   /** Whether the compute instance type is available in the region. */
   available?: boolean;
   /** The compute instance [Type](/docs/api/linode-types/) ID. */
@@ -5798,6 +5798,315 @@ export type GetNodebalancersNodeBalancerIdStats200Data = {
  * An object for describing a single error that occurred during the processing of a request.
 
  */
+export type GetNodeBalancerFirewallsDefaultErrorsItem = {
+  /** The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as "null" if the error is not specific to any single element of the request.
+ */
+  field?: string;
+  /** What happened to cause this error. In most cases, this can be fixed immediately by changing the data you sent in the request, but in some cases you will be instructed to [open a Support Ticket](/docs/api/support/#support-ticket-open) or perform some other action before you can complete the request successfully.
+ */
+  reason?: string;
+};
+
+export type GetNodeBalancerFirewallsDefault = {
+  errors?: GetNodeBalancerFirewallsDefaultErrorsItem[];
+};
+
+export type GetNodeBalancerFirewalls200AllOfTwo = {
+  data?: GetNodeBalancerFirewalls200AllOfTwoDataItem[];
+};
+
+export type GetNodeBalancerFirewalls200 = GetNodeBalancerFirewalls200AllOf & GetNodeBalancerFirewalls200AllOfTwo;
+
+/**
+ * The status of this Firewall.
+
+  * When a Firewall is first created its status is `enabled`.
+  * Use the [Update Firewall](/docs/api/networking/#firewall-update) endpoint to set a Firewall's status to `enabled` or `disabled`.
+  * Use the [Delete Firewall](/docs/api/networking/#firewall-delete) endpoint to delete a Firewall.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemStatus = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemStatus[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemStatus = {
+  enabled: 'enabled',
+  disabled: 'disabled',
+  deleted: 'deleted',
+} as const;
+
+/**
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItem = {
+  /** When this Firewall was created.
+ */
+  readonly created?: string;
+  /** The Firewall's unique ID.
+ */
+  readonly id?: number;
+  /** The Firewall's label, for display purposes only.
+
+Firewall labels have the following constraints:
+
+  * Must begin and end with an alphanumeric character.
+  * May only consist of alphanumeric characters, dashes (`-`), underscores (`_`) or periods (`.`).
+  * Cannot have two dashes (`--`), underscores (`__`) or periods (`..`) in a row.
+  * Must be between 3 and 32 characters.
+  * Must be unique.
+ */
+  label?: string;
+  /** The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+ */
+  rules?: GetNodeBalancerFirewalls200AllOfTwoDataItemRules;
+  /** The status of this Firewall.
+
+  * When a Firewall is first created its status is `enabled`.
+  * Use the [Update Firewall](/docs/api/networking/#firewall-update) endpoint to set a Firewall's status to `enabled` or `disabled`.
+  * Use the [Delete Firewall](/docs/api/networking/#firewall-delete) endpoint to delete a Firewall.
+ */
+  readonly status?: GetNodeBalancerFirewalls200AllOfTwoDataItemStatus;
+  /** An array of tags applied to this object. Tags are for organizational purposes only.
+ */
+  tags?: string[];
+  /** When this Firewall was last updated.
+ */
+  readonly updated?: string;
+};
+
+/**
+ * The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundPolicy = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundPolicy[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundPolicy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundPolicy = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
+
+/**
+ * The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRules = {
+  /** The inbound rules for the firewall, as a JSON array.
+ */
+  inbound?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItem[];
+  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+ */
+  inbound_policy?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundPolicy;
+  /** The outbound rules for the firewall, as a JSON array.
+ */
+  outbound?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItem[];
+  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+ */
+  outbound_policy?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundPolicy;
+};
+
+/**
+ * The type of network traffic affected by this rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemProtocol = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemProtocol[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemProtocol];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemProtocol = {
+  TCP: 'TCP',
+  UDP: 'UDP',
+  ICMP: 'ICMP',
+  IPENCAP: 'IPENCAP',
+} as const;
+
+/**
+ * The IPv4 and/or IPv6 addresses affected by this rule. A Rule can have up to 255 total addresses or networks listed across its IPv4 and IPv6 arrays. A network and a single IP are treated as equivalent when accounting for this limit.
+
+Must contain `ipv4`, `ipv6`, or both.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAddresses = {
+  /** A list of IPv4 addresses or networks. Addresses must be in IP/mask format. Must not be an empty list.
+
+If "0.0.0.0/0" is included in this list, all IPv4 addresses are affected by this rule.
+ */
+  ipv4?: string[];
+  /** A list of IPv6 addresses or networks. Addresses must be in IP/mask format. Must not be an empty list.
+
+If "::/0" is included in this list, all IPv6 addresses are affected by this rule.
+ */
+  ipv6?: string[];
+};
+
+/**
+ * Controls whether traffic is accepted or dropped by this rule. Overrides the Firewall's `inbound_policy` if this is an inbound rule, or the `outbound_policy` if this is an outbound rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAction = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAction[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAction];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAction = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
+
+/**
+ * One of a Firewall's inbound or outbound access rules. The `ports` property can be used to allow traffic on a comma-separated list of different ports.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItem = {
+  /** Controls whether traffic is accepted or dropped by this rule. Overrides the Firewall's `inbound_policy` if this is an inbound rule, or the `outbound_policy` if this is an outbound rule.
+ */
+  action?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAction;
+  /** The IPv4 and/or IPv6 addresses affected by this rule. A Rule can have up to 255 total addresses or networks listed across its IPv4 and IPv6 arrays. A network and a single IP are treated as equivalent when accounting for this limit.
+
+Must contain `ipv4`, `ipv6`, or both.
+ */
+  addresses?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemAddresses;
+  /** Used to describe this rule. For display purposes only.
+ */
+  description?: string;
+  /** Used to identify this rule. For display purposes only.
+ */
+  label?: string;
+  /** A string representing the port or ports affected by this rule:
+
+- The string may be a single port, a range of ports, or a comma-separated list of single ports and port ranges. A space is permitted following each comma.
+- A range of ports is inclusive of the start and end values for the range. The end value of the range must be greater than the start value.
+- Ports must be within 1 and 65535, and may not contain any leading zeroes. For example, port "080" is not allowed.
+- The ports string can have up to 15 *pieces*, where a single port is treated as one piece, and a port range is treated as two pieces. For example, the string "22-24, 80, 443" has four pieces.
+- If no ports are configured, all ports are affected.
+- Only allowed for the TCP and UDP protocols. Ports are not allowed for the ICMP and IPENCAP protocols.
+ */
+  ports?: string | null;
+  /** The type of network traffic affected by this rule.
+ */
+  protocol?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesOutboundItemProtocol;
+};
+
+/**
+ * The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundPolicy = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundPolicy[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundPolicy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundPolicy = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
+
+/**
+ * The type of network traffic affected by this rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemProtocol = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemProtocol[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemProtocol];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemProtocol = {
+  TCP: 'TCP',
+  UDP: 'UDP',
+  ICMP: 'ICMP',
+  IPENCAP: 'IPENCAP',
+} as const;
+
+/**
+ * The IPv4 and/or IPv6 addresses affected by this rule. A Rule can have up to 255 total addresses or networks listed across its IPv4 and IPv6 arrays. A network and a single IP are treated as equivalent when accounting for this limit.
+
+Must contain `ipv4`, `ipv6`, or both.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAddresses = {
+  /** A list of IPv4 addresses or networks. Addresses must be in IP/mask format. Must not be an empty list.
+
+If "0.0.0.0/0" is included in this list, all IPv4 addresses are affected by this rule.
+ */
+  ipv4?: string[];
+  /** A list of IPv6 addresses or networks. Addresses must be in IP/mask format. Must not be an empty list.
+
+If "::/0" is included in this list, all IPv6 addresses are affected by this rule.
+ */
+  ipv6?: string[];
+};
+
+/**
+ * Controls whether traffic is accepted or dropped by this rule. Overrides the Firewall's `inbound_policy` if this is an inbound rule, or the `outbound_policy` if this is an outbound rule.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAction = typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAction[keyof typeof GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAction];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAction = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
+
+/**
+ * One of a Firewall's inbound or outbound access rules. The `ports` property can be used to allow traffic on a comma-separated list of different ports.
+
+ */
+export type GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItem = {
+  /** Controls whether traffic is accepted or dropped by this rule. Overrides the Firewall's `inbound_policy` if this is an inbound rule, or the `outbound_policy` if this is an outbound rule.
+ */
+  action?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAction;
+  /** The IPv4 and/or IPv6 addresses affected by this rule. A Rule can have up to 255 total addresses or networks listed across its IPv4 and IPv6 arrays. A network and a single IP are treated as equivalent when accounting for this limit.
+
+Must contain `ipv4`, `ipv6`, or both.
+ */
+  addresses?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemAddresses;
+  /** Used to describe this rule. For display purposes only.
+ */
+  description?: string;
+  /** Used to identify this rule. For display purposes only.
+ */
+  label?: string;
+  /** A string representing the port or ports affected by this rule:
+
+- The string may be a single port, a range of ports, or a comma-separated list of single ports and port ranges. A space is permitted following each comma.
+- A range of ports is inclusive of the start and end values for the range. The end value of the range must be greater than the start value.
+- Ports must be within 1 and 65535, and may not contain any leading zeroes. For example, port "080" is not allowed.
+- The ports string can have up to 15 *pieces*, where a single port is treated as one piece, and a port range is treated as two pieces. For example, the string "22-24, 80, 443" has four pieces.
+- If no ports are configured, all ports are affected.
+- Only allowed for the TCP and UDP protocols. Ports are not allowed for the ICMP and IPENCAP protocols.
+ */
+  ports?: string | null;
+  /** The type of network traffic affected by this rule.
+ */
+  protocol?: GetNodeBalancerFirewalls200AllOfTwoDataItemRulesInboundItemProtocol;
+};
+
+/**
+ * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
+
+ */
+export type GetNodeBalancerFirewalls200AllOf = {
+  /** The current [page](/docs/api/#pagination). */
+  readonly page?: number;
+  /** The total number of [pages](/docs/api/#pagination). */
+  readonly pages?: number;
+  /** The total number of results. */
+  readonly results?: number;
+};
+
+/**
+ * An object for describing a single error that occurred during the processing of a request.
+
+ */
 export type DeleteNodeBalancerConfigNodeDefaultErrorsItem = {
   /** The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as "null" if the error is not specific to any single element of the request.
  */
@@ -8726,6 +9035,12 @@ export type CreateNodeBalancerBody = {
 Each Config must have a unique port and at least one Node.
  */
   configs?: CreateNodeBalancerBodyConfigsItem[];
+  /** The ID of the Firewall to assign to the NodeBalancer.
+
+* Only one NodeBalancer can be assigned to a Firewall at a time.
+* Firewalls only apply to inbound TCP traffic to NodeBalancers.
+ */
+  firewall_id?: number;
   /** This NodeBalancer's label. These must be unique on your Account.
  */
   label?: string;
@@ -9204,6 +9519,29 @@ export const UpdateFirewallRules200OutboundPolicy = {
 } as const;
 
 /**
+ * The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+
+ */
+export type UpdateFirewallRules200 = {
+  /** The inbound rules for the firewall, as a JSON array.
+ */
+  inbound?: UpdateFirewallRules200InboundItem[];
+  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+ */
+  inbound_policy?: UpdateFirewallRules200InboundPolicy;
+  /** The outbound rules for the firewall, as a JSON array.
+ */
+  outbound?: UpdateFirewallRules200OutboundItem[];
+  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+ */
+  outbound_policy?: UpdateFirewallRules200OutboundPolicy;
+};
+
+/**
  * The type of network traffic affected by this rule.
 
  */
@@ -9296,29 +9634,6 @@ export const UpdateFirewallRules200InboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
-
-/**
- * The inbound and outbound access rules to apply to the Firewall.
-
-A Firewall may have up to 25 rules across its inbound and outbound rulesets.
-
-Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
-
- */
-export type UpdateFirewallRules200 = {
-  /** The inbound rules for the firewall, as a JSON array.
- */
-  inbound?: UpdateFirewallRules200InboundItem[];
-  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
- */
-  inbound_policy?: UpdateFirewallRules200InboundPolicy;
-  /** The outbound rules for the firewall, as a JSON array.
- */
-  outbound?: UpdateFirewallRules200OutboundItem[];
-  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
- */
-  outbound_policy?: UpdateFirewallRules200OutboundPolicy;
-};
 
 /**
  * The type of network traffic affected by this rule.
@@ -9415,6 +9730,34 @@ export const UpdateFirewallRulesBodyAllOfOutboundPolicy = {
 } as const;
 
 /**
+ * The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+
+ */
+export type UpdateFirewallRulesBodyAllOf = {
+  /** The inbound rules for the firewall, as a JSON array.
+ */
+  inbound?: UpdateFirewallRulesBodyAllOfInboundItem[];
+  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+ */
+  inbound_policy?: UpdateFirewallRulesBodyAllOfInboundPolicy;
+  /** The outbound rules for the firewall, as a JSON array.
+ */
+  outbound?: UpdateFirewallRulesBodyAllOfOutboundItem[];
+  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+ */
+  outbound_policy?: UpdateFirewallRulesBodyAllOfOutboundPolicy;
+};
+
+export type UpdateFirewallRulesBody = UpdateFirewallRulesBodyAllOf & {
+  inbound?: unknown;
+  outbound?: unknown;
+};
+
+/**
  * The type of network traffic affected by this rule.
 
  */
@@ -9507,34 +9850,6 @@ export const UpdateFirewallRulesBodyAllOfInboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
-
-/**
- * The inbound and outbound access rules to apply to the Firewall.
-
-A Firewall may have up to 25 rules across its inbound and outbound rulesets.
-
-Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
-
- */
-export type UpdateFirewallRulesBodyAllOf = {
-  /** The inbound rules for the firewall, as a JSON array.
- */
-  inbound?: UpdateFirewallRulesBodyAllOfInboundItem[];
-  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
- */
-  inbound_policy?: UpdateFirewallRulesBodyAllOfInboundPolicy;
-  /** The outbound rules for the firewall, as a JSON array.
- */
-  outbound?: UpdateFirewallRulesBodyAllOfOutboundItem[];
-  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
- */
-  outbound_policy?: UpdateFirewallRulesBodyAllOfOutboundPolicy;
-};
-
-export type UpdateFirewallRulesBody = UpdateFirewallRulesBodyAllOf & {
-  inbound?: unknown;
-  outbound?: unknown;
-};
 
 /**
  * The type of network traffic affected by this rule.
@@ -9890,10 +10205,11 @@ export type GetFirewallDevice200EntityType = typeof GetFirewallDevice200EntityTy
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetFirewallDevice200EntityType = {
   linode: 'linode',
+  nodebalancer: 'nodebalancer',
 } as const;
 
 /**
- * The Linode service that this Firewall has been applied to.
+ * The compute service that this Firewall has been applied to.
 
  */
 export type GetFirewallDevice200Entity = {
@@ -9903,20 +10219,20 @@ export type GetFirewallDevice200Entity = {
   readonly label?: string;
   /** The entity's type. */
   readonly type?: GetFirewallDevice200EntityType;
-  /** The URL you can use to access this entity.
+  /** The API URL path you can use to access this entity.
  */
   readonly url?: string;
 };
 
 /**
- * Associates a Firewall with a Linode service. A Firewall can be assigned to a single Linode service at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
+ * Associates a Firewall with a Linode or NodeBalancer service. A Firewall can be assigned to a single entity at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
 
  */
 export type GetFirewallDevice200 = {
   /** When this Device was created.
  */
   readonly created?: string;
-  /** The Linode service that this Firewall has been applied to.
+  /** The compute service that this Firewall has been applied to.
  */
   readonly entity?: GetFirewallDevice200Entity;
   /** The Device's unique ID
@@ -9945,14 +10261,14 @@ export type CreateFirewallDeviceDefault = {
 };
 
 /**
- * Associates a Firewall with a Linode service. A Firewall can be assigned to a single Linode service at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
+ * Associates a Firewall with a Linode or NodeBalancer service. A Firewall can be assigned to a single entity at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
 
  */
 export type CreateFirewallDevice200 = {
   /** When this Device was created.
  */
   readonly created?: string;
-  /** The Linode service that this Firewall has been applied to.
+  /** The compute service that this Firewall has been applied to.
  */
   readonly entity?: CreateFirewallDevice200Entity;
   /** The Device's unique ID
@@ -9972,10 +10288,11 @@ export type CreateFirewallDevice200EntityType = typeof CreateFirewallDevice200En
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateFirewallDevice200EntityType = {
   linode: 'linode',
+  nodebalancer: 'nodebalancer',
 } as const;
 
 /**
- * The Linode service that this Firewall has been applied to.
+ * The compute service that this Firewall has been applied to.
 
  */
 export type CreateFirewallDevice200Entity = {
@@ -9985,7 +10302,7 @@ export type CreateFirewallDevice200Entity = {
   readonly label?: string;
   /** The entity's type. */
   readonly type?: CreateFirewallDevice200EntityType;
-  /** The URL you can use to access this entity.
+  /** The API URL path you can use to access this entity.
  */
   readonly url?: string;
 };
@@ -9999,10 +10316,11 @@ export type CreateFirewallDeviceBodyAllOfType = typeof CreateFirewallDeviceBodyA
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateFirewallDeviceBodyAllOfType = {
   linode: 'linode',
+  nodebalancer: 'nodebalancer',
 } as const;
 
 /**
- * The Linode service that this Firewall has been applied to.
+ * The compute service that this Firewall has been applied to.
 
  */
 export type CreateFirewallDeviceBodyAllOf = {
@@ -10012,7 +10330,7 @@ export type CreateFirewallDeviceBodyAllOf = {
   readonly label?: string;
   /** The entity's type. */
   readonly type?: CreateFirewallDeviceBodyAllOfType;
-  /** The URL you can use to access this entity.
+  /** The API URL path you can use to access this entity.
  */
   readonly url?: string;
 };
@@ -10035,14 +10353,14 @@ export type GetFirewallDevicesDefault = {
 };
 
 /**
- * Associates a Firewall with a Linode service. A Firewall can be assigned to a single Linode service at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
+ * Associates a Firewall with a Linode or NodeBalancer service. A Firewall can be assigned to a single entity at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
 
  */
 export type GetFirewallDevices200DataItem = {
   /** When this Device was created.
  */
   readonly created?: string;
-  /** The Linode service that this Firewall has been applied to.
+  /** The compute service that this Firewall has been applied to.
  */
   readonly entity?: GetFirewallDevices200DataItemEntity;
   /** The Device's unique ID
@@ -10072,10 +10390,11 @@ export type GetFirewallDevices200DataItemEntityType = typeof GetFirewallDevices2
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetFirewallDevices200DataItemEntityType = {
   linode: 'linode',
+  nodebalancer: 'nodebalancer',
 } as const;
 
 /**
- * The Linode service that this Firewall has been applied to.
+ * The compute service that this Firewall has been applied to.
 
  */
 export type GetFirewallDevices200DataItemEntity = {
@@ -10085,7 +10404,7 @@ export type GetFirewallDevices200DataItemEntity = {
   readonly label?: string;
   /** The entity's type. */
   readonly type?: GetFirewallDevices200DataItemEntityType;
-  /** The URL you can use to access this entity.
+  /** The API URL path you can use to access this entity.
  */
   readonly url?: string;
 };
@@ -10156,7 +10475,7 @@ export const UpdateFirewall200Status = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type UpdateFirewall200 = {
@@ -10485,43 +10804,7 @@ export const GetFirewall200Status = {
 } as const;
 
 /**
- * The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
-
- */
-export type GetFirewall200RulesOutboundPolicy = typeof GetFirewall200RulesOutboundPolicy[keyof typeof GetFirewall200RulesOutboundPolicy];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetFirewall200RulesOutboundPolicy = {
-  ACCEPT: 'ACCEPT',
-  DROP: 'DROP',
-} as const;
-
-/**
- * The inbound and outbound access rules to apply to the Firewall.
-
-A Firewall may have up to 25 rules across its inbound and outbound rulesets.
-
-Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
-
- */
-export type GetFirewall200Rules = {
-  /** The inbound rules for the firewall, as a JSON array.
- */
-  inbound?: GetFirewall200RulesInboundItem[];
-  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
- */
-  inbound_policy?: GetFirewall200RulesInboundPolicy;
-  /** The outbound rules for the firewall, as a JSON array.
- */
-  outbound?: GetFirewall200RulesOutboundItem[];
-  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
- */
-  outbound_policy?: GetFirewall200RulesOutboundPolicy;
-};
-
-/**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type GetFirewall200 = {
@@ -10563,6 +10846,19 @@ Multiple rules are applied in order. If two rules conflict, the first rule takes
  */
   readonly updated?: string;
 };
+
+/**
+ * The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+
+ */
+export type GetFirewall200RulesOutboundPolicy = typeof GetFirewall200RulesOutboundPolicy[keyof typeof GetFirewall200RulesOutboundPolicy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetFirewall200RulesOutboundPolicy = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
 
 /**
  * The type of network traffic affected by this rule.
@@ -10657,6 +10953,29 @@ export const GetFirewall200RulesInboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
+
+/**
+ * The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+
+ */
+export type GetFirewall200Rules = {
+  /** The inbound rules for the firewall, as a JSON array.
+ */
+  inbound?: GetFirewall200RulesInboundItem[];
+  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+ */
+  inbound_policy?: GetFirewall200RulesInboundPolicy;
+  /** The outbound rules for the firewall, as a JSON array.
+ */
+  outbound?: GetFirewall200RulesOutboundItem[];
+  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+ */
+  outbound_policy?: GetFirewall200RulesOutboundPolicy;
+};
 
 /**
  * The type of network traffic affected by this rule.
@@ -10775,7 +11094,7 @@ export const CreateFirewalls200Status = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type CreateFirewalls200 = {
@@ -11037,19 +11356,29 @@ export type CreateFirewallsBodyRules = {
 /**
  * Devices to create for this Firewall.
 When a Device is created, the Firewall is assigned to its associated service.
-Currently, Devices can only be created for Linode instances.
+Currently, Devices can be created for Linode compute instances and NodeBalancers.
+
+Additional devices can be assigned after Firewall creation by using the [Firewall Device Create](#firewall-device-create) command.
 
  */
 export type CreateFirewallsBodyDevices = {
   /** An array of Linode IDs. A Firewall Device is created for each ID.
  */
   linodes?: number[];
+  /** An array containing a NodeBalancer ID. A Firewall Device is created for the ID.
+
+* Only one NodeBalancer can be assigned to a Firewall at a time.
+* Firewalls only apply to inbound TCP traffic to NodeBalancers.
+ */
+  nodebalancers?: number[];
 };
 
 export type CreateFirewallsBody = CreateFirewallsBodyAllOf & {
   /** Devices to create for this Firewall.
 When a Device is created, the Firewall is assigned to its associated service.
-Currently, Devices can only be created for Linode instances.
+Currently, Devices can be created for Linode compute instances and NodeBalancers.
+
+Additional devices can be assigned after Firewall creation by using the [Firewall Device Create](#firewall-device-create) command.
  */
   devices?: CreateFirewallsBodyDevices;
   rules: CreateFirewallsBodyRules;
@@ -11074,7 +11403,7 @@ export const CreateFirewallsBodyAllOfStatus = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type CreateFirewallsBodyAllOf = {
@@ -11374,7 +11703,7 @@ export const GetFirewalls200DataItemStatus = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type GetFirewalls200DataItem = {
@@ -12280,6 +12609,19 @@ export type GetIPs200AllOfTwo = {
 };
 
 /**
+ * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
+
+ */
+export type GetIPs200AllOf = {
+  /** The current [page](/docs/api/#pagination). */
+  readonly page?: number;
+  /** The total number of [pages](/docs/api/#pagination). */
+  readonly pages?: number;
+  /** The total number of results. */
+  readonly results?: number;
+};
+
+/**
  * The response data for the IP Addresses List (GET /networking/ips) command.
  */
 export type GetIPs200 = GetIPs200AllOf & GetIPs200AllOfTwo;
@@ -12331,19 +12673,6 @@ export type GetIPs200AllOfTwoDataItem = {
   /** The type of address this is.
  */
   readonly type?: GetIPs200AllOfTwoDataItemType;
-};
-
-/**
- * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
-
- */
-export type GetIPs200AllOf = {
-  /** The current [page](/docs/api/#pagination). */
-  readonly page?: number;
-  /** The total number of [pages](/docs/api/#pagination). */
-  readonly pages?: number;
-  /** The total number of results. */
-  readonly results?: number;
 };
 
 export type GetIPsBody = {
@@ -15568,32 +15897,6 @@ export type PostLKEClusterPools200NodesItem = {
 };
 
 /**
- * The set of Node Pools which are members of the Kubernetes cluster. Node Pools consist of a Linode type, the number of Linodes to deploy of that type, and additional status information.
-
- */
-export type PostLKEClusterPools200 = {
-  /** When enabled, the number of nodes autoscales within the defined minimum and maximum values.
- */
-  autoscaler?: PostLKEClusterPools200Autoscaler;
-  /** The number of nodes in the Node Pool. */
-  count?: number;
-  /** This Node Pool's custom disk layout.
- */
-  disks?: PostLKEClusterPools200DisksItem[];
-  /** This Node Pool's unique ID.
- */
-  id?: number;
-  /** Status information for the Nodes which are members of this Node Pool. If a Linode has not been provisioned for a given Node slot, the instance_id will be returned as null.
- */
-  nodes?: PostLKEClusterPools200NodesItem[];
-  /** An array of tags applied to this object. Tags are for organizational purposes only.
- */
-  tags?: string[];
-  /** The Linode Type for all of the nodes in the Node Pool. */
-  type?: string;
-};
-
-/**
  * This custom disk partition's filesystem type.
 
  */
@@ -15632,6 +15935,32 @@ export type PostLKEClusterPools200Autoscaler = {
   max?: number;
   /** The minimum number of nodes to autoscale to. Defaults to the Node Pool's `count`. */
   min?: number;
+};
+
+/**
+ * The set of Node Pools which are members of the Kubernetes cluster. Node Pools consist of a Linode type, the number of Linodes to deploy of that type, and additional status information.
+
+ */
+export type PostLKEClusterPools200 = {
+  /** When enabled, the number of nodes autoscales within the defined minimum and maximum values.
+ */
+  autoscaler?: PostLKEClusterPools200Autoscaler;
+  /** The number of nodes in the Node Pool. */
+  count?: number;
+  /** This Node Pool's custom disk layout.
+ */
+  disks?: PostLKEClusterPools200DisksItem[];
+  /** This Node Pool's unique ID.
+ */
+  id?: number;
+  /** Status information for the Nodes which are members of this Node Pool. If a Linode has not been provisioned for a given Node slot, the instance_id will be returned as null.
+ */
+  nodes?: PostLKEClusterPools200NodesItem[];
+  /** An array of tags applied to this object. Tags are for organizational purposes only.
+ */
+  tags?: string[];
+  /** The Linode Type for all of the nodes in the Node Pool. */
+  type?: string;
 };
 
 /**
@@ -16077,16 +16406,6 @@ Labels have the following constraints:
   readonly updated?: string;
 };
 
-/**
- * Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Availability for LKE is an **irreversible** change.
-
- */
-export type CreateLKEClusterBodyControlPlane = {
-  /** Defines whether High Availability is enabled for the Control Plane Components of the cluster. Defaults to `false`.
- */
-  high_availability?: boolean;
-};
-
 export type CreateLKEClusterBody = {
   /** Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Availability for LKE is an **irreversible** change.
  */
@@ -16192,6 +16511,16 @@ partition for each node in this Node Pool.
   tags?: string[];
   /** The Linode Type for all of the nodes in the Node Pool. */
   type?: string;
+};
+
+/**
+ * Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Availability for LKE is an **irreversible** change.
+
+ */
+export type CreateLKEClusterBodyControlPlane = {
+  /** Defines whether High Availability is enabled for the Control Plane Components of the cluster. Defaults to `false`.
+ */
+  high_availability?: boolean;
 };
 
 /**
@@ -18977,7 +19306,7 @@ export const GetLinodeFirewalls200DataItemStatus = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export type GetLinodeFirewalls200DataItem = {
@@ -19029,6 +19358,19 @@ export type GetLinodeFirewalls200DataItemRulesOutboundPolicy = typeof GetLinodeF
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetLinodeFirewalls200DataItemRulesOutboundPolicy = {
+  ACCEPT: 'ACCEPT',
+  DROP: 'DROP',
+} as const;
+
+/**
+ * The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+
+ */
+export type GetLinodeFirewalls200DataItemRulesInboundPolicy = typeof GetLinodeFirewalls200DataItemRulesInboundPolicy[keyof typeof GetLinodeFirewalls200DataItemRulesInboundPolicy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetLinodeFirewalls200DataItemRulesInboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
@@ -19136,19 +19478,6 @@ Must contain `ipv4`, `ipv6`, or both.
  */
   protocol?: GetLinodeFirewalls200DataItemRulesOutboundItemProtocol;
 };
-
-/**
- * The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
-
- */
-export type GetLinodeFirewalls200DataItemRulesInboundPolicy = typeof GetLinodeFirewalls200DataItemRulesInboundPolicy[keyof typeof GetLinodeFirewalls200DataItemRulesInboundPolicy];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetLinodeFirewalls200DataItemRulesInboundPolicy = {
-  ACCEPT: 'ACCEPT',
-  DROP: 'DROP',
-} as const;
 
 /**
  * The type of network traffic affected by this rule.
@@ -20279,6 +20608,72 @@ export const UpdateLinodeConfigBodyRunLevel = {
   binbash: 'binbash',
 } as const;
 
+export type UpdateLinodeConfigBody = {
+  /** Optional field for arbitrary User comments on this Config. */
+  comments?: string | null;
+  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
+* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
+* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
+ */
+  devices?: UpdateLinodeConfigBodyDevices;
+  /** Helpers enabled when booting to this Linode Config. */
+  helpers?: UpdateLinodeConfigBodyHelpers;
+  /** The ID of this Config. */
+  readonly id?: number;
+  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
+
+At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
+
+- First [0]:  eth0
+- Second [1]: eth1
+- Third [2]:  eth2
+
+When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
+
+If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
+
+**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
+
+**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
+If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
+the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
+
+**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
+ */
+  interfaces?: UpdateLinodeConfigBodyInterfacesItem[];
+  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
+
+* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
+* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
+* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
+
+For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
+ */
+  kernel?: string;
+  /** The Config's label is for display purposes only.
+ */
+  label?: string;
+  /** Defaults to the total RAM of the Linode.
+ */
+  memory_limit?: number;
+  /** The root device to boot.
+* If no value or an invalid value is provided, root device will default to `/dev/sda`.
+* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
+ */
+  root_device?: string;
+  /** Defines the state of your Linode after booting. Defaults to `default`.
+ */
+  run_level?: UpdateLinodeConfigBodyRunLevel;
+  /** Controls the virtualization mode. Defaults to `paravirt`.
+* `paravirt` is suitable for most cases. Linodes running in paravirt mode
+  share some qualities with the host, ultimately making it run faster since
+  there is less transition between it and the host.
+* `fullvirt` affords more customization, but is slower because 100% of the VM
+  is virtualized.
+ */
+  virt_mode?: UpdateLinodeConfigBodyVirtMode;
+};
+
 /**
  * The type of interface.
 
@@ -20364,72 +20759,6 @@ export type UpdateLinodeConfigBodyHelpers = {
   network?: boolean;
   /** Disables updatedb cron job to avoid disk thrashing. */
   updatedb_disabled?: boolean;
-};
-
-export type UpdateLinodeConfigBody = {
-  /** Optional field for arbitrary User comments on this Config. */
-  comments?: string | null;
-  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
-* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
-* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
- */
-  devices?: UpdateLinodeConfigBodyDevices;
-  /** Helpers enabled when booting to this Linode Config. */
-  helpers?: UpdateLinodeConfigBodyHelpers;
-  /** The ID of this Config. */
-  readonly id?: number;
-  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
-
-At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
-
-- First [0]:  eth0
-- Second [1]: eth1
-- Third [2]:  eth2
-
-When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
-
-If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
-
-**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
-
-**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
-If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
-the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
-
-**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
- */
-  interfaces?: UpdateLinodeConfigBodyInterfacesItem[];
-  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
-
-* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
-* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
-* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
-
-For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
- */
-  kernel?: string;
-  /** The Config's label is for display purposes only.
- */
-  label?: string;
-  /** Defaults to the total RAM of the Linode.
- */
-  memory_limit?: number;
-  /** The root device to boot.
-* If no value or an invalid value is provided, root device will default to `/dev/sda`.
-* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
- */
-  root_device?: string;
-  /** Defines the state of your Linode after booting. Defaults to `default`.
- */
-  run_level?: UpdateLinodeConfigBodyRunLevel;
-  /** Controls the virtualization mode. Defaults to `paravirt`.
-* `paravirt` is suitable for most cases. Linodes running in paravirt mode
-  share some qualities with the host, ultimately making it run faster since
-  there is less transition between it and the host.
-* `fullvirt` affords more customization, but is slower because 100% of the VM
-  is virtualized.
- */
-  virt_mode?: UpdateLinodeConfigBodyVirtMode;
 };
 
 /**
@@ -20957,72 +21286,6 @@ export const AddLinodeConfig200RunLevel = {
   binbash: 'binbash',
 } as const;
 
-export type AddLinodeConfig200 = {
-  /** Optional field for arbitrary User comments on this Config. */
-  comments?: string | null;
-  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
-* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
-* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
- */
-  devices?: AddLinodeConfig200Devices;
-  /** Helpers enabled when booting to this Linode Config. */
-  helpers?: AddLinodeConfig200Helpers;
-  /** The ID of this Config. */
-  readonly id?: number;
-  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
-
-At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
-
-- First [0]:  eth0
-- Second [1]: eth1
-- Third [2]:  eth2
-
-When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
-
-If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
-
-**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
-
-**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
-If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
-the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
-
-**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
- */
-  interfaces?: AddLinodeConfig200InterfacesItem[];
-  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
-
-* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
-* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
-* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
-
-For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
- */
-  kernel?: string;
-  /** The Config's label is for display purposes only.
- */
-  label?: string;
-  /** Defaults to the total RAM of the Linode.
- */
-  memory_limit?: number;
-  /** The root device to boot.
-* If no value or an invalid value is provided, root device will default to `/dev/sda`.
-* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
- */
-  root_device?: string;
-  /** Defines the state of your Linode after booting. Defaults to `default`.
- */
-  run_level?: AddLinodeConfig200RunLevel;
-  /** Controls the virtualization mode. Defaults to `paravirt`.
-* `paravirt` is suitable for most cases. Linodes running in paravirt mode
-  share some qualities with the host, ultimately making it run faster since
-  there is less transition between it and the host.
-* `fullvirt` affords more customization, but is slower because 100% of the VM
-  is virtualized.
- */
-  virt_mode?: AddLinodeConfig200VirtMode;
-};
-
 /**
  * The type of interface.
 
@@ -21108,6 +21371,72 @@ export type AddLinodeConfig200Helpers = {
   network?: boolean;
   /** Disables updatedb cron job to avoid disk thrashing. */
   updatedb_disabled?: boolean;
+};
+
+export type AddLinodeConfig200 = {
+  /** Optional field for arbitrary User comments on this Config. */
+  comments?: string | null;
+  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
+* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
+* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
+ */
+  devices?: AddLinodeConfig200Devices;
+  /** Helpers enabled when booting to this Linode Config. */
+  helpers?: AddLinodeConfig200Helpers;
+  /** The ID of this Config. */
+  readonly id?: number;
+  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
+
+At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
+
+- First [0]:  eth0
+- Second [1]: eth1
+- Third [2]:  eth2
+
+When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
+
+If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
+
+**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
+
+**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
+If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
+the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
+
+**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
+ */
+  interfaces?: AddLinodeConfig200InterfacesItem[];
+  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
+
+* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
+* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
+* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
+
+For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
+ */
+  kernel?: string;
+  /** The Config's label is for display purposes only.
+ */
+  label?: string;
+  /** Defaults to the total RAM of the Linode.
+ */
+  memory_limit?: number;
+  /** The root device to boot.
+* If no value or an invalid value is provided, root device will default to `/dev/sda`.
+* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
+ */
+  root_device?: string;
+  /** Defines the state of your Linode after booting. Defaults to `default`.
+ */
+  run_level?: AddLinodeConfig200RunLevel;
+  /** Controls the virtualization mode. Defaults to `paravirt`.
+* `paravirt` is suitable for most cases. Linodes running in paravirt mode
+  share some qualities with the host, ultimately making it run faster since
+  there is less transition between it and the host.
+* `fullvirt` affords more customization, but is slower because 100% of the VM
+  is virtualized.
+ */
+  virt_mode?: AddLinodeConfig200VirtMode;
 };
 
 /**
@@ -22531,39 +22860,6 @@ export const CreateSnapshot200Status = {
 } as const;
 
 /**
- * An object representing a Backup or snapshot for a Linode with Backup service enabled.
-
- */
-export type CreateSnapshot200 = {
-  /** Whether this Backup is available for restoration.
-
-Backups undergoing maintenance are not available for restoration.
- */
-  readonly available?: boolean;
-  /** A list of the labels of the Configuration profiles that are part of the Backup.
- */
-  readonly configs?: string[];
-  /** The date the Backup was taken. */
-  readonly created?: string;
-  /** A list of the disks that are part of the Backup.
- */
-  readonly disks?: CreateSnapshot200DisksItem[];
-  /** The date the Backup completed. */
-  readonly finished?: string;
-  /** The unique ID of this Backup. */
-  readonly id?: number;
-  /** A label for Backups that are of type `snapshot`. */
-  label?: string | null;
-  /** The current state of a specific Backup. */
-  readonly status?: CreateSnapshot200Status;
-  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
- */
-  readonly type?: CreateSnapshot200Type;
-  /** The date the Backup was most recently updated. */
-  readonly updated?: string;
-};
-
-/**
  * The Disk filesystem can be one of:
 
   * raw - No filesystem, just a raw binary stream.
@@ -22597,6 +22893,39 @@ export type CreateSnapshot200DisksItem = {
   filesystem?: CreateSnapshot200DisksItemFilesystem;
   label?: string;
   size?: number;
+};
+
+/**
+ * An object representing a Backup or snapshot for a Linode with Backup service enabled.
+
+ */
+export type CreateSnapshot200 = {
+  /** Whether this Backup is available for restoration.
+
+Backups undergoing maintenance are not available for restoration.
+ */
+  readonly available?: boolean;
+  /** A list of the labels of the Configuration profiles that are part of the Backup.
+ */
+  readonly configs?: string[];
+  /** The date the Backup was taken. */
+  readonly created?: string;
+  /** A list of the disks that are part of the Backup.
+ */
+  readonly disks?: CreateSnapshot200DisksItem[];
+  /** The date the Backup completed. */
+  readonly finished?: string;
+  /** The unique ID of this Backup. */
+  readonly id?: number;
+  /** A label for Backups that are of type `snapshot`. */
+  label?: string | null;
+  /** The current state of a specific Backup. */
+  readonly status?: CreateSnapshot200Status;
+  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
+ */
+  readonly type?: CreateSnapshot200Type;
+  /** The date the Backup was most recently updated. */
+  readonly updated?: string;
 };
 
 export type CreateSnapshotBody = {
@@ -22666,6 +22995,39 @@ export const GetBackups200SnapshotInProgressStatus = {
 } as const;
 
 /**
+ * An object representing a Backup or snapshot for a Linode with Backup service enabled.
+
+ */
+export type GetBackups200SnapshotInProgress = {
+  /** Whether this Backup is available for restoration.
+
+Backups undergoing maintenance are not available for restoration.
+ */
+  readonly available?: boolean;
+  /** A list of the labels of the Configuration profiles that are part of the Backup.
+ */
+  readonly configs?: string[];
+  /** The date the Backup was taken. */
+  readonly created?: string;
+  /** A list of the disks that are part of the Backup.
+ */
+  readonly disks?: GetBackups200SnapshotInProgressDisksItem[];
+  /** The date the Backup completed. */
+  readonly finished?: string;
+  /** The unique ID of this Backup. */
+  readonly id?: number;
+  /** A label for Backups that are of type `snapshot`. */
+  label?: string | null;
+  /** The current state of a specific Backup. */
+  readonly status?: GetBackups200SnapshotInProgressStatus;
+  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
+ */
+  readonly type?: GetBackups200SnapshotInProgressType;
+  /** The date the Backup was most recently updated. */
+  readonly updated?: string;
+};
+
+/**
  * The Disk filesystem can be one of:
 
   * raw - No filesystem, just a raw binary stream.
@@ -22699,39 +23061,6 @@ export type GetBackups200SnapshotInProgressDisksItem = {
   filesystem?: GetBackups200SnapshotInProgressDisksItemFilesystem;
   label?: string;
   size?: number;
-};
-
-/**
- * An object representing a Backup or snapshot for a Linode with Backup service enabled.
-
- */
-export type GetBackups200SnapshotInProgress = {
-  /** Whether this Backup is available for restoration.
-
-Backups undergoing maintenance are not available for restoration.
- */
-  readonly available?: boolean;
-  /** A list of the labels of the Configuration profiles that are part of the Backup.
- */
-  readonly configs?: string[];
-  /** The date the Backup was taken. */
-  readonly created?: string;
-  /** A list of the disks that are part of the Backup.
- */
-  readonly disks?: GetBackups200SnapshotInProgressDisksItem[];
-  /** The date the Backup completed. */
-  readonly finished?: string;
-  /** The unique ID of this Backup. */
-  readonly id?: number;
-  /** A label for Backups that are of type `snapshot`. */
-  label?: string | null;
-  /** The current state of a specific Backup. */
-  readonly status?: GetBackups200SnapshotInProgressStatus;
-  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
- */
-  readonly type?: GetBackups200SnapshotInProgressType;
-  /** The date the Backup was most recently updated. */
-  readonly updated?: string;
 };
 
 /**
@@ -22870,6 +23199,39 @@ export const GetBackups200AutomaticItemAllOfStatus = {
 } as const;
 
 /**
+ * An object representing a Backup or snapshot for a Linode with Backup service enabled.
+
+ */
+export type GetBackups200AutomaticItemAllOf = {
+  /** Whether this Backup is available for restoration.
+
+Backups undergoing maintenance are not available for restoration.
+ */
+  readonly available?: boolean;
+  /** A list of the labels of the Configuration profiles that are part of the Backup.
+ */
+  readonly configs?: string[];
+  /** The date the Backup was taken. */
+  readonly created?: string;
+  /** A list of the disks that are part of the Backup.
+ */
+  readonly disks?: GetBackups200AutomaticItemAllOfDisksItem[];
+  /** The date the Backup completed. */
+  readonly finished?: string;
+  /** The unique ID of this Backup. */
+  readonly id?: number;
+  /** A label for Backups that are of type `snapshot`. */
+  label?: string | null;
+  /** The current state of a specific Backup. */
+  readonly status?: GetBackups200AutomaticItemAllOfStatus;
+  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
+ */
+  readonly type?: GetBackups200AutomaticItemAllOfType;
+  /** The date the Backup was most recently updated. */
+  readonly updated?: string;
+};
+
+/**
  * The Disk filesystem can be one of:
 
   * raw - No filesystem, just a raw binary stream.
@@ -22903,39 +23265,6 @@ export type GetBackups200AutomaticItemAllOfDisksItem = {
   filesystem?: GetBackups200AutomaticItemAllOfDisksItemFilesystem;
   label?: string;
   size?: number;
-};
-
-/**
- * An object representing a Backup or snapshot for a Linode with Backup service enabled.
-
- */
-export type GetBackups200AutomaticItemAllOf = {
-  /** Whether this Backup is available for restoration.
-
-Backups undergoing maintenance are not available for restoration.
- */
-  readonly available?: boolean;
-  /** A list of the labels of the Configuration profiles that are part of the Backup.
- */
-  readonly configs?: string[];
-  /** The date the Backup was taken. */
-  readonly created?: string;
-  /** A list of the disks that are part of the Backup.
- */
-  readonly disks?: GetBackups200AutomaticItemAllOfDisksItem[];
-  /** The date the Backup completed. */
-  readonly finished?: string;
-  /** The unique ID of this Backup. */
-  readonly id?: number;
-  /** A label for Backups that are of type `snapshot`. */
-  label?: string | null;
-  /** The current state of a specific Backup. */
-  readonly status?: GetBackups200AutomaticItemAllOfStatus;
-  /** This indicates whether the Backup is an automatic Backup or manual snapshot taken by the User at a specific point in time.
- */
-  readonly type?: GetBackups200AutomaticItemAllOfType;
-  /** The date the Backup was most recently updated. */
-  readonly updated?: string;
 };
 
 /**
@@ -25039,6 +25368,8 @@ The "+order_by" and "+order" operators are not available for [filtering](/docs/a
 };
 
 export type PostImagesUploadBody = {
+  /** Whether the uploaded Image supports cloud-init. */
+  cloud_init?: boolean;
   /** Description for the uploaded Image. */
   description?: string;
   /** Label for the uploaded Image. */
@@ -25157,6 +25488,8 @@ The "+order_by" and "+order" operators are not available for [filtering](/docs/a
 };
 
 export type CreateImageBody = {
+  /** Whether this Image supports cloud-init. */
+  cloud_init?: boolean;
   /** A detailed description of this Image.
  */
   description?: string;
@@ -27742,6 +28075,45 @@ export type PutDatabasesPostgreSQLInstanceDefault = {
 };
 
 /**
+ * The operating status of the Managed Database.
+ */
+export type PutDatabasesPostgreSQLInstance200Status = typeof PutDatabasesPostgreSQLInstance200Status[keyof typeof PutDatabasesPostgreSQLInstance200Status];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PutDatabasesPostgreSQLInstance200Status = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` for a high availability cluster.
+
+ */
+export type PutDatabasesPostgreSQLInstance200ReplicationType = typeof PutDatabasesPostgreSQLInstance200ReplicationType[keyof typeof PutDatabasesPostgreSQLInstance200ReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PutDatabasesPostgreSQLInstance200ReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+} as const;
+
+/**
  * The synchronization level of the replicating server.
 
 Must be `local` or `off` for the `asynch` replication type.
@@ -27842,12 +28214,16 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: PutDatabasesPostgreSQLInstance200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: PutDatabasesPostgreSQLInstance200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -27884,45 +28260,6 @@ export type PutDatabasesPostgreSQLInstance200Updates = {
  */
   week_of_month?: number | null;
 };
-
-/**
- * The operating status of the Managed Database.
- */
-export type PutDatabasesPostgreSQLInstance200Status = typeof PutDatabasesPostgreSQLInstance200Status[keyof typeof PutDatabasesPostgreSQLInstance200Status];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PutDatabasesPostgreSQLInstance200Status = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` for a high availability cluster.
-
- */
-export type PutDatabasesPostgreSQLInstance200ReplicationType = typeof PutDatabasesPostgreSQLInstance200ReplicationType[keyof typeof PutDatabasesPostgreSQLInstance200ReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PutDatabasesPostgreSQLInstance200ReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-} as const;
 
 /**
  * Updated information for the Managed PostgreSQL Database.
@@ -28009,6 +28346,45 @@ export type GetDatabasesPostgreSQLInstanceDefaultErrorsItem = {
 export type GetDatabasesPostgreSQLInstanceDefault = {
   errors?: GetDatabasesPostgreSQLInstanceDefaultErrorsItem[];
 };
+
+/**
+ * The operating status of the Managed Database.
+ */
+export type GetDatabasesPostgreSQLInstance200Status = typeof GetDatabasesPostgreSQLInstance200Status[keyof typeof GetDatabasesPostgreSQLInstance200Status];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesPostgreSQLInstance200Status = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` for a high availability cluster.
+
+ */
+export type GetDatabasesPostgreSQLInstance200ReplicationType = typeof GetDatabasesPostgreSQLInstance200ReplicationType[keyof typeof GetDatabasesPostgreSQLInstance200ReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesPostgreSQLInstance200ReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+} as const;
 
 /**
  * The synchronization level of the replicating server.
@@ -28111,12 +28487,16 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: GetDatabasesPostgreSQLInstance200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: GetDatabasesPostgreSQLInstance200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -28155,45 +28535,6 @@ export type GetDatabasesPostgreSQLInstance200Updates = {
 };
 
 /**
- * The operating status of the Managed Database.
- */
-export type GetDatabasesPostgreSQLInstance200Status = typeof GetDatabasesPostgreSQLInstance200Status[keyof typeof GetDatabasesPostgreSQLInstance200Status];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesPostgreSQLInstance200Status = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` for a high availability cluster.
-
- */
-export type GetDatabasesPostgreSQLInstance200ReplicationType = typeof GetDatabasesPostgreSQLInstance200ReplicationType[keyof typeof GetDatabasesPostgreSQLInstance200ReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesPostgreSQLInstance200ReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-} as const;
-
-/**
  * An object for describing a single error that occurred during the processing of a request.
 
  */
@@ -28209,45 +28550,6 @@ export type PostDatabasesPostgreSQLInstancesDefaultErrorsItem = {
 export type PostDatabasesPostgreSQLInstancesDefault = {
   errors?: PostDatabasesPostgreSQLInstancesDefaultErrorsItem[];
 };
-
-/**
- * The operating status of the Managed Database.
- */
-export type PostDatabasesPostgreSQLInstances200Status = typeof PostDatabasesPostgreSQLInstances200Status[keyof typeof PostDatabasesPostgreSQLInstances200Status];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostDatabasesPostgreSQLInstances200Status = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` for a high availability cluster.
-
- */
-export type PostDatabasesPostgreSQLInstances200ReplicationType = typeof PostDatabasesPostgreSQLInstances200ReplicationType[keyof typeof PostDatabasesPostgreSQLInstances200ReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostDatabasesPostgreSQLInstances200ReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-} as const;
 
 /**
  * The synchronization level of the replicating server.
@@ -28350,12 +28652,16 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: PostDatabasesPostgreSQLInstances200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: PostDatabasesPostgreSQLInstances200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -28392,6 +28698,45 @@ export type PostDatabasesPostgreSQLInstances200Updates = {
  */
   week_of_month?: number | null;
 };
+
+/**
+ * The operating status of the Managed Database.
+ */
+export type PostDatabasesPostgreSQLInstances200Status = typeof PostDatabasesPostgreSQLInstances200Status[keyof typeof PostDatabasesPostgreSQLInstances200Status];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostDatabasesPostgreSQLInstances200Status = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` for a high availability cluster.
+
+ */
+export type PostDatabasesPostgreSQLInstances200ReplicationType = typeof PostDatabasesPostgreSQLInstances200ReplicationType[keyof typeof PostDatabasesPostgreSQLInstances200ReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostDatabasesPostgreSQLInstances200ReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+} as const;
 
 /**
  * The replication method used for the Managed Database.
@@ -28512,45 +28857,6 @@ export type GetDatabasesPostgreSQLInstancesDefault = {
 export type GetDatabasesPostgreSQLInstances200 = GetDatabasesPostgreSQLInstances200AllOf & GetDatabasesPostgreSQLInstances200AllOfTwo;
 
 /**
- * The operating status of the Managed Database.
- */
-export type GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus = typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus[keyof typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` for a high availability cluster.
-
- */
-export type GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType = typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType[keyof typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-} as const;
-
-/**
  * The synchronization level of the replicating server.
 
 Must be `local` or `off` for the `asynch` replication type.
@@ -28651,12 +28957,16 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: GetDatabasesPostgreSQLInstances200AllOfTwoDataItemUpdates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -28697,6 +29007,45 @@ export type GetDatabasesPostgreSQLInstances200AllOfTwoDataItemUpdates = {
  */
   week_of_month?: number | null;
 };
+
+/**
+ * The operating status of the Managed Database.
+ */
+export type GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus = typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus[keyof typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesPostgreSQLInstances200AllOfTwoDataItemStatus = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `asynch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` for a high availability cluster.
+
+ */
+export type GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType = typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType[keyof typeof GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesPostgreSQLInstances200AllOfTwoDataItemReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+} as const;
 
 /**
  * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
@@ -28966,19 +29315,6 @@ export type GetDatabasesMySQLInstanceBackups200AllOfTwo = {
   data?: GetDatabasesMySQLInstanceBackups200AllOfTwoDataItem[];
 };
 
-/**
- * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
-
- */
-export type GetDatabasesMySQLInstanceBackups200AllOf = {
-  /** The current [page](/docs/api/#pagination). */
-  readonly page?: number;
-  /** The total number of [pages](/docs/api/#pagination). */
-  readonly pages?: number;
-  /** The total number of results. */
-  readonly results?: number;
-};
-
 export type GetDatabasesMySQLInstanceBackups200 = GetDatabasesMySQLInstanceBackups200AllOf & GetDatabasesMySQLInstanceBackups200AllOfTwo;
 
 /**
@@ -29008,6 +29344,19 @@ Must include only ASCII letters or numbers.
   label?: string;
   /** The type of database backup, determined by how the backup was created. */
   type?: GetDatabasesMySQLInstanceBackups200AllOfTwoDataItemType;
+};
+
+/**
+ * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
+
+ */
+export type GetDatabasesMySQLInstanceBackups200AllOf = {
+  /** The current [page](/docs/api/#pagination). */
+  readonly page?: number;
+  /** The total number of [pages](/docs/api/#pagination). */
+  readonly pages?: number;
+  /** The total number of results. */
+  readonly results?: number;
 };
 
 export type GetDatabasesMySQLInstanceBackupsParams = {
@@ -29189,12 +29538,16 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: PutDatabasesMySQLInstance200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: PutDatabasesMySQLInstance200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -29286,6 +29639,46 @@ export type GetDatabasesMySQLInstanceDefault = {
 };
 
 /**
+ * The operating status of the Managed Database.
+ */
+export type GetDatabasesMySQLInstance200Status = typeof GetDatabasesMySQLInstance200Status[keyof typeof GetDatabasesMySQLInstance200Status];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesMySQLInstance200Status = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `semi_synch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` or `semi_synch` for a high availability cluster.
+
+ */
+export type GetDatabasesMySQLInstance200ReplicationType = typeof GetDatabasesMySQLInstance200ReplicationType[keyof typeof GetDatabasesMySQLInstance200ReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesMySQLInstance200ReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+  semi_synch: 'semi_synch',
+} as const;
+
+/**
  * The primary and secondary hosts for the Managed Database. These are assigned after provisioning is complete.
  */
 export type GetDatabasesMySQLInstance200Hosts = {
@@ -29363,12 +29756,16 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: GetDatabasesMySQLInstance200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: GetDatabasesMySQLInstance200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -29405,46 +29802,6 @@ export type GetDatabasesMySQLInstance200Updates = {
  */
   week_of_month?: number | null;
 };
-
-/**
- * The operating status of the Managed Database.
- */
-export type GetDatabasesMySQLInstance200Status = typeof GetDatabasesMySQLInstance200Status[keyof typeof GetDatabasesMySQLInstance200Status];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesMySQLInstance200Status = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `semi_synch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` or `semi_synch` for a high availability cluster.
-
- */
-export type GetDatabasesMySQLInstance200ReplicationType = typeof GetDatabasesMySQLInstance200ReplicationType[keyof typeof GetDatabasesMySQLInstance200ReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesMySQLInstance200ReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-  semi_synch: 'semi_synch',
-} as const;
 
 /**
  * An object for describing a single error that occurred during the processing of a request.
@@ -29614,12 +29971,16 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: PostDatabasesMySQLInstances200Status;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: PostDatabasesMySQLInstances200Updates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -29875,12 +30236,16 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: GetDatabasesMySQLInstances200AllOfTwoDataItemStatus;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: GetDatabasesMySQLInstances200AllOfTwoDataItemUpdates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 };
@@ -29927,6 +30292,68 @@ export type GetDatabasesInstancesDefault = {
 };
 
 export type GetDatabasesInstances200 = GetDatabasesInstances200AllOf & GetDatabasesInstances200AllOfTwo;
+
+/**
+ * The operating status of the Managed Database.
+ */
+export type GetDatabasesInstances200AllOfTwoDataItemStatus = typeof GetDatabasesInstances200AllOfTwoDataItemStatus[keyof typeof GetDatabasesInstances200AllOfTwoDataItemStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesInstances200AllOfTwoDataItemStatus = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The primary and secondary hosts for the Managed Database. These are assigned after provisioning is complete.
+ */
+export type GetDatabasesInstances200AllOfTwoDataItemHosts = {
+  /** The primary host for the Managed Database. */
+  readonly primary?: string | null;
+  /** The secondary/private network host for the Managed Database.
+
+A private network host and a private IP can only be used to access a Database Cluster from Linodes in the same data center and will not incur transfer costs.
+
+**Note**: The secondary hostname is publicly viewable and accessible.
+ */
+  readonly secondary?: string | null;
+};
+
+/**
+ * The Managed Database engine type.
+ */
+export type GetDatabasesInstances200AllOfTwoDataItemEngine = typeof GetDatabasesInstances200AllOfTwoDataItemEngine[keyof typeof GetDatabasesInstances200AllOfTwoDataItemEngine];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesInstances200AllOfTwoDataItemEngine = {
+  mysql: 'mysql',
+  postgresql: 'postgresql',
+} as const;
+
+/**
+ * The number of Linode Instance nodes deployed to the Managed Database.
+
+Choosing 3 nodes creates a high availability cluster consisting of 1 primary node and 2 replica nodes.
+
+ */
+export type GetDatabasesInstances200AllOfTwoDataItemClusterSize = typeof GetDatabasesInstances200AllOfTwoDataItemClusterSize[keyof typeof GetDatabasesInstances200AllOfTwoDataItemClusterSize];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetDatabasesInstances200AllOfTwoDataItemClusterSize = {
+  NUMBER_1: 1,
+  NUMBER_3: 3,
+} as const;
 
 /**
  * A general Managed Database instance object containing properties that are identical for all database types.
@@ -30011,68 +30438,6 @@ export type GetDatabasesInstances200AllOfTwoDataItemUpdates = {
 };
 
 /**
- * The operating status of the Managed Database.
- */
-export type GetDatabasesInstances200AllOfTwoDataItemStatus = typeof GetDatabasesInstances200AllOfTwoDataItemStatus[keyof typeof GetDatabasesInstances200AllOfTwoDataItemStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesInstances200AllOfTwoDataItemStatus = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The primary and secondary hosts for the Managed Database. These are assigned after provisioning is complete.
- */
-export type GetDatabasesInstances200AllOfTwoDataItemHosts = {
-  /** The primary host for the Managed Database. */
-  readonly primary?: string | null;
-  /** The secondary/private network host for the Managed Database.
-
-A private network host and a private IP can only be used to access a Database Cluster from Linodes in the same data center and will not incur transfer costs.
-
-**Note**: The secondary hostname is publicly viewable and accessible.
- */
-  readonly secondary?: string | null;
-};
-
-/**
- * The Managed Database engine type.
- */
-export type GetDatabasesInstances200AllOfTwoDataItemEngine = typeof GetDatabasesInstances200AllOfTwoDataItemEngine[keyof typeof GetDatabasesInstances200AllOfTwoDataItemEngine];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesInstances200AllOfTwoDataItemEngine = {
-  mysql: 'mysql',
-  postgresql: 'postgresql',
-} as const;
-
-/**
- * The number of Linode Instance nodes deployed to the Managed Database.
-
-Choosing 3 nodes creates a high availability cluster consisting of 1 primary node and 2 replica nodes.
-
- */
-export type GetDatabasesInstances200AllOfTwoDataItemClusterSize = typeof GetDatabasesInstances200AllOfTwoDataItemClusterSize[keyof typeof GetDatabasesInstances200AllOfTwoDataItemClusterSize];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetDatabasesInstances200AllOfTwoDataItemClusterSize = {
-  NUMBER_1: 1,
-  NUMBER_3: 3,
-} as const;
-
-/**
  * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
 
  */
@@ -30121,6 +30486,10 @@ export type GetDatabasesEngine200 = {
   engine?: string;
   /** The Managed Database engine ID in engine/version format. */
   id?: string;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   version?: string;
 };
@@ -30161,6 +30530,10 @@ export type GetDatabasesEngines200AllOfTwoDataItem = {
   engine?: string;
   /** The Managed Database engine ID in engine/version format. */
   id?: string;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   version?: string;
 };
@@ -30673,6 +31046,36 @@ export type UpdateUserGrantsBodyVolumeItem = {
 };
 
 /**
+ * The level of access this User has to this entity.  If null, this User has no access.
+
+ */
+export type UpdateUserGrantsBodyStackscriptItemPermissions = typeof UpdateUserGrantsBodyStackscriptItemPermissions[keyof typeof UpdateUserGrantsBodyStackscriptItemPermissions];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateUserGrantsBodyStackscriptItemPermissions = {
+  read_only: 'read_only',
+  read_write: 'read_write',
+  null: null,
+} as const;
+
+/**
+ * Represents the level of access a restricted User has to a specific resource on the Account.
+
+ */
+export type UpdateUserGrantsBodyStackscriptItem = {
+  /** The ID of the entity this grant applies to.
+ */
+  id?: number;
+  /** The current label of the entity this grant applies to, for display purposes.
+ */
+  readonly label?: string;
+  /** The level of access this User has to this entity.  If null, this User has no access.
+ */
+  permissions?: UpdateUserGrantsBodyStackscriptItemPermissions;
+};
+
+/**
  * A structure representing all grants a restricted User has on the Account. Not available for unrestricted users, as they have access to everything without grants. If retrieved from the `/profile/grants` endpoint, entities to which a User has no access will be omitted.
 
  */
@@ -30704,36 +31107,6 @@ export type UpdateUserGrantsBody = {
   /** The grants this User has for each Block Storage Volume that is owned by this Account.
  */
   volume?: UpdateUserGrantsBodyVolumeItem[];
-};
-
-/**
- * The level of access this User has to this entity.  If null, this User has no access.
-
- */
-export type UpdateUserGrantsBodyStackscriptItemPermissions = typeof UpdateUserGrantsBodyStackscriptItemPermissions[keyof typeof UpdateUserGrantsBodyStackscriptItemPermissions];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UpdateUserGrantsBodyStackscriptItemPermissions = {
-  read_only: 'read_only',
-  read_write: 'read_write',
-  null: null,
-} as const;
-
-/**
- * Represents the level of access a restricted User has to a specific resource on the Account.
-
- */
-export type UpdateUserGrantsBodyStackscriptItem = {
-  /** The ID of the entity this grant applies to.
- */
-  id?: number;
-  /** The current label of the entity this grant applies to, for display purposes.
- */
-  readonly label?: string;
-  /** The level of access this User has to this entity.  If null, this User has no access.
- */
-  permissions?: UpdateUserGrantsBodyStackscriptItemPermissions;
 };
 
 /**
@@ -33050,32 +33423,6 @@ export const GetPaymentMethods200DataItemType = {
 } as const;
 
 /**
- * Payment Method Response Object.
- */
-export type GetPaymentMethods200DataItem = {
-  /** When the Payment Method was added to the Account. */
-  readonly created?: string;
-  data?: GetPaymentMethods200DataItemData;
-  /** The unique ID of this Payment Method. */
-  id?: number;
-  /** Whether this Payment Method is the default method for automatically processing service charges.
- */
-  is_default?: boolean;
-  /** The type of Payment Method. */
-  type?: GetPaymentMethods200DataItemType;
-};
-
-export type GetPaymentMethods200 = {
-  data?: GetPaymentMethods200DataItem[];
-  /** The current [page](/docs/api/#pagination). */
-  readonly page?: number;
-  /** The total number of [pages](/docs/api/#pagination). */
-  readonly pages?: number;
-  /** The total number of results. */
-  readonly results?: number;
-};
-
-/**
  * PayPal information.
  */
 export type GetPaymentMethods200DataItemDataOneOfThree = {
@@ -33110,6 +33457,32 @@ export type GetPaymentMethods200DataItemDataOneOf = {
 };
 
 export type GetPaymentMethods200DataItemData = GetPaymentMethods200DataItemDataOneOf | GetPaymentMethods200DataItemDataOneOfTwo | GetPaymentMethods200DataItemDataOneOfThree;
+
+/**
+ * Payment Method Response Object.
+ */
+export type GetPaymentMethods200DataItem = {
+  /** When the Payment Method was added to the Account. */
+  readonly created?: string;
+  data?: GetPaymentMethods200DataItemData;
+  /** The unique ID of this Payment Method. */
+  id?: number;
+  /** Whether this Payment Method is the default method for automatically processing service charges.
+ */
+  is_default?: boolean;
+  /** The type of Payment Method. */
+  type?: GetPaymentMethods200DataItemType;
+};
+
+export type GetPaymentMethods200 = {
+  data?: GetPaymentMethods200DataItem[];
+  /** The current [page](/docs/api/#pagination). */
+  readonly page?: number;
+  /** The total number of [pages](/docs/api/#pagination). */
+  readonly pages?: number;
+  /** The total number of results. */
+  readonly results?: number;
+};
 
 export type GetPaymentMethodsParams = {
 /**
@@ -34263,53 +34636,6 @@ export type GetEvent200SecondaryEntity = {
 };
 
 /**
- * A collection of Event objects. An Event is an action taken against an entity related to your Account. For example, booting a Linode would create an Event.
-The Events returned depends on your grants.
-
- */
-export type GetEvent200 = {
-  /** The action that caused this Event. New actions may be added in the future.
- */
-  readonly action?: GetEvent200Action;
-  /** When this Event was created. */
-  readonly created?: string;
-  /** The total duration in seconds that it takes for the Event to complete.
- */
-  readonly duration?: number;
-  /** Detailed information about the Event's entity, including ID, type, label, and URL used to access it.
- */
-  readonly entity?: GetEvent200Entity;
-  /** The unique ID of this Event. */
-  readonly id?: number;
-  /** Provides additional information about the event. Additional information may include, but is not limited to, a more detailed representation of events which can help diagnose non-obvious failures.
- */
-  message?: string | null;
-  /** A percentage estimating the amount of time remaining for an Event.
-Returns `null` for notification events.
- */
-  readonly percent_complete?: number;
-  /** The rate of completion of the Event. Only some Events will return rate; for example, migration and resize Events.
- */
-  readonly rate?: string;
-  /** If this Event has been read. */
-  readonly read?: boolean;
-  /** Detailed information about the Event's secondary entity, which provides additional information
-for events such as, but not limited to, `linode_boot`, `linode_reboot`, `linode_create`, and `linode_clone` Event actions.
- */
-  readonly secondary_entity?: GetEvent200SecondaryEntity;
-  /** If this Event has been seen. */
-  readonly seen?: boolean;
-  /** The current status of this Event. */
-  readonly status?: GetEvent200Status;
-  /** The estimated time remaining until the completion of this Event. This value is only returned for some in-progress migration events. For all other in-progress events, the `percent_complete` attribute will indicate about how much more work is to be done.
- */
-  readonly time_remaining?: string | null;
-  /** The username of the User who caused the Event.
- */
-  readonly username?: string | null;
-};
-
-/**
  * The type of entity that is being referenced by the Event.
 
  */
@@ -34506,6 +34832,53 @@ export const GetEvent200Action = {
   volume_detach: 'volume_detach',
   volume_resize: 'volume_resize',
 } as const;
+
+/**
+ * A collection of Event objects. An Event is an action taken against an entity related to your Account. For example, booting a Linode would create an Event.
+The Events returned depends on your grants.
+
+ */
+export type GetEvent200 = {
+  /** The action that caused this Event. New actions may be added in the future.
+ */
+  readonly action?: GetEvent200Action;
+  /** When this Event was created. */
+  readonly created?: string;
+  /** The total duration in seconds that it takes for the Event to complete.
+ */
+  readonly duration?: number;
+  /** Detailed information about the Event's entity, including ID, type, label, and URL used to access it.
+ */
+  readonly entity?: GetEvent200Entity;
+  /** The unique ID of this Event. */
+  readonly id?: number;
+  /** Provides additional information about the event. Additional information may include, but is not limited to, a more detailed representation of events which can help diagnose non-obvious failures.
+ */
+  message?: string | null;
+  /** A percentage estimating the amount of time remaining for an Event.
+Returns `null` for notification events.
+ */
+  readonly percent_complete?: number;
+  /** The rate of completion of the Event. Only some Events will return rate; for example, migration and resize Events.
+ */
+  readonly rate?: string;
+  /** If this Event has been read. */
+  readonly read?: boolean;
+  /** Detailed information about the Event's secondary entity, which provides additional information
+for events such as, but not limited to, `linode_boot`, `linode_reboot`, `linode_create`, and `linode_clone` Event actions.
+ */
+  readonly secondary_entity?: GetEvent200SecondaryEntity;
+  /** If this Event has been seen. */
+  readonly seen?: boolean;
+  /** The current status of this Event. */
+  readonly status?: GetEvent200Status;
+  /** The estimated time remaining until the completion of this Event. This value is only returned for some in-progress migration events. For all other in-progress events, the `percent_complete` attribute will indicate about how much more work is to be done.
+ */
+  readonly time_remaining?: string | null;
+  /** The username of the User who caused the Event.
+ */
+  readonly username?: string | null;
+};
 
 /**
  * An object for describing a single error that occurred during the processing of a request.
@@ -35420,6 +35793,83 @@ page_size?: number;
  * An object for describing a single error that occurred during the processing of a request.
 
  */
+export type GetAccountAvailabilityDefaultErrorsItem = {
+  /** The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as "null" if the error is not specific to any single element of the request.
+ */
+  field?: string;
+  /** What happened to cause this error. In most cases, this can be fixed immediately by changing the data you sent in the request, but in some cases you will be instructed to [open a Support Ticket](/docs/api/support/#support-ticket-open) or perform some other action before you can complete the request successfully.
+ */
+  reason?: string;
+};
+
+export type GetAccountAvailabilityDefault = {
+  errors?: GetAccountAvailabilityDefaultErrorsItem[];
+};
+
+/**
+ * Account Service Availability object
+ */
+export type GetAccountAvailability200 = {
+  /** Displays the data center represented by a slug.
+ */
+  readonly region?: string;
+  /** A list of strings of unavailable services.
+ */
+  readonly unavailable?: unknown;
+};
+
+/**
+ * An object for describing a single error that occurred during the processing of a request.
+
+ */
+export type GetAvailabilityDefaultErrorsItem = {
+  /** The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as "null" if the error is not specific to any single element of the request.
+ */
+  field?: string;
+  /** What happened to cause this error. In most cases, this can be fixed immediately by changing the data you sent in the request, but in some cases you will be instructed to [open a Support Ticket](/docs/api/support/#support-ticket-open) or perform some other action before you can complete the request successfully.
+ */
+  reason?: string;
+};
+
+export type GetAvailabilityDefault = {
+  errors?: GetAvailabilityDefaultErrorsItem[];
+};
+
+/**
+ * An envelope for paginated response. When accessing a collection through a GET endpoint, the results are wrapped in this envelope which includes metadata about those results. Results are presented within a `data` array. See [Pagination](/docs/api/#pagination) for more information.
+
+ */
+export type GetAvailability200AllOfThree = {
+  /** The current [page](/docs/api/#pagination). */
+  readonly page?: number;
+  /** The total number of [pages](/docs/api/#pagination). */
+  readonly pages?: number;
+  /** The total number of results. */
+  readonly results?: number;
+};
+
+export type GetAvailability200 = GetAvailability200AllOf & GetAvailability200AllOfThree;
+
+/**
+ * Account Service Availability object
+ */
+export type GetAvailability200AllOfDataItem = {
+  /** Displays the data center represented by a slug.
+ */
+  readonly region?: string;
+  /** A list of strings of unavailable services.
+ */
+  readonly unavailable?: unknown;
+};
+
+export type GetAvailability200AllOf = {
+  data?: GetAvailability200AllOfDataItem[];
+};
+
+/**
+ * An object for describing a single error that occurred during the processing of a request.
+
+ */
 export type UpdateAccountDefaultErrorsItem = {
   /** The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as "null" if the error is not specific to any single element of the request.
  */
@@ -35615,68 +36065,6 @@ export const UpdateAccountBodyBillingSource = {
 } as const;
 
 /**
- * The service to which this promotion applies.
-
- */
-export type UpdateAccountBodyActivePromotionsItemServiceType = typeof UpdateAccountBodyActivePromotionsItemServiceType[keyof typeof UpdateAccountBodyActivePromotionsItemServiceType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UpdateAccountBodyActivePromotionsItemServiceType = {
-  all: 'all',
-  backup: 'backup',
-  blockstorage: 'blockstorage',
-  db_mysql: 'db_mysql',
-  ip_v4: 'ip_v4',
-  linode: 'linode',
-  linode_disk: 'linode_disk',
-  linode_memory: 'linode_memory',
-  longview: 'longview',
-  managed: 'managed',
-  nodebalancer: 'nodebalancer',
-  objectstorage: 'objectstorage',
-  transfer_tx: 'transfer_tx',
-} as const;
-
-/**
- * Promotions generally
-offer a set amount of credit that can be used toward your Linode
-services, and the promotion expires after a specified date. As well,
-a monthly cap on the promotional offer is set.
-
-Simply put, a promotion offers a certain amount of credit every
-month, until either the expiration date is passed, or until the total
-promotional credit is used, whichever comes first.
-
- */
-export type UpdateAccountBodyActivePromotionsItem = {
-  /** The amount available to spend per month.
- */
-  readonly credit_monthly_cap?: string;
-  /** The total amount of credit left for this promotion.
- */
-  readonly credit_remaining?: string;
-  /** A detailed description of this promotion.
- */
-  readonly description?: string;
-  /** When this promotion's credits expire.
- */
-  readonly expire_dt?: string;
-  /** The location of an image for this promotion.
- */
-  readonly image_url?: string;
-  /** The service to which this promotion applies.
- */
-  readonly service_type?: UpdateAccountBodyActivePromotionsItemServiceType;
-  /** Short details of this promotion.
- */
-  readonly summary?: string;
-  /** The amount of credit left for this month for this promotion.
- */
-  readonly this_month_credit_remaining?: string;
-};
-
-/**
  * Account object
  */
 export type UpdateAccountBody = {
@@ -35741,6 +36129,68 @@ Must not include any of the following characters: `<` `>` `(` `)` `"` `=`
 - Must not contain more than 9 letter or number characters.
  */
   zip?: string;
+};
+
+/**
+ * The service to which this promotion applies.
+
+ */
+export type UpdateAccountBodyActivePromotionsItemServiceType = typeof UpdateAccountBodyActivePromotionsItemServiceType[keyof typeof UpdateAccountBodyActivePromotionsItemServiceType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateAccountBodyActivePromotionsItemServiceType = {
+  all: 'all',
+  backup: 'backup',
+  blockstorage: 'blockstorage',
+  db_mysql: 'db_mysql',
+  ip_v4: 'ip_v4',
+  linode: 'linode',
+  linode_disk: 'linode_disk',
+  linode_memory: 'linode_memory',
+  longview: 'longview',
+  managed: 'managed',
+  nodebalancer: 'nodebalancer',
+  objectstorage: 'objectstorage',
+  transfer_tx: 'transfer_tx',
+} as const;
+
+/**
+ * Promotions generally
+offer a set amount of credit that can be used toward your Linode
+services, and the promotion expires after a specified date. As well,
+a monthly cap on the promotional offer is set.
+
+Simply put, a promotion offers a certain amount of credit every
+month, until either the expiration date is passed, or until the total
+promotional credit is used, whichever comes first.
+
+ */
+export type UpdateAccountBodyActivePromotionsItem = {
+  /** The amount available to spend per month.
+ */
+  readonly credit_monthly_cap?: string;
+  /** The total amount of credit left for this promotion.
+ */
+  readonly credit_remaining?: string;
+  /** A detailed description of this promotion.
+ */
+  readonly description?: string;
+  /** When this promotion's credits expire.
+ */
+  readonly expire_dt?: string;
+  /** The location of an image for this promotion.
+ */
+  readonly image_url?: string;
+  /** The service to which this promotion applies.
+ */
+  readonly service_type?: UpdateAccountBodyActivePromotionsItemServiceType;
+  /** Short details of this promotion.
+ */
+  readonly summary?: string;
+  /** The amount of credit left for this month for this promotion.
+ */
+  readonly this_month_credit_remaining?: string;
 };
 
 /**
@@ -36298,36 +36748,6 @@ export interface UserDefinedField {
 }
 
 /**
- * The result of the most recent login attempt for this User.
-
- */
-export type UserLastLoginStatus = typeof UserLastLoginStatus[keyof typeof UserLastLoginStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UserLastLoginStatus = {
-  successful: 'successful',
-  failed: 'failed',
-} as const;
-
-/**
- * Information for the most recent login attempt for this User.
-
-`null` if no login attempts have been made since creation of this User.
-
-Access the [User Logins List All](/docs/api/account/#user-logins-list-all) command for additional login information.
-
- */
-export type UserLastLogin = {
-  /** The date and time of this User's most recent login attempt.
- */
-  readonly login_datetime?: string;
-  /** The result of the most recent login attempt for this User.
- */
-  readonly status?: UserLastLoginStatus;
-} | null;
-
-/**
  * A User on your Account. Unrestricted users can log in and access information about your Account, while restricted users may only access entities or perform actions they've been granted access to.
 
  */
@@ -36375,6 +36795,36 @@ field of the following requests:
  */
   readonly verified_phone_number?: string | null;
 }
+
+/**
+ * The result of the most recent login attempt for this User.
+
+ */
+export type UserLastLoginStatus = typeof UserLastLoginStatus[keyof typeof UserLastLoginStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UserLastLoginStatus = {
+  successful: 'successful',
+  failed: 'failed',
+} as const;
+
+/**
+ * Information for the most recent login attempt for this User.
+
+`null` if no login attempts have been made since creation of this User.
+
+Access the [User Logins List All](/docs/api/account/#user-logins-list-all) command for additional login information.
+
+ */
+export type UserLastLogin = {
+  /** The date and time of this User's most recent login attempt.
+ */
+  readonly login_datetime?: string;
+  /** The result of the most recent login attempt for this User.
+ */
+  readonly status?: UserLastLoginStatus;
+} | null;
 
 /**
  * A tag that has been applied to an object on your Account. Tags are currently for organizational purposes only.
@@ -37241,22 +37691,6 @@ export const PaymentMethodType = {
 } as const;
 
 /**
- * Payment Method Response Object.
- */
-export interface PaymentMethod {
-  /** When the Payment Method was added to the Account. */
-  readonly created?: string;
-  data?: PaymentMethodData;
-  /** The unique ID of this Payment Method. */
-  id?: number;
-  /** Whether this Payment Method is the default method for automatically processing service charges.
- */
-  is_default?: boolean;
-  /** The type of Payment Method. */
-  type?: PaymentMethodType;
-}
-
-/**
  * PayPal information.
  */
 export type PaymentMethodDataOneOfThree = {
@@ -37291,6 +37725,22 @@ export type PaymentMethodDataOneOf = {
 };
 
 export type PaymentMethodData = PaymentMethodDataOneOf | PaymentMethodDataOneOfTwo | PaymentMethodDataOneOfThree;
+
+/**
+ * Payment Method Response Object.
+ */
+export interface PaymentMethod {
+  /** When the Payment Method was added to the Account. */
+  readonly created?: string;
+  data?: PaymentMethodData;
+  /** The unique ID of this Payment Method. */
+  id?: number;
+  /** Whether this Payment Method is the default method for automatically processing service charges.
+ */
+  is_default?: boolean;
+  /** The type of Payment Method. */
+  type?: PaymentMethodType;
+}
 
 /**
  * Payment object response.
@@ -37345,27 +37795,6 @@ Line breaks must be represented as "\n" in the string for requests (but not when
 }
 
 /**
- * This Limited Access Key's permissions for the selected bucket.
- */
-export type ObjectStorageKeyBucketAccessItemPermissions = typeof ObjectStorageKeyBucketAccessItemPermissions[keyof typeof ObjectStorageKeyBucketAccessItemPermissions];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ObjectStorageKeyBucketAccessItemPermissions = {
-  read_write: 'read_write',
-  read_only: 'read_only',
-} as const;
-
-export type ObjectStorageKeyBucketAccessItem = {
-  /** The unique label of the bucket to which the key will grant limited access. */
-  bucket_name?: string;
-  /** The Object Storage cluster where a bucket to which the key is granting access is hosted. */
-  cluster?: string;
-  /** This Limited Access Key's permissions for the selected bucket. */
-  permissions?: ObjectStorageKeyBucketAccessItemPermissions;
-};
-
-/**
  * A keypair used to communicate with the Object Storage S3 API.
  */
 export interface ObjectStorageKey {
@@ -37398,6 +37827,27 @@ export interface ObjectStorageKey {
   /** This keypair's secret key. Only returned on key creation. */
   readonly secret_key?: string;
 }
+
+/**
+ * This Limited Access Key's permissions for the selected bucket.
+ */
+export type ObjectStorageKeyBucketAccessItemPermissions = typeof ObjectStorageKeyBucketAccessItemPermissions[keyof typeof ObjectStorageKeyBucketAccessItemPermissions];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ObjectStorageKeyBucketAccessItemPermissions = {
+  read_write: 'read_write',
+  read_only: 'read_only',
+} as const;
+
+export type ObjectStorageKeyBucketAccessItem = {
+  /** The unique label of the bucket to which the key will grant limited access. */
+  bucket_name?: string;
+  /** The Object Storage cluster where a bucket to which the key is granting access is hosted. */
+  cluster?: string;
+  /** This Limited Access Key's permissions for the selected bucket. */
+  permissions?: ObjectStorageKeyBucketAccessItemPermissions;
+};
 
 /**
  * This cluster's status.
@@ -37553,34 +38003,6 @@ export const NotificationSeverity = {
 } as const;
 
 /**
- * An important, often time-sensitive item related to your Account.
-
- */
-export interface Notification {
-  /** A full description of this Notification, in markdown format.  Not all Notifications include bodies.
- */
-  readonly body?: string | null;
-  /** Detailed information about the Notification. */
-  readonly entity?: NotificationEntity;
-  /** A short description of this Notification.
- */
-  readonly label?: string;
-  /** A human-readable description of the Notification. */
-  readonly message?: string;
-  /** The severity of this Notification.  This field can be used to decide how prominently to display the Notification, what color to make the display text, etc.
- */
-  readonly severity?: NotificationSeverity;
-  /** The type of Notification this is. */
-  readonly type?: NotificationType;
-  /** If this Notification has a duration, this will be the ending time for the Event/action. For example, if there is scheduled maintenance for one of our systems, `until` would be set to the end of the maintenance window.
- */
-  readonly until?: string;
-  /** If this Notification is of an Event that will happen at a fixed, future time, this is when the named action will be taken. For example, if a Linode is to be migrated in response to a Security Advisory, this field will contain the approximate time the Linode will be taken offline for migration.
- */
-  readonly when?: string;
-}
-
-/**
  * The type of entity this is related to.
  */
 export type NotificationEntityType = typeof NotificationEntityType[keyof typeof NotificationEntityType];
@@ -37630,6 +38052,47 @@ Returns `null` for the `promotion` entity type.
 };
 
 /**
+ * An important, often time-sensitive item related to your Account.
+
+ */
+export interface Notification {
+  /** A full description of this Notification, in markdown format.  Not all Notifications include bodies.
+ */
+  readonly body?: string | null;
+  /** Detailed information about the Notification. */
+  readonly entity?: NotificationEntity;
+  /** A short description of this Notification.
+ */
+  readonly label?: string;
+  /** A human-readable description of the Notification. */
+  readonly message?: string;
+  /** The severity of this Notification.  This field can be used to decide how prominently to display the Notification, what color to make the display text, etc.
+ */
+  readonly severity?: NotificationSeverity;
+  /** The type of Notification this is. */
+  readonly type?: NotificationType;
+  /** If this Notification has a duration, this will be the ending time for the Event/action. For example, if there is scheduled maintenance for one of our systems, `until` would be set to the end of the maintenance window.
+ */
+  readonly until?: string;
+  /** If this Notification is of an Event that will happen at a fixed, future time, this is when the named action will be taken. For example, if a Linode is to be migrated in response to a Security Advisory, this field will contain the approximate time the Linode will be taken offline for migration.
+ */
+  readonly when?: string;
+}
+
+/**
+ * Stats for this NodeBalancer.
+
+ */
+export interface NodeBalancerStats {
+  /** The data returned about this NodeBalancers.
+ */
+  data?: NodeBalancerStatsData;
+  /** The title for the statistics generated in this response.
+ */
+  title?: string;
+}
+
+/**
  * Traffic statistics for this NodeBalancer.
 
  */
@@ -37654,19 +38117,6 @@ export type NodeBalancerStatsData = {
  */
   traffic?: NodeBalancerStatsDataTraffic;
 };
-
-/**
- * Stats for this NodeBalancer.
-
- */
-export interface NodeBalancerStats {
-  /** The data returned about this NodeBalancers.
- */
-  data?: NodeBalancerStatsData;
-  /** The title for the statistics generated in this response.
- */
-  title?: string;
-}
 
 /**
  * The current status of this node, based on the configured checks of its NodeBalancer Config.
@@ -38161,25 +38611,6 @@ export interface ManagedLinodeSettings {
 }
 
 /**
- * An Issue that was detected with a service Linode is managing.
-
- */
-export interface ManagedIssue {
-  /** When this Issue was created. Issues are created in response to issues detected with Managed Services, so this is also when the Issue was detected.
- */
-  readonly created?: string;
-  /** The ticket this Managed Issue opened.
- */
-  readonly entity?: ManagedIssueEntity;
-  /** This Issue's unique ID.
- */
-  readonly id?: number;
-  /** An array of Managed Service IDs that were affected by this Issue.
- */
-  readonly services?: number[];
-}
-
-/**
  * The type of entity this is. In this case, it is always a Ticket.
 
  */
@@ -38209,6 +38640,25 @@ export type ManagedIssueEntity = {
  */
   readonly url?: string;
 };
+
+/**
+ * An Issue that was detected with a service Linode is managing.
+
+ */
+export interface ManagedIssue {
+  /** When this Issue was created. Issues are created in response to issues detected with Managed Services, so this is also when the Issue was detected.
+ */
+  readonly created?: string;
+  /** The ticket this Managed Issue opened.
+ */
+  readonly entity?: ManagedIssueEntity;
+  /** This Issue's unique ID.
+ */
+  readonly id?: number;
+  /** An array of Managed Service IDs that were affected by this Issue.
+ */
+  readonly services?: number[];
+}
 
 /**
  * A securely-stored Credential that allows Linode's special forces to access a Managed server to respond to Issues.
@@ -38550,32 +39000,6 @@ export interface LKENodeStatus {
 }
 
 /**
- * The set of Node Pools which are members of the Kubernetes cluster. Node Pools consist of a Linode type, the number of Linodes to deploy of that type, and additional status information.
-
- */
-export interface LKENodePool {
-  /** When enabled, the number of nodes autoscales within the defined minimum and maximum values.
- */
-  autoscaler?: LKENodePoolAutoscaler;
-  /** The number of nodes in the Node Pool. */
-  count?: number;
-  /** This Node Pool's custom disk layout.
- */
-  disks?: LKENodePoolDisksItem[];
-  /** This Node Pool's unique ID.
- */
-  id?: number;
-  /** Status information for the Nodes which are members of this Node Pool. If a Linode has not been provisioned for a given Node slot, the instance_id will be returned as null.
- */
-  nodes?: LKENodePoolNodesItem[];
-  /** An array of tags applied to this object. Tags are for organizational purposes only.
- */
-  tags?: string[];
-  /** The Linode Type for all of the nodes in the Node Pool. */
-  type?: string;
-}
-
-/**
  * The Node's status as it pertains to being a Kubernetes node.
 
  */
@@ -38646,30 +39070,24 @@ export type LKENodePoolAutoscaler = {
 };
 
 /**
- * Specifies a collection of Linodes which will be members of a Kubernetes cluster.
+ * The set of Node Pools which are members of the Kubernetes cluster. Node Pools consist of a Linode type, the number of Linodes to deploy of that type, and additional status information.
 
  */
-export interface LKENodePoolRequestBody {
+export interface LKENodePool {
   /** When enabled, the number of nodes autoscales within the defined minimum and maximum values.
-
-When making a request, `max` and `min` require each other.
  */
-  autoscaler?: LKENodePoolRequestBodyAutoscaler;
+  autoscaler?: LKENodePoolAutoscaler;
   /** The number of nodes in the Node Pool. */
   count?: number;
-  /** **Note**: This field should be omitted except for special use cases. The disks specified here are
-partitions in *addition* to the primary partition and reduce the size of the primary partition,
-which can lead to stability problems for the Node.
-
-This Node Pool's custom disk layout. Each item in this array will create a new disk
-partition for each node in this Node Pool.
-
-  * The custom disk layout is applied to each node in this Node Pool.
-  * The maximum number of custom disk partitions that can be configured is 7.
-  * Once the requested disk paritions are allocated, the remaining disk space is allocated to the node's boot disk.
-  * A Node Pool's custom disk layout is immutable over the lifetime of the Node Pool.
+  /** This Node Pool's custom disk layout.
  */
-  disks?: LKENodePoolRequestBodyDisksItem[];
+  disks?: LKENodePoolDisksItem[];
+  /** This Node Pool's unique ID.
+ */
+  id?: number;
+  /** Status information for the Nodes which are members of this Node Pool. If a Linode has not been provisioned for a given Node slot, the instance_id will be returned as null.
+ */
+  nodes?: LKENodePoolNodesItem[];
   /** An array of tags applied to this object. Tags are for organizational purposes only.
  */
   tags?: string[];
@@ -38720,6 +39138,38 @@ export type LKENodePoolRequestBodyAutoscaler = {
   /** The minimum number of nodes to autoscale to. Defaults to the Node Pool's `count`. */
   min?: number;
 };
+
+/**
+ * Specifies a collection of Linodes which will be members of a Kubernetes cluster.
+
+ */
+export interface LKENodePoolRequestBody {
+  /** When enabled, the number of nodes autoscales within the defined minimum and maximum values.
+
+When making a request, `max` and `min` require each other.
+ */
+  autoscaler?: LKENodePoolRequestBodyAutoscaler;
+  /** The number of nodes in the Node Pool. */
+  count?: number;
+  /** **Note**: This field should be omitted except for special use cases. The disks specified here are
+partitions in *addition* to the primary partition and reduce the size of the primary partition,
+which can lead to stability problems for the Node.
+
+This Node Pool's custom disk layout. Each item in this array will create a new disk
+partition for each node in this Node Pool.
+
+  * The custom disk layout is applied to each node in this Node Pool.
+  * The maximum number of custom disk partitions that can be configured is 7.
+  * Once the requested disk paritions are allocated, the remaining disk space is allocated to the node's boot disk.
+  * A Node Pool's custom disk layout is immutable over the lifetime of the Node Pool.
+ */
+  disks?: LKENodePoolRequestBodyDisksItem[];
+  /** An array of tags applied to this object. Tags are for organizational purposes only.
+ */
+  tags?: string[];
+  /** The Linode Type for all of the nodes in the Node Pool. */
+  type?: string;
+}
 
 /**
  * Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Avaialability for LKE is an **irreversible** change.
@@ -38819,16 +39269,6 @@ export const LinodeTypeClass = {
 } as const;
 
 /**
- * A list of optional add-on services for Linodes and their associated costs.
-
- */
-export type LinodeTypeAddons = {
-  /** Information about the optional Backup service offered for Linodes.
- */
-  readonly backups?: LinodeTypeAddonsBackups;
-};
-
-/**
  * Returns collection of Linode types, including pricing and specifications for each type. These are used when [creating](/docs/api/linode-instances/#linode-create) or [resizing](/docs/api/linode-instances/#linode-resize) Linodes.
 
  */
@@ -38917,6 +39357,16 @@ Certain Regions have different prices from the default. For Region-specific pric
  */
   readonly price?: LinodeTypeAddonsBackupsPrice;
   readonly region_prices?: LinodeTypeAddonsBackupsRegionPricesItem[];
+};
+
+/**
+ * A list of optional add-on services for Linodes and their associated costs.
+
+ */
+export type LinodeTypeAddons = {
+  /** Information about the optional Backup service offered for Linodes.
+ */
+  readonly backups?: LinodeTypeAddonsBackups;
 };
 
 /**
@@ -39053,6 +39503,30 @@ This field cannot be used when deploying from a Backup or a Private Image.
 }
 
 /**
+ * An array of Network Interfaces to add to this Linode's Configuration Profile.
+
+At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
+
+- First [0]:  eth0
+- Second [1]: eth1
+- Third [2]:  eth2
+
+When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
+
+If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
+
+**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
+
+**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
+If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
+the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
+
+**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
+
+ */
+export type LinodeConfigInterfaces = LinodeConfigInterfacesItem[];
+
+/**
  * The type of interface.
 
 * `public`
@@ -39121,30 +39595,6 @@ If the VLAN label is new, a VLAN is created. Up to 10 VLANs can be created in ea
  */
   purpose?: LinodeConfigInterfacesItemPurpose;
 };
-
-/**
- * An array of Network Interfaces to add to this Linode's Configuration Profile.
-
-At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
-
-- First [0]:  eth0
-- Second [1]: eth1
-- Third [2]:  eth2
-
-When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
-
-If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
-
-**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
-
-**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
-If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
-the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
-
-**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
-
- */
-export type LinodeConfigInterfaces = LinodeConfigInterfacesItem[];
 
 /**
  * The type of interface.
@@ -39248,72 +39698,6 @@ export const LinodeConfigRunLevel = {
   binbash: 'binbash',
 } as const;
 
-export interface LinodeConfig {
-  /** Optional field for arbitrary User comments on this Config. */
-  comments?: string | null;
-  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
-* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
-* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
- */
-  devices?: LinodeConfigDevices;
-  /** Helpers enabled when booting to this Linode Config. */
-  helpers?: LinodeConfigHelpers;
-  /** The ID of this Config. */
-  readonly id?: number;
-  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
-
-At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
-
-- First [0]:  eth0
-- Second [1]: eth1
-- Third [2]:  eth2
-
-When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
-
-If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
-
-**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
-
-**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
-If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
-the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
-
-**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
- */
-  interfaces?: LinodeConfigInterfacesPropertyItem[];
-  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
-
-* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
-* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
-* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
-
-For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
- */
-  kernel?: string;
-  /** The Config's label is for display purposes only.
- */
-  label?: string;
-  /** Defaults to the total RAM of the Linode.
- */
-  memory_limit?: number;
-  /** The root device to boot.
-* If no value or an invalid value is provided, root device will default to `/dev/sda`.
-* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
- */
-  root_device?: string;
-  /** Defines the state of your Linode after booting. Defaults to `default`.
- */
-  run_level?: LinodeConfigRunLevel;
-  /** Controls the virtualization mode. Defaults to `paravirt`.
-* `paravirt` is suitable for most cases. Linodes running in paravirt mode
-  share some qualities with the host, ultimately making it run faster since
-  there is less transition between it and the host.
-* `fullvirt` affords more customization, but is slower because 100% of the VM
-  is virtualized.
- */
-  virt_mode?: LinodeConfigVirtMode;
-}
-
 /**
  * The type of interface.
 
@@ -39400,6 +39784,72 @@ export type LinodeConfigHelpers = {
   /** Disables updatedb cron job to avoid disk thrashing. */
   updatedb_disabled?: boolean;
 };
+
+export interface LinodeConfig {
+  /** Optional field for arbitrary User comments on this Config. */
+  comments?: string | null;
+  /** A dictionary of device disks to use as a device map in a Linode's configuration profile.
+* An empty device disk dictionary or a dictionary with empty values for device slots is allowed.
+* If no devices are specified, booting from this configuration will hold until a device exists that allows the boot process to start.
+ */
+  devices?: LinodeConfigDevices;
+  /** Helpers enabled when booting to this Linode Config. */
+  helpers?: LinodeConfigHelpers;
+  /** The ID of this Config. */
+  readonly id?: number;
+  /** An array of Network Interfaces to add to this Linode's Configuration Profile.
+
+At least one and up to three interface objects can be entered in this array. The position in the array determines which of the Linode's network interfaces is configured:
+
+- First [0]:  eth0
+- Second [1]: eth1
+- Third [2]:  eth2
+
+When updating a Linode's interfaces, *each interface must be redefined*. An empty interfaces array results in a default public interface configuration only.
+
+If no public interface is configured, public IP addresses are still assigned to the Linode but will not be usable without manual configuration.
+
+**Note:** Changes to Linode interface configurations can be enabled by rebooting the Linode.
+
+**Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the Regions ([/regions](/docs/api/regions/)) endpoint to view the capabilities of data center regions.
+If a VLAN is attached to your Linode and you attempt to migrate or clone it to a non-NGN data center,
+the migration or cloning will not initiate. If a Linode cannot be migrated or cloned because of an incompatibility, you will be prompted to select a different data center or contact support.
+
+**Note:** See the [VLANs Overview](/docs/products/networking/vlans/#technical-specifications) guide to view additional specifications and limitations.
+ */
+  interfaces?: LinodeConfigInterfacesPropertyItem[];
+  /** A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
+
+* `linode/latest-64bit` (default): Our latest kernel at the time of instance boot/reboot.
+* `linode/grub2`: The upstream distribution-supplied kernel that is installed on the primary disk, or a custom kernel if installed.
+* `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root device, used instead of a Linux kernel.
+
+For a complete list of options, use the [Kernels List](/docs/api/linode-instances/#kernels-list) command.
+ */
+  kernel?: string;
+  /** The Config's label is for display purposes only.
+ */
+  label?: string;
+  /** Defaults to the total RAM of the Linode.
+ */
+  memory_limit?: number;
+  /** The root device to boot.
+* If no value or an invalid value is provided, root device will default to `/dev/sda`.
+* If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.
+ */
+  root_device?: string;
+  /** Defines the state of your Linode after booting. Defaults to `default`.
+ */
+  run_level?: LinodeConfigRunLevel;
+  /** Controls the virtualization mode. Defaults to `paravirt`.
+* `paravirt` is suitable for most cases. Linodes running in paravirt mode
+  share some qualities with the host, ultimately making it run faster since
+  there is less transition between it and the host.
+* `fullvirt` affords more customization, but is slower because 100% of the VM
+  is virtualized.
+ */
+  virt_mode?: LinodeConfigVirtMode;
+}
 
 /**
  * Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only one type per slot allowed. Can be null.
@@ -39598,24 +40048,6 @@ export const LinodeHypervisor = {
   kvm: 'kvm',
 } as const;
 
-/**
- * Information about this Linode's backups status. For information about available backups, see [/linode/instances/{linodeId}/backups](/docs/api/linode-instances/#backups-list).
-
- */
-export type LinodeBackups = {
-  /** Whether Backups for this Linode are available for restoration.
-
-Backups undergoing maintenance are not available for restoration.
- */
-  readonly available?: boolean;
-  /** If this Linode has the Backup service enabled. To enable backups, see [POST /linode/instances/{linodeId}/backups/enable](/docs/api/linode-instances/#backups-enable).
- */
-  readonly enabled?: boolean;
-  /** The last successful backup date. 'null' if there was no previous backup. */
-  readonly last_successful?: string;
-  schedule?: LinodeBackupsSchedule;
-};
-
 export interface Linode {
   alerts?: LinodeAlerts;
   /** Information about this Linode's backups status. For information about available backups, see [/linode/instances/{linodeId}/backups](/docs/api/linode-instances/#backups-list).
@@ -39773,6 +40205,24 @@ If not set manually, when backups are initially enabled this
 may come back as `Scheduling` until the `window` is automatically selected.
  */
   window?: LinodeBackupsScheduleWindow;
+};
+
+/**
+ * Information about this Linode's backups status. For information about available backups, see [/linode/instances/{linodeId}/backups](/docs/api/linode-instances/#backups-list).
+
+ */
+export type LinodeBackups = {
+  /** Whether Backups for this Linode are available for restoration.
+
+Backups undergoing maintenance are not available for restoration.
+ */
+  readonly available?: boolean;
+  /** If this Linode has the Backup service enabled. To enable backups, see [POST /linode/instances/{linodeId}/backups/enable](/docs/api/linode-instances/#backups-enable).
+ */
+  readonly enabled?: boolean;
+  /** The last successful backup date. 'null' if there was no previous backup. */
+  readonly last_successful?: string;
+  schedule?: LinodeBackupsSchedule;
 };
 
 export type LinodeAlerts = {
@@ -40015,6 +40465,10 @@ export interface IPAddressesShareRequest {
   linode_id: number;
 }
 
+export type IPAddressesListResponseAllOfTwo = {
+  data?: IPAddressesListResponseAllOfTwoDataItem[];
+};
+
 /**
  * The response data for the IP Addresses List (GET /networking/ips) command.
  */
@@ -40067,10 +40521,6 @@ export type IPAddressesListResponseAllOfTwoDataItem = {
   /** The type of address this is.
  */
   readonly type?: IPAddressesListResponseAllOfTwoDataItemType;
-};
-
-export type IPAddressesListResponseAllOfTwo = {
-  data?: IPAddressesListResponseAllOfTwoDataItem[];
 };
 
 /**
@@ -40340,6 +40790,40 @@ The "+order_by" and "+order" operators are not available for [filtering](/docs/a
 }
 
 /**
+ * A structure representing all grants a restricted User has on the Account. Not available for unrestricted users, as they have access to everything without grants. If retrieved from the `/profile/grants` endpoint, entities to which a User has no access will be omitted.
+
+ */
+export interface GrantsResponse {
+  /** The grants this User has for each Database that is owned by this Account.
+ */
+  database?: GrantsResponseDatabaseItem[];
+  /** The grants this User has for each Domain that is owned by this Account.
+ */
+  domain?: GrantsResponseDomainItem[];
+  /** A structure containing the Account-level grants a User has.
+ */
+  global?: GrantsResponseGlobal;
+  /** The grants this User has for each Image that is owned by this Account.
+ */
+  image?: GrantsResponseImageItem[];
+  /** The grants this User has for each Linode that is owned by this Account.
+ */
+  linode?: GrantsResponseLinodeItem[];
+  /** The grants this User has for each Longview Client that is owned by this Account.
+ */
+  longview?: GrantsResponseLongviewItem[];
+  /** The grants this User has for each NodeBalancer that is owned by this Account.
+ */
+  nodebalancer?: GrantsResponseNodebalancerItem[];
+  /** The grants this User has for each StackScript that is owned by this Account.
+ */
+  stackscript?: GrantsResponseStackscriptItem[];
+  /** The grants this User has for each Block Storage Volume that is owned by this Account.
+ */
+  volume?: GrantsResponseVolumeItem[];
+}
+
+/**
  * The level of access this User has to this entity.  If null, this User has no access.
 
  */
@@ -40398,40 +40882,6 @@ export type GrantsResponseStackscriptItem = {
  */
   permissions?: GrantsResponseStackscriptItemPermissions;
 };
-
-/**
- * A structure representing all grants a restricted User has on the Account. Not available for unrestricted users, as they have access to everything without grants. If retrieved from the `/profile/grants` endpoint, entities to which a User has no access will be omitted.
-
- */
-export interface GrantsResponse {
-  /** The grants this User has for each Database that is owned by this Account.
- */
-  database?: GrantsResponseDatabaseItem[];
-  /** The grants this User has for each Domain that is owned by this Account.
- */
-  domain?: GrantsResponseDomainItem[];
-  /** A structure containing the Account-level grants a User has.
- */
-  global?: GrantsResponseGlobal;
-  /** The grants this User has for each Image that is owned by this Account.
- */
-  image?: GrantsResponseImageItem[];
-  /** The grants this User has for each Linode that is owned by this Account.
- */
-  linode?: GrantsResponseLinodeItem[];
-  /** The grants this User has for each Longview Client that is owned by this Account.
- */
-  longview?: GrantsResponseLongviewItem[];
-  /** The grants this User has for each NodeBalancer that is owned by this Account.
- */
-  nodebalancer?: GrantsResponseNodebalancerItem[];
-  /** The grants this User has for each StackScript that is owned by this Account.
- */
-  stackscript?: GrantsResponseStackscriptItem[];
-  /** The grants this User has for each Block Storage Volume that is owned by this Account.
- */
-  volume?: GrantsResponseVolumeItem[];
-}
 
 /**
  * The level of access this User has to this entity.  If null, this User has no access.
@@ -40690,25 +41140,6 @@ export interface Grant {
 }
 
 /**
- * Associates a Firewall with a Linode service. A Firewall can be assigned to a single Linode service at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
-
- */
-export interface FirewallDevices {
-  /** When this Device was created.
- */
-  readonly created?: string;
-  /** The Linode service that this Firewall has been applied to.
- */
-  readonly entity?: FirewallDevicesEntity;
-  /** The Device's unique ID
- */
-  id?: number;
-  /** When this Device was last updated.
- */
-  readonly updated?: string;
-}
-
-/**
  * The entity's type.
  */
 export type FirewallDevicesEntityType = typeof FirewallDevicesEntityType[keyof typeof FirewallDevicesEntityType];
@@ -40717,10 +41148,11 @@ export type FirewallDevicesEntityType = typeof FirewallDevicesEntityType[keyof t
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FirewallDevicesEntityType = {
   linode: 'linode',
+  nodebalancer: 'nodebalancer',
 } as const;
 
 /**
- * The Linode service that this Firewall has been applied to.
+ * The compute service that this Firewall has been applied to.
 
  */
 export type FirewallDevicesEntity = {
@@ -40730,10 +41162,29 @@ export type FirewallDevicesEntity = {
   readonly label?: string;
   /** The entity's type. */
   readonly type?: FirewallDevicesEntityType;
-  /** The URL you can use to access this entity.
+  /** The API URL path you can use to access this entity.
  */
   readonly url?: string;
 };
+
+/**
+ * Associates a Firewall with a Linode or NodeBalancer service. A Firewall can be assigned to a single entity at a time. Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
+
+ */
+export interface FirewallDevices {
+  /** When this Device was created.
+ */
+  readonly created?: string;
+  /** The compute service that this Firewall has been applied to.
+ */
+  readonly entity?: FirewallDevicesEntity;
+  /** The Device's unique ID
+ */
+  id?: number;
+  /** When this Device was last updated.
+ */
+  readonly updated?: string;
+}
 
 /**
  * The type of network traffic affected by this rule.
@@ -40835,7 +41286,7 @@ export const FirewallStatus = {
 } as const;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode service. Only one Firewall can be attached to a Linode at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute service. Only one enabled Firewall can be attached to a particular service at any given time. [Create a Firewall Device](/docs/api/networking/#firewall-create) to assign a Firewall to a service. Currently, Firewalls can assigned to Linode compute instances and NodeBalancers.
 
  */
 export interface Firewall {
@@ -40890,29 +41341,6 @@ export const FirewallRulesOutboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
-
-/**
- * The inbound and outbound access rules to apply to the Firewall.
-
-A Firewall may have up to 25 rules across its inbound and outbound rulesets.
-
-Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
-
- */
-export type FirewallRules = {
-  /** The inbound rules for the firewall, as a JSON array.
- */
-  inbound?: FirewallRulesInboundItem[];
-  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
- */
-  inbound_policy?: FirewallRulesInboundPolicy;
-  /** The outbound rules for the firewall, as a JSON array.
- */
-  outbound?: FirewallRulesOutboundItem[];
-  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
- */
-  outbound_policy?: FirewallRulesOutboundPolicy;
-};
 
 /**
  * The type of network traffic affected by this rule.
@@ -41007,6 +41435,29 @@ export const FirewallRulesInboundPolicy = {
   ACCEPT: 'ACCEPT',
   DROP: 'DROP',
 } as const;
+
+/**
+ * The inbound and outbound access rules to apply to the Firewall.
+
+A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+
+Multiple rules are applied in order. If two rules conflict, the first rule takes precedence. For example, if the first rule accepts inbound traffic from an address, and the second rule drops inbound traffic the same address, the first rule applies and inbound traffic from that address is accepted.
+
+ */
+export type FirewallRules = {
+  /** The inbound rules for the firewall, as a JSON array.
+ */
+  inbound?: FirewallRulesInboundItem[];
+  /** The default behavior for inbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `inbound.action` property of the Firewall Rule.
+ */
+  inbound_policy?: FirewallRulesInboundPolicy;
+  /** The outbound rules for the firewall, as a JSON array.
+ */
+  outbound?: FirewallRulesOutboundItem[];
+  /** The default behavior for outbound traffic. This setting can be overridden by [updating](/docs/api/networking/#firewall-rules-update) the `outbound.action` property of the Firewall Rule.
+ */
+  outbound_policy?: FirewallRulesOutboundPolicy;
+};
 
 /**
  * The type of network traffic affected by this rule.
@@ -41123,53 +41574,6 @@ export type EventSecondaryEntity = {
  */
   readonly url?: string;
 };
-
-/**
- * A collection of Event objects. An Event is an action taken against an entity related to your Account. For example, booting a Linode would create an Event.
-The Events returned depends on your grants.
-
- */
-export interface Event {
-  /** The action that caused this Event. New actions may be added in the future.
- */
-  readonly action?: EventAction;
-  /** When this Event was created. */
-  readonly created?: string;
-  /** The total duration in seconds that it takes for the Event to complete.
- */
-  readonly duration?: number;
-  /** Detailed information about the Event's entity, including ID, type, label, and URL used to access it.
- */
-  readonly entity?: EventEntity;
-  /** The unique ID of this Event. */
-  readonly id?: number;
-  /** Provides additional information about the event. Additional information may include, but is not limited to, a more detailed representation of events which can help diagnose non-obvious failures.
- */
-  message?: string | null;
-  /** A percentage estimating the amount of time remaining for an Event.
-Returns `null` for notification events.
- */
-  readonly percent_complete?: number;
-  /** The rate of completion of the Event. Only some Events will return rate; for example, migration and resize Events.
- */
-  readonly rate?: string;
-  /** If this Event has been read. */
-  readonly read?: boolean;
-  /** Detailed information about the Event's secondary entity, which provides additional information
-for events such as, but not limited to, `linode_boot`, `linode_reboot`, `linode_create`, and `linode_clone` Event actions.
- */
-  readonly secondary_entity?: EventSecondaryEntity;
-  /** If this Event has been seen. */
-  readonly seen?: boolean;
-  /** The current status of this Event. */
-  readonly status?: EventStatus;
-  /** The estimated time remaining until the completion of this Event. This value is only returned for some in-progress migration events. For all other in-progress events, the `percent_complete` attribute will indicate about how much more work is to be done.
- */
-  readonly time_remaining?: string | null;
-  /** The username of the User who caused the Event.
- */
-  readonly username?: string | null;
-}
 
 /**
  * The type of entity that is being referenced by the Event.
@@ -41368,6 +41772,53 @@ export const EventAction = {
   volume_detach: 'volume_detach',
   volume_resize: 'volume_resize',
 } as const;
+
+/**
+ * A collection of Event objects. An Event is an action taken against an entity related to your Account. For example, booting a Linode would create an Event.
+The Events returned depends on your grants.
+
+ */
+export interface Event {
+  /** The action that caused this Event. New actions may be added in the future.
+ */
+  readonly action?: EventAction;
+  /** When this Event was created. */
+  readonly created?: string;
+  /** The total duration in seconds that it takes for the Event to complete.
+ */
+  readonly duration?: number;
+  /** Detailed information about the Event's entity, including ID, type, label, and URL used to access it.
+ */
+  readonly entity?: EventEntity;
+  /** The unique ID of this Event. */
+  readonly id?: number;
+  /** Provides additional information about the event. Additional information may include, but is not limited to, a more detailed representation of events which can help diagnose non-obvious failures.
+ */
+  message?: string | null;
+  /** A percentage estimating the amount of time remaining for an Event.
+Returns `null` for notification events.
+ */
+  readonly percent_complete?: number;
+  /** The rate of completion of the Event. Only some Events will return rate; for example, migration and resize Events.
+ */
+  readonly rate?: string;
+  /** If this Event has been read. */
+  readonly read?: boolean;
+  /** Detailed information about the Event's secondary entity, which provides additional information
+for events such as, but not limited to, `linode_boot`, `linode_reboot`, `linode_create`, and `linode_clone` Event actions.
+ */
+  readonly secondary_entity?: EventSecondaryEntity;
+  /** If this Event has been seen. */
+  readonly seen?: boolean;
+  /** The current status of this Event. */
+  readonly status?: EventStatus;
+  /** The estimated time remaining until the completion of this Event. This value is only returned for some in-progress migration events. For all other in-progress events, the `percent_complete` attribute will indicate about how much more work is to be done.
+ */
+  readonly time_remaining?: string | null;
+  /** The username of the User who caused the Event.
+ */
+  readonly username?: string | null;
+}
 
 /**
  * An object for describing a single error that occurred during the processing of a request.
@@ -42034,13 +42485,6 @@ export interface DatabaseTypeEngine {
   quantity?: DatabaseTypeEngineQuantity;
 }
 
-export type DatabaseTypeEngines = {
-  /** Pricing details for MySQL Managed Databases. */
-  mysql?: DatabaseTypeEnginesMysqlItem[];
-  /** Pricing details for PostgreSQL Managed Databases. */
-  postgresql?: DatabaseTypeEnginesPostgresqlItem[];
-};
-
 /**
  * Managed Database plan type object.
  */
@@ -42090,6 +42534,13 @@ export type DatabaseTypeEnginesPostgresqlItem = {
   price?: DatabaseTypeEnginesPostgresqlItemPrice;
   /** The number of nodes for the Managed Database cluster for this subscription tier. */
   quantity?: DatabaseTypeEnginesPostgresqlItemQuantity;
+};
+
+export type DatabaseTypeEngines = {
+  /** Pricing details for MySQL Managed Databases. */
+  mysql?: DatabaseTypeEnginesMysqlItem[];
+  /** Pricing details for PostgreSQL Managed Databases. */
+  postgresql?: DatabaseTypeEnginesPostgresqlItem[];
 };
 
 /**
@@ -42228,6 +42679,39 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type: string;
 }
+
+/**
+ * Whether maintenance occurs on a weekly or monthly basis.
+ */
+export type DatabasePostgreSQLUpdatesFrequency = typeof DatabasePostgreSQLUpdatesFrequency[keyof typeof DatabasePostgreSQLUpdatesFrequency];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DatabasePostgreSQLUpdatesFrequency = {
+  weekly: 'weekly',
+  monthly: 'monthly',
+} as const;
+
+/**
+ * Configuration settings for automated patch update maintenance for the Managed Database.
+ */
+export type DatabasePostgreSQLUpdates = {
+  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
+  day_of_week?: number;
+  /** The maximum maintenance window time in hours. */
+  duration?: number;
+  /** Whether maintenance occurs on a weekly or monthly basis. */
+  frequency?: DatabasePostgreSQLUpdatesFrequency;
+  /** The hour to begin maintenance based in UTC time. */
+  hour_of_day?: number;
+  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
+
+* Required for `monthly` frequency updates.
+
+* Must be `null` for `weekly` frequency updates.
+ */
+  week_of_month?: number | null;
+};
 
 /**
  * The operating status of the Managed Database.
@@ -42369,48 +42853,19 @@ Use the **Managed PostgreSQL Database Credentials View** ([GET /databases/postgr
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: DatabasePostgreSQLStatus;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: DatabasePostgreSQLUpdates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 }
-
-/**
- * Whether maintenance occurs on a weekly or monthly basis.
- */
-export type DatabasePostgreSQLUpdatesFrequency = typeof DatabasePostgreSQLUpdatesFrequency[keyof typeof DatabasePostgreSQLUpdatesFrequency];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DatabasePostgreSQLUpdatesFrequency = {
-  weekly: 'weekly',
-  monthly: 'monthly',
-} as const;
-
-/**
- * Configuration settings for automated patch update maintenance for the Managed Database.
- */
-export type DatabasePostgreSQLUpdates = {
-  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
-  day_of_week?: number;
-  /** The maximum maintenance window time in hours. */
-  duration?: number;
-  /** Whether maintenance occurs on a weekly or monthly basis. */
-  frequency?: DatabasePostgreSQLUpdatesFrequency;
-  /** The hour to begin maintenance based in UTC time. */
-  hour_of_day?: number;
-  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
-
-* Required for `monthly` frequency updates.
-
-* Must be `null` for `weekly` frequency updates.
- */
-  week_of_month?: number | null;
-};
 
 /**
  * The replication method used for the Managed Database.
@@ -42490,79 +42945,6 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
 }
 
 /**
- * Whether maintenance occurs on a weekly or monthly basis.
- */
-export type DatabaseMySQLUpdatesFrequency = typeof DatabaseMySQLUpdatesFrequency[keyof typeof DatabaseMySQLUpdatesFrequency];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DatabaseMySQLUpdatesFrequency = {
-  weekly: 'weekly',
-  monthly: 'monthly',
-} as const;
-
-/**
- * Configuration settings for automated patch update maintenance for the Managed Database.
- */
-export type DatabaseMySQLUpdates = {
-  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
-  day_of_week?: number;
-  /** The maximum maintenance window time in hours. */
-  duration?: number;
-  /** Whether maintenance occurs on a weekly or monthly basis. */
-  frequency?: DatabaseMySQLUpdatesFrequency;
-  /** The hour to begin maintenance based in UTC time. */
-  hour_of_day?: number;
-  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
-
-* Required for `monthly` frequency updates.
-
-* Must be `null` for `weekly` frequency updates.
- */
-  week_of_month?: number | null;
-};
-
-/**
- * The operating status of the Managed Database.
- */
-export type DatabaseMySQLStatus = typeof DatabaseMySQLStatus[keyof typeof DatabaseMySQLStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DatabaseMySQLStatus = {
-  provisioning: 'provisioning',
-  active: 'active',
-  suspending: 'suspending',
-  suspended: 'suspended',
-  resuming: 'resuming',
-  restoring: 'restoring',
-  failed: 'failed',
-  degraded: 'degraded',
-  updating: 'updating',
-  backing_up: 'backing_up',
-} as const;
-
-/**
- * The replication method used for the Managed Database.
-
-Defaults to `none` for a single cluster and `semi_synch` for a high availability cluster.
-
-Must be `none` for a single node cluster.
-
-Must be `asynch` or `semi_synch` for a high availability cluster.
-
- */
-export type DatabaseMySQLReplicationType = typeof DatabaseMySQLReplicationType[keyof typeof DatabaseMySQLReplicationType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DatabaseMySQLReplicationType = {
-  none: 'none',
-  asynch: 'asynch',
-  semi_synch: 'semi_synch',
-} as const;
-
-/**
  * The primary and secondary hosts for the Managed Database. These are assigned after provisioning is complete.
  */
 export type DatabaseMySQLHosts = {
@@ -42640,15 +43022,92 @@ Use the **Managed MySQL Database Credentials View** ([GET /databases/mysql/insta
   ssl_connection?: boolean;
   /** The operating status of the Managed Database. */
   readonly status?: DatabaseMySQLStatus;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
   /** The Linode Instance type used by the Managed Database for its nodes. */
   type?: string;
   /** When this Managed Database was last updated. */
   readonly updated?: string;
   /** Configuration settings for automated patch update maintenance for the Managed Database. */
   updates?: DatabaseMySQLUpdates;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   readonly version?: string;
 }
+
+/**
+ * Whether maintenance occurs on a weekly or monthly basis.
+ */
+export type DatabaseMySQLUpdatesFrequency = typeof DatabaseMySQLUpdatesFrequency[keyof typeof DatabaseMySQLUpdatesFrequency];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DatabaseMySQLUpdatesFrequency = {
+  weekly: 'weekly',
+  monthly: 'monthly',
+} as const;
+
+/**
+ * Configuration settings for automated patch update maintenance for the Managed Database.
+ */
+export type DatabaseMySQLUpdates = {
+  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
+  day_of_week?: number;
+  /** The maximum maintenance window time in hours. */
+  duration?: number;
+  /** Whether maintenance occurs on a weekly or monthly basis. */
+  frequency?: DatabaseMySQLUpdatesFrequency;
+  /** The hour to begin maintenance based in UTC time. */
+  hour_of_day?: number;
+  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
+
+* Required for `monthly` frequency updates.
+
+* Must be `null` for `weekly` frequency updates.
+ */
+  week_of_month?: number | null;
+};
+
+/**
+ * The operating status of the Managed Database.
+ */
+export type DatabaseMySQLStatus = typeof DatabaseMySQLStatus[keyof typeof DatabaseMySQLStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DatabaseMySQLStatus = {
+  provisioning: 'provisioning',
+  active: 'active',
+  suspending: 'suspending',
+  suspended: 'suspended',
+  resuming: 'resuming',
+  restoring: 'restoring',
+  failed: 'failed',
+  degraded: 'degraded',
+  updating: 'updating',
+  backing_up: 'backing_up',
+} as const;
+
+/**
+ * The replication method used for the Managed Database.
+
+Defaults to `none` for a single cluster and `semi_synch` for a high availability cluster.
+
+Must be `none` for a single node cluster.
+
+Must be `asynch` or `semi_synch` for a high availability cluster.
+
+ */
+export type DatabaseMySQLReplicationType = typeof DatabaseMySQLReplicationType[keyof typeof DatabaseMySQLReplicationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DatabaseMySQLReplicationType = {
+  none: 'none',
+  asynch: 'asynch',
+  semi_synch: 'semi_synch',
+} as const;
 
 /**
  * Managed Database engine object.
@@ -42658,6 +43117,10 @@ export interface DatabaseEngine {
   engine?: string;
   /** The Managed Database engine ID in engine/version format. */
   id?: string;
+  /** The total disk size of the database in GB. */
+  total_disk_size_gb?: number;
+  /** The used space of the database in GB. */
+  used_disk_size_gb?: number;
   /** The Managed Database engine version. */
   version?: string;
 }
@@ -42730,6 +43193,39 @@ Must include only ASCII letters or numbers.
   /** The type of database backup, determined by how the backup was created. */
   type?: DatabaseBackupType;
 }
+
+/**
+ * Whether maintenance occurs on a weekly or monthly basis.
+ */
+export type DatabaseUpdatesFrequency = typeof DatabaseUpdatesFrequency[keyof typeof DatabaseUpdatesFrequency];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DatabaseUpdatesFrequency = {
+  weekly: 'weekly',
+  monthly: 'monthly',
+} as const;
+
+/**
+ * Configuration settings for automated patch update maintenance for the Managed Database.
+ */
+export type DatabaseUpdates = {
+  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
+  day_of_week?: number;
+  /** The maximum maintenance window time in hours. */
+  duration?: number;
+  /** Whether maintenance occurs on a weekly or monthly basis. */
+  frequency?: DatabaseUpdatesFrequency;
+  /** The hour to begin maintenance based in UTC time. */
+  hour_of_day?: number;
+  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
+
+* Required for `monthly` frequency updates.
+
+* Must be `null` for `weekly` frequency updates.
+ */
+  week_of_month?: number | null;
+};
 
 /**
  * The operating status of the Managed Database.
@@ -42837,39 +43333,6 @@ Choosing 3 nodes creates a high availability cluster consisting of 1 primary nod
   /** The Managed Database engine version. */
   readonly version?: string;
 }
-
-/**
- * Whether maintenance occurs on a weekly or monthly basis.
- */
-export type DatabaseUpdatesFrequency = typeof DatabaseUpdatesFrequency[keyof typeof DatabaseUpdatesFrequency];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DatabaseUpdatesFrequency = {
-  weekly: 'weekly',
-  monthly: 'monthly',
-} as const;
-
-/**
- * Configuration settings for automated patch update maintenance for the Managed Database.
- */
-export type DatabaseUpdates = {
-  /** The day to perform maintenance. 1=Monday, 2=Tuesday, etc. */
-  day_of_week?: number;
-  /** The maximum maintenance window time in hours. */
-  duration?: number;
-  /** Whether maintenance occurs on a weekly or monthly basis. */
-  frequency?: DatabaseUpdatesFrequency;
-  /** The hour to begin maintenance based in UTC time. */
-  hour_of_day?: number;
-  /** The week of the month to perform `monthly` frequency updates. Defaults to `null`.
-
-* Required for `monthly` frequency updates.
-
-* Must be `null` for `weekly` frequency updates.
- */
-  week_of_month?: number | null;
-};
 
 /**
  * An object representing the credit card information you have on file with
@@ -43106,6 +43569,18 @@ export interface AccountSettings {
 }
 
 /**
+ * Account Service Availability object
+ */
+export interface AccountAvailability {
+  /** Displays the data center represented by a slug.
+ */
+  readonly region?: string;
+  /** A list of strings of unavailable services.
+ */
+  readonly unavailable?: unknown;
+}
+
+/**
  * Credit Card information associated with this Account.
  */
 export type AccountCreditCard = {
@@ -43289,6 +43764,38 @@ const updateAccount = <TData = AxiosResponse<UpdateAccount200>>(
     return axios.put(
       `/account`,
       updateAccountBody,options
+    );
+  }
+
+/**
+ * Returns service unavailability for all available regions.
+
+Only authorized Users can access this endpoint.
+
+*This endpoint is currently in **Beta**, and should not be used for production workloads.*
+
+ * @summary Account Availability
+ */
+const getAvailability = <TData = AxiosResponse<GetAvailability200>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/account/availability`,options
+    );
+  }
+
+/**
+ * Returns a single region's service availability.
+
+Only authorized Users can access this.
+
+ * @summary Region Service Availability
+ */
+const getAccountAvailability = <TData = AxiosResponse<GetAccountAvailability200>>(
+    id: string, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/account/availability/${id}`,options
     );
   }
 
@@ -45841,7 +46348,7 @@ const resizeDisk = <TData = AxiosResponse<ResizeDisk200>>(
   }
 
 /**
- * View Firewall information for Firewalls associated with this Linode.
+ * View Firewall information for Firewalls assigned to this Linode.
 
  * @summary Firewalls List
  */
@@ -47501,11 +48008,11 @@ const getFirewalls = <TData = AxiosResponse<GetFirewalls200>>(
 * Use the `rules` property to create inbound and outbound access rules.
 
 * Use the `devices` property to assign the Firewall to a service and apply its Rules to the device. Requires `read_write` [User's Grants](/docs/api/account/#users-grants-view) to the device.
-Currently, Firewalls can only be assigned to Linode instances.
+Currently, Firewalls can be assigned to Linode compute instances and NodeBalancers.
 
-* A Firewall can be assigned to multiple Linode instances at a time.
+* A Firewall can be assigned to multiple services at a time.
 
-* A Linode instance can have one active, assigned Firewall at a time.
+* A service can have one active, assigned Firewall at a time.
 Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
 
 * Firewalls apply to all of a Linode's non-`vlan` purpose Configuration Profile Interfaces.
@@ -47555,7 +48062,7 @@ be manipulated by this endpoint:
 - A Firewall's Devices cannot be set with this endpoint. Instead, use the
 [Create Firewall Device](/docs/api/networking/#firewall-device-create)
 and [Delete Firewall Device](/docs/api/networking/#firewall-device-delete)
-endpoints to assign and remove this Firewall from Linode services.
+endpoints to assign and remove this Firewall from services.
 
 - A Firewall's Rules cannot be changed with this endpoint. Instead, use the
 [Update Firewall Rules](/docs/api/networking/#firewall-rules-update)
@@ -47579,8 +48086,8 @@ const updateFirewall = <TData = AxiosResponse<UpdateFirewall200>>(
   }
 
 /**
- * Delete a Firewall resource by its ID. This will remove all of the Firewall's Rules
-from any Linode services that the Firewall was assigned to.
+ * Delete a Firewall resource by its ID. This removes all of the Firewall's Rules
+from any services that the Firewall was assigned to.
 
 * Assigned Linodes must not have any ongoing live migrations.
 
@@ -47597,9 +48104,7 @@ const deleteFirewall = <TData = AxiosResponse<DeleteFirewall200>>(
   }
 
 /**
- * Returns a paginated list of a Firewall's Devices. A Firewall Device assigns a
-Firewall to a Linode service (referred to as the Device's `entity`). Currently,
-only Devices with an entity of type `linode` are accepted.
+ * Returns a paginated list of a Firewall's Devices. A Firewall Device assigns a Firewall to a service (referred to as the Device's `entity`).
 
  * @summary Firewall Devices List
  */
@@ -47618,11 +48123,13 @@ const getFirewallDevices = <TData = AxiosResponse<GetFirewallDevices200>>(
  * Creates a Firewall Device, which assigns a Firewall to a service (referred to
 as the Device's `entity`) and applies the Firewall's Rules to the device.
 
-* Currently, only Devices with an entity of type `linode` are accepted.
+* Currently, Devices with `linode` and `nodebalancer` entity types are accepted.
 
-* A Firewall can be assigned to multiple Linode instances at a time.
+* Firewalls only apply to inbound TCP traffic to NodeBalancers.
 
-* A Linode instance can have one active, assigned Firewall at a time.
+* A Firewall can be assigned to multiple services at a time.
+
+* A service can have one active, assigned Firewall at a time.
 Additional disabled Firewalls can be assigned to a service, but they cannot be enabled if another active Firewall is already assigned to the same service.
 
 * Assigned Linodes must not have any ongoing live migrations.
@@ -47643,8 +48150,7 @@ const createFirewallDevice = <TData = AxiosResponse<CreateFirewallDevice200>>(
 
 /**
  * Returns information for a Firewall Device, which assigns a Firewall
-to a Linode service (referred to as the Device's `entity`). Currently,
-only Devices with an entity of type `linode` are accepted.
+to a service (referred to as the Device's `entity`).
 
  * @summary Firewall Device View
  */
@@ -47658,10 +48164,10 @@ const getFirewallDevice = <TData = AxiosResponse<GetFirewallDevice200>>(
   }
 
 /**
- * Removes a Firewall Device, which removes a Firewall from the Linode service it was
-assigned to by the Device. This will remove all of the Firewall's Rules from the Linode
-service. If any other Firewalls have been assigned to the Linode service, then those Rules
-will remain in effect.
+ * Removes a Firewall Device, which removes a Firewall from the service it was
+assigned to by the Device. This removes all of the Firewall's Rules from the
+service. If any other Firewalls have been assigned to the service, then those Rules
+remain in effect.
 
 * Assigned Linodes must not have any ongoing live migrations.
 
@@ -48002,6 +48508,19 @@ const deleteNodeBalancerConfigNode = <TData = AxiosResponse<DeleteNodeBalancerCo
  ): Promise<TData> => {
     return axios.delete(
       `/nodebalancers/${nodeBalancerId}/configs/${configId}/nodes/${nodeId}`,options
+    );
+  }
+
+/**
+ * View information for Firewalls assigned to this NodeBalancer.
+
+ * @summary Firewalls List
+ */
+const getNodeBalancerFirewalls = <TData = AxiosResponse<GetNodeBalancerFirewalls200>>(
+    nodeBalancerId: number, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/nodebalancers/${nodeBalancerId}/firewalls`,options
     );
   }
 
@@ -48925,7 +49444,7 @@ const getRegion = <TData = AxiosResponse<GetRegion200>>(
 
  * @summary Region Availability View
  */
-const getRegionAvailability = <TData = AxiosResponse<GetRegionAvailability200>>(
+const getRegionAvailability = <TData = AxiosResponse<GetRegionAvailability200Item[]>>(
     regionId: string, options?: AxiosRequestConfig
  ): Promise<TData> => {
     return axios.get(
@@ -49275,9 +49794,11 @@ const resizeVolume = <TData = AxiosResponse<ResizeVolume200>>(
     );
   }
 
-return {getAccount,updateAccount,getEnrolledBetaPrograms,enrollBetaProgram,getEnrolledBetaProgram,cancelAccount,createCreditCard,getEntityTransfers,createEntityTransfer,getEntityTransfer,deleteEntityTransfer,acceptEntityTransfer,getEvents,getEvent,eventRead,eventSeen,getInvoices,getInvoice,getInvoiceItems,getAccountLogins,getAccountLogin,getMaintenance,getNotifications,getClients,createClient,getClient,updateClient,deleteClient,resetClientSecret,getClientThumbnail,setClientThumbnail,getPaymentMethods,createPaymentMethod,getPaymentMethod,deletePaymentMethod,makePaymentMethodDefault,getPayments,createPayment,getPayment,createPayPalPayment,executePayPalPayment,createPromoCredit,getServiceTransfers,createServiceTransfer,getServiceTransfer,deleteServiceTransfer,acceptServiceTransfer,getAccountSettings,updateAccountSettings,enableAccountManaged,getTransfer,getUsers,createUser,getUser,updateUser,deleteUser,getUserGrants,updateUserGrants,getBetaPrograms,getBetaProgram,getDatabasesEngines,getDatabasesEngine,getDatabasesInstances,getDatabasesMySQLInstances,postDatabasesMySQLInstances,getDatabasesMySQLInstance,deleteDatabasesMySQLInstance,putDatabasesMySQLInstance,getDatabasesMySQLInstanceBackups,postDatabasesMySQLInstanceBackup,getDatabasesMySQLInstanceBackup,deleteDatabaseMySQLInstanceBackup,postDatabasesMySQLInstanceBackupRestore,getDatabasesMySQLInstanceCredentials,postDatabasesMySQLInstanceCredentialsReset,getDatabasesMySQLInstanceSSL,postDatabasesMySQLInstancePatch,getDatabasesPostgreSQLInstances,postDatabasesPostgreSQLInstances,getDatabasesPostgreSQLInstance,deleteDatabasesPostgreSQLInstance,putDatabasesPostgreSQLInstance,getDatabasesPostgreSQLInstanceBackups,postDatabasesPostgreSQLInstanceBackup,getDatabasesPostgreSQLInstanceBackup,deleteDatabasePostgreSQLInstanceBackup,postDatabasesPostgreSQLInstanceBackupRestore,getDatabasesPostgreSQLInstanceCredentials,postDatabasesPostgreSQLInstanceCredentialsReset,getDatabasesPostgreSQLInstanceSSL,postDatabasesPostgreSQLInstancePatch,getDatabasesTypes,getDatabasesType,getDomains,createDomain,getDomain,updateDomain,deleteDomain,getDomainZone,importDomain,cloneDomain,getDomainRecords,createDomainRecord,getDomainRecord,updateDomainRecord,deleteDomainRecord,getImages,createImage,postImagesUpload,getImage,updateImage,deleteImage,getLinodeInstances,createLinodeInstance,getLinodeInstance,updateLinodeInstance,deleteLinodeInstance,getBackups,createSnapshot,cancelBackups,enableBackups,getBackup,restoreBackup,bootLinodeInstance,cloneLinodeInstance,getLinodeConfigs,addLinodeConfig,getLinodeConfig,updateLinodeConfig,deleteLinodeConfig,getLinodeDisks,addLinodeDisk,getLinodeDisk,updateDisk,deleteDisk,cloneLinodeDisk,resetDiskPassword,resizeDisk,getLinodeFirewalls,getLinodeIPs,addLinodeIP,getLinodeIP,updateLinodeIP,removeLinodeIP,getKernels,getKernel,migrateLinodeInstance,mutateLinodeInstance,getLinodeNodeBalancers,resetLinodePassword,rebootLinodeInstance,rebuildLinodeInstance,rescueLinodeInstance,resizeLinodeInstance,shutdownLinodeInstance,getLinodeTransfer,getLinodeTransferByYearMonth,getLinodeStats,getLinodeStatsByYearMonth,getLinodeVolumes,getStackScripts,addStackScript,getStackScript,updateStackScript,deleteStackScript,getLinodeTypes,getLinodeType,getLKEClusters,createLKECluster,getLKECluster,putLKECluster,deleteLKECluster,getLKEClusterPools,postLKEClusterPools,postLKEClusterRecycle,getLKENodePool,putLKENodePool,deleteLKENodePool,postLKEClusterPoolRecycle,getLKEClusterNode,deleteLKEClusterNode,postLKEClusterNodeRecycle,getLKEClusterAPIEndpoints,getLKEClusterDashboard,getLKEClusterKubeconfig,deleteLKEClusterKubeconfig,postLKEClusterRegenerate,postLKECServiceTokenDelete,getLKEVersions,getLKEVersion,getLongviewClients,createLongviewClient,getLongviewClient,updateLongviewClient,deleteLongviewClient,getLongviewPlan,updateLongviewPlan,getLongviewSubscriptions,getLongviewSubscription,getManagedContacts,createManagedContact,getManagedContact,updateManagedContact,deleteManagedContact,getManagedCredentials,createManagedCredential,getManagedCredential,updateManagedCredential,updateManagedCredentialUsernamePassword,deleteManagedCredential,viewManagedSSHKey,getManagedIssues,getManagedIssue,getManagedLinodeSettings,getManagedLinodeSetting,updateManagedLinodeSetting,getManagedServices,createManagedService,getManagedService,updateManagedService,deleteManagedService,disableManagedService,enableManagedService,getManagedStats,getIPs,allocateIP,getIP,updateIP,assignIPs,shareIPs,assignIPv4s,shareIPv4s,getIPv6Pools,getIPv6Ranges,postIPv6Range,getIPv6Range,deleteIPv6Range,getFirewalls,createFirewalls,getFirewall,updateFirewall,deleteFirewall,getFirewallDevices,createFirewallDevice,getFirewallDevice,deleteFirewallDevice,getFirewallRules,updateFirewallRules,getVLANs,getNodeBalancers,createNodeBalancer,getNodeBalancer,updateNodeBalancer,deleteNodeBalancer,getNodeBalancerConfigs,createNodeBalancerConfig,getNodeBalancerConfig,updateNodeBalancerConfig,deleteNodeBalancerConfig,rebuildNodeBalancerConfig,getNodeBalancerConfigNodes,createNodeBalancerNode,getNodeBalancerNode,updateNodeBalancerNode,deleteNodeBalancerConfigNode,getNodebalancersNodeBalancerIdStats,getObjectStorageBuckets,createObjectStorageBucket,getObjectStorageBucket,deleteObjectStorageBucket,getObjectStorageBucketinCluster,modifyObjectStorageBucketAccess,updateObjectStorageBucketAccess,viewObjectStorageBucketACL,updateObjectStorageBucketACL,getObjectStorageBucketContent,createObjectStorageObjectURL,getObjectStorageClusters,getObjectStorageCluster,getObjectStorageKeys,createObjectStorageKeys,getObjectStorageKey,updateObjectStorageKey,deleteObjectStorageKey,cancelObjectStorage,getObjectStorageSSL,createObjectStorageSSL,deleteObjectStorageSSL,getObjectStorageTransfer,getProfile,updateProfile,getProfileApps,getProfileApp,deleteProfileApp,getProfileGrants,tfaDisable,tfaEnable,tfaConfirm,getPersonalAccessTokens,createPersonalAccessToken,getPersonalAccessToken,updatePersonalAccessToken,deletePersonalAccessToken,getProfileLogins,getProfileLogin,getDevices,getTrustedDevice,revokeTrustedDevice,getSecurityQuestions,postSecurityQuestions,getSSHKeys,addSSHKey,getSSHKey,updateSSHKey,deleteSSHKey,deleteProfilePhoneNumber,postProfilePhoneNumber,postProfilePhoneNumberVerify,getUserPreferences,updateUserPreferences,getRegions,getRegion,getRegionAvailability,getRegionsAvailability,getTickets,createTicket,getTicket,createTicketAttachment,closeTicket,getTicketReplies,createTicketReply,getTags,createTag,getTaggedObjects,deleteTag,getVolumes,createVolume,getVolume,updateVolume,deleteVolume,attachVolume,cloneVolume,detachVolume,resizeVolume}};
+return {getAccount,updateAccount,getAvailability,getAccountAvailability,getEnrolledBetaPrograms,enrollBetaProgram,getEnrolledBetaProgram,cancelAccount,createCreditCard,getEntityTransfers,createEntityTransfer,getEntityTransfer,deleteEntityTransfer,acceptEntityTransfer,getEvents,getEvent,eventRead,eventSeen,getInvoices,getInvoice,getInvoiceItems,getAccountLogins,getAccountLogin,getMaintenance,getNotifications,getClients,createClient,getClient,updateClient,deleteClient,resetClientSecret,getClientThumbnail,setClientThumbnail,getPaymentMethods,createPaymentMethod,getPaymentMethod,deletePaymentMethod,makePaymentMethodDefault,getPayments,createPayment,getPayment,createPayPalPayment,executePayPalPayment,createPromoCredit,getServiceTransfers,createServiceTransfer,getServiceTransfer,deleteServiceTransfer,acceptServiceTransfer,getAccountSettings,updateAccountSettings,enableAccountManaged,getTransfer,getUsers,createUser,getUser,updateUser,deleteUser,getUserGrants,updateUserGrants,getBetaPrograms,getBetaProgram,getDatabasesEngines,getDatabasesEngine,getDatabasesInstances,getDatabasesMySQLInstances,postDatabasesMySQLInstances,getDatabasesMySQLInstance,deleteDatabasesMySQLInstance,putDatabasesMySQLInstance,getDatabasesMySQLInstanceBackups,postDatabasesMySQLInstanceBackup,getDatabasesMySQLInstanceBackup,deleteDatabaseMySQLInstanceBackup,postDatabasesMySQLInstanceBackupRestore,getDatabasesMySQLInstanceCredentials,postDatabasesMySQLInstanceCredentialsReset,getDatabasesMySQLInstanceSSL,postDatabasesMySQLInstancePatch,getDatabasesPostgreSQLInstances,postDatabasesPostgreSQLInstances,getDatabasesPostgreSQLInstance,deleteDatabasesPostgreSQLInstance,putDatabasesPostgreSQLInstance,getDatabasesPostgreSQLInstanceBackups,postDatabasesPostgreSQLInstanceBackup,getDatabasesPostgreSQLInstanceBackup,deleteDatabasePostgreSQLInstanceBackup,postDatabasesPostgreSQLInstanceBackupRestore,getDatabasesPostgreSQLInstanceCredentials,postDatabasesPostgreSQLInstanceCredentialsReset,getDatabasesPostgreSQLInstanceSSL,postDatabasesPostgreSQLInstancePatch,getDatabasesTypes,getDatabasesType,getDomains,createDomain,getDomain,updateDomain,deleteDomain,getDomainZone,importDomain,cloneDomain,getDomainRecords,createDomainRecord,getDomainRecord,updateDomainRecord,deleteDomainRecord,getImages,createImage,postImagesUpload,getImage,updateImage,deleteImage,getLinodeInstances,createLinodeInstance,getLinodeInstance,updateLinodeInstance,deleteLinodeInstance,getBackups,createSnapshot,cancelBackups,enableBackups,getBackup,restoreBackup,bootLinodeInstance,cloneLinodeInstance,getLinodeConfigs,addLinodeConfig,getLinodeConfig,updateLinodeConfig,deleteLinodeConfig,getLinodeDisks,addLinodeDisk,getLinodeDisk,updateDisk,deleteDisk,cloneLinodeDisk,resetDiskPassword,resizeDisk,getLinodeFirewalls,getLinodeIPs,addLinodeIP,getLinodeIP,updateLinodeIP,removeLinodeIP,getKernels,getKernel,migrateLinodeInstance,mutateLinodeInstance,getLinodeNodeBalancers,resetLinodePassword,rebootLinodeInstance,rebuildLinodeInstance,rescueLinodeInstance,resizeLinodeInstance,shutdownLinodeInstance,getLinodeTransfer,getLinodeTransferByYearMonth,getLinodeStats,getLinodeStatsByYearMonth,getLinodeVolumes,getStackScripts,addStackScript,getStackScript,updateStackScript,deleteStackScript,getLinodeTypes,getLinodeType,getLKEClusters,createLKECluster,getLKECluster,putLKECluster,deleteLKECluster,getLKEClusterPools,postLKEClusterPools,postLKEClusterRecycle,getLKENodePool,putLKENodePool,deleteLKENodePool,postLKEClusterPoolRecycle,getLKEClusterNode,deleteLKEClusterNode,postLKEClusterNodeRecycle,getLKEClusterAPIEndpoints,getLKEClusterDashboard,getLKEClusterKubeconfig,deleteLKEClusterKubeconfig,postLKEClusterRegenerate,postLKECServiceTokenDelete,getLKEVersions,getLKEVersion,getLongviewClients,createLongviewClient,getLongviewClient,updateLongviewClient,deleteLongviewClient,getLongviewPlan,updateLongviewPlan,getLongviewSubscriptions,getLongviewSubscription,getManagedContacts,createManagedContact,getManagedContact,updateManagedContact,deleteManagedContact,getManagedCredentials,createManagedCredential,getManagedCredential,updateManagedCredential,updateManagedCredentialUsernamePassword,deleteManagedCredential,viewManagedSSHKey,getManagedIssues,getManagedIssue,getManagedLinodeSettings,getManagedLinodeSetting,updateManagedLinodeSetting,getManagedServices,createManagedService,getManagedService,updateManagedService,deleteManagedService,disableManagedService,enableManagedService,getManagedStats,getIPs,allocateIP,getIP,updateIP,assignIPs,shareIPs,assignIPv4s,shareIPv4s,getIPv6Pools,getIPv6Ranges,postIPv6Range,getIPv6Range,deleteIPv6Range,getFirewalls,createFirewalls,getFirewall,updateFirewall,deleteFirewall,getFirewallDevices,createFirewallDevice,getFirewallDevice,deleteFirewallDevice,getFirewallRules,updateFirewallRules,getVLANs,getNodeBalancers,createNodeBalancer,getNodeBalancer,updateNodeBalancer,deleteNodeBalancer,getNodeBalancerConfigs,createNodeBalancerConfig,getNodeBalancerConfig,updateNodeBalancerConfig,deleteNodeBalancerConfig,rebuildNodeBalancerConfig,getNodeBalancerConfigNodes,createNodeBalancerNode,getNodeBalancerNode,updateNodeBalancerNode,deleteNodeBalancerConfigNode,getNodeBalancerFirewalls,getNodebalancersNodeBalancerIdStats,getObjectStorageBuckets,createObjectStorageBucket,getObjectStorageBucket,deleteObjectStorageBucket,getObjectStorageBucketinCluster,modifyObjectStorageBucketAccess,updateObjectStorageBucketAccess,viewObjectStorageBucketACL,updateObjectStorageBucketACL,getObjectStorageBucketContent,createObjectStorageObjectURL,getObjectStorageClusters,getObjectStorageCluster,getObjectStorageKeys,createObjectStorageKeys,getObjectStorageKey,updateObjectStorageKey,deleteObjectStorageKey,cancelObjectStorage,getObjectStorageSSL,createObjectStorageSSL,deleteObjectStorageSSL,getObjectStorageTransfer,getProfile,updateProfile,getProfileApps,getProfileApp,deleteProfileApp,getProfileGrants,tfaDisable,tfaEnable,tfaConfirm,getPersonalAccessTokens,createPersonalAccessToken,getPersonalAccessToken,updatePersonalAccessToken,deletePersonalAccessToken,getProfileLogins,getProfileLogin,getDevices,getTrustedDevice,revokeTrustedDevice,getSecurityQuestions,postSecurityQuestions,getSSHKeys,addSSHKey,getSSHKey,updateSSHKey,deleteSSHKey,deleteProfilePhoneNumber,postProfilePhoneNumber,postProfilePhoneNumberVerify,getUserPreferences,updateUserPreferences,getRegions,getRegion,getRegionAvailability,getRegionsAvailability,getTickets,createTicket,getTicket,createTicketAttachment,closeTicket,getTicketReplies,createTicketReply,getTags,createTag,getTaggedObjects,deleteTag,getVolumes,createVolume,getVolume,updateVolume,deleteVolume,attachVolume,cloneVolume,detachVolume,resizeVolume}};
 export type GetAccountResult = AxiosResponse<GetAccount200>
 export type UpdateAccountResult = AxiosResponse<UpdateAccount200>
+export type GetAvailabilityResult = AxiosResponse<GetAvailability200>
+export type GetAccountAvailabilityResult = AxiosResponse<GetAccountAvailability200>
 export type GetEnrolledBetaProgramsResult = AxiosResponse<GetEnrolledBetaPrograms200>
 export type EnrollBetaProgramResult = AxiosResponse<EnrollBetaProgram200>
 export type GetEnrolledBetaProgramResult = AxiosResponse<GetEnrolledBetaProgram200>
@@ -49541,6 +50062,7 @@ export type CreateNodeBalancerNodeResult = AxiosResponse<CreateNodeBalancerNode2
 export type GetNodeBalancerNodeResult = AxiosResponse<GetNodeBalancerNode200>
 export type UpdateNodeBalancerNodeResult = AxiosResponse<UpdateNodeBalancerNode200>
 export type DeleteNodeBalancerConfigNodeResult = AxiosResponse<DeleteNodeBalancerConfigNode200>
+export type GetNodeBalancerFirewallsResult = AxiosResponse<GetNodeBalancerFirewalls200>
 export type GetNodebalancersNodeBalancerIdStatsResult = AxiosResponse<GetNodebalancersNodeBalancerIdStats200>
 export type GetObjectStorageBucketsResult = AxiosResponse<GetObjectStorageBuckets200>
 export type CreateObjectStorageBucketResult = AxiosResponse<CreateObjectStorageBucket200>
@@ -49598,7 +50120,7 @@ export type GetUserPreferencesResult = AxiosResponse<GetUserPreferences200>
 export type UpdateUserPreferencesResult = AxiosResponse<UpdateUserPreferences200>
 export type GetRegionsResult = AxiosResponse<GetRegions200>
 export type GetRegionResult = AxiosResponse<GetRegion200>
-export type GetRegionAvailabilityResult = AxiosResponse<GetRegionAvailability200>
+export type GetRegionAvailabilityResult = AxiosResponse<GetRegionAvailability200Item[]>
 export type GetRegionsAvailabilityResult = AxiosResponse<GetRegionsAvailability200>
 export type GetTicketsResult = AxiosResponse<GetTickets200>
 export type CreateTicketResult = AxiosResponse<CreateTicket200>

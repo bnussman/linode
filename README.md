@@ -12,4 +12,6 @@ To run:
 bun run index.ts
 ```
 
-This project was created using `bun init` in bun v1.0.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## The Goal
+
+Try to build something that has exports that look idential to @linode/api-v4 so that it could be a drop-in replacement
