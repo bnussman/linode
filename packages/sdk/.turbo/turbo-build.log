@@ -1,21 +1,21 @@
 
 [0m[2m[35m$[0m [2m[1mtsdown[0m
-[34mℹ[39m tsdown [2mv0.17.4[22m powered by rolldown [2mv1.0.0-beta.53[22m
-[34mℹ[39m config file: [4m/Users/banks/Development/linode-toolkit/packages/sdk/tsdown.config.ts[24m 
-[34mℹ[39m entry: [34msrc/index.ts, src/zod.gen.ts, src/client.gen.ts, src/sdk.gen.ts[39m
+[34mℹ[39m [34mtsdown v0.22.0[39m powered by [38;2;255;126;23mrolldown v1.0.0[39m
+[34mℹ[39m config file: [4m/Users/banks/Development/linode/packages/sdk/tsdown.config.ts[24m 
+[34mℹ[39m entry: [34m./src/index.ts, ./src/zod.gen.ts, ./src/client.gen.ts, ./src/sdk.gen.ts[39m
 [34mℹ[39m tsconfig: [34mtsconfig.json[39m
 [34mℹ[39m Build start
 [34mℹ[39m Cleaning 11 files
-[34mℹ[39m [2mdist/[22m[1mzod.gen.mjs[22m               [2m 648.79 kB[22m [2m│ gzip: 58.05 kB[22m
-[34mℹ[39m [2mdist/[22m[1msdk.gen.mjs[22m               [2m 484.57 kB[22m [2m│ gzip: 58.84 kB[22m
-[34mℹ[39m [2mdist/[22m[1mclient.gen.mjs[22m            [2m   0.08 kB[22m [2m│ gzip:  0.08 kB[22m
-[34mℹ[39m [2mdist/[22m[1mindex.mjs[22m                 [2m   0.01 kB[22m [2m│ gzip:  0.03 kB[22m
-[34mℹ[39m [2mdist/[22mclient.gen-CUqcXed3.mjs   [2m  19.48 kB[22m [2m│ gzip:  5.36 kB[22m
-[34mℹ[39m [2mdist/[22m[32m[1mzod.gen.d.mts[22m[39m             [2m 828.71 kB[22m [2m│ gzip: 63.68 kB[22m
-[34mℹ[39m [2mdist/[22m[32m[1msdk.gen.d.mts[22m[39m             [2m 521.76 kB[22m [2m│ gzip: 69.47 kB[22m
-[34mℹ[39m [2mdist/[22m[32m[1mindex.d.mts[22m[39m               [2m 137.62 kB[22m [2m│ gzip: 20.79 kB[22m
-[34mℹ[39m [2mdist/[22m[32m[1mclient.gen.d.mts[22m[39m          [2m   0.78 kB[22m [2m│ gzip:  0.43 kB[22m
-[34mℹ[39m [2mdist/[22m[32mtypes.gen-Dwi_G7sM.d.mts[39m  [2m2811.51 kB[22m
-[34mℹ[39m [2mdist/[22m[32mtypes.gen-gU6OBAWu.d.mts[39m  [2m  12.29 kB[22m [2m│ gzip:  3.50 kB[22m
-[34mℹ[39m 11 files, total: 5465.61 kB
-[32m✔[39m Build complete in [32m2621ms[39m
+[34mℹ[39m [2mdist/[22m[1mzod.gen.mjs[22m               [2m648.79 kB[22m [2m│ gzip: 58.05 kB[22m
+[34mℹ[39m [2mdist/[22m[1msdk.gen.mjs[22m               [2m484.57 kB[22m [2m│ gzip: 58.84 kB[22m
+[34mℹ[39m [2mdist/[22m[1mclient.gen.mjs[22m            [2m  0.08 kB[22m [2m│ gzip:  0.08 kB[22m
+[34mℹ[39m [2mdist/[22m[1mindex.mjs[22m                 [2m  0.01 kB[22m [2m│ gzip:  0.03 kB[22m
+[34mℹ[39m [2mdist/[22mclient.gen-CjjGDxHQ.mjs   [2m 19.28 kB[22m [2m│ gzip:  5.29 kB[22m
+[34mℹ[39m [2mdist/[22m[32m[1mzod.gen.d.mts[22m[39m             [2m828.71 kB[22m [2m│ gzip: 63.68 kB[22m
+[34mℹ[39m [2mdist/[22m[32m[1msdk.gen.d.mts[22m[39m             [2m521.76 kB[22m [2m│ gzip: 69.47 kB[22m
+[34mℹ[39m [2mdist/[22m[32m[1mindex.d.mts[22m[39m               [2m137.62 kB[22m [2m│ gzip: 20.78 kB[22m
+[34mℹ[39m [2mdist/[22m[32m[1mclient.gen.d.mts[22m[39m          [2m  0.78 kB[22m [2m│ gzip:  0.42 kB[22m
+[34mℹ[39m [2mdist/[22m[32mtypes.gen-BTNlUUue.d.mts[39m  [2m  2.81 MB[22m
+[34mℹ[39m [2mdist/[22m[32mtypes.gen-Dv1G3wtp.d.mts[39m  [2m 12.23 kB[22m [2m│ gzip:  3.49 kB[22m
+[34mℹ[39m 11 files, total: 5.47 MB
+[32m✔[39m Build complete in [32m2657ms[39m
