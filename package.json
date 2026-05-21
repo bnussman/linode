@@ -1,8 +1,10 @@
 {
   "name": "@bnussman/linode-toolkit",
   "scripts": {
+    "dev": "turbo run dev",
     "build": "turbo run build",
-    "check-types": "turbo run check-types"
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck"
   },
   "packageManager": "bun@1.3.13",
   "workspaces": [

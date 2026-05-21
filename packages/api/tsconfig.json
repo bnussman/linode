@@ -1,0 +1,7 @@
+{
+  "extends": ["@bnussman/linode-tsconfig/package"],
+  "compilerOptions": {
+    "types": ["@types/bun", "bun"]
+  },
+  "include": ["src", "tests/index.test.ts"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@bnussman/linode-search",
+  "version": "0.0.1",
+  "description": "Search query parser for Linode API filtering",
+  "type": "module",
+  "main": "src/search.ts",
+  "module": "src/search.ts",
+  "types": "src/search.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "peggy": "^4.0.3"
+  },
+  "devDependencies": {
+    "@bnussman/linode-tsconfig": "workspace:*",
+    "@bnussman/linode-api": "workspace:*",
+    "tsdown": "0.22.0",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "vite": "*"
+  }
+}
