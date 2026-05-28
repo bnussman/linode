@@ -20,6 +20,10 @@ export default defineConfig({
       requests: { name: (name) => `${name}RequestSchema` },
       responses: { name: (name) => `${name}ResponseSchema` },
       exportFromIndex: true,
+    },
+    {
+      name: '@tanstack/react-query',
+      includeInEntry: true,
     }
   ],
 });
